@@ -124,7 +124,7 @@ body {
 }
 
 .card {
-    width: 150px;
+    flex: 1;
     border: 1px solid #e5e7eb;
     overflow: hidden;
     cursor: pointer;
