@@ -196,7 +196,7 @@ body {
 }
 
 .iklan {
-    padding: 10px;
+    padding: 20px;
     width: 30%;
 }
 
@@ -331,4 +331,89 @@ body {
 .info p {
     color: #DC0000;
     font-weight: bold;
+}
+
+.footer {
+    background: #4f4f4f;
+    background: radial-gradient(circle, rgba(79, 79, 79, 1) 0%, rgba(51, 51, 51, 1) 100%);
+    color: #e5e7eb;
+    font-size: 15px;
+}
+
+/* Bagian atas footer */
+.footer-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-left {
+    
+}
+
+.footer-left img {
+    height: calc(100vh * 0.05);
+}
+
+.footer-center {
+    display: grid;
+    row-gap: 10px;
+}
+
+
+.footer-center a {
+    color: #e5e7eb;
+    text-decoration: none;
+}
+
+.footer-center a:hover {
+    text-decoration: underline;
+}
+
+/* Bagian bawah (Tentang Kami) */
+.footer-bottom {
+    border-top: 1px solid #1e293b;
+    padding: 20px;
+    text-align: center;
+    max-width: 900px;
+    margin: auto;
+}
+
+.footer-bottom h4 {
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.footer-bottom p {
+    color: #fff;
+    margin: 5px 0;
+    line-height: 1.6;
+}
+
+.footer-bottom small {
+    color: #9ca3af;
+}
+
+.sosmed {
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+}
+
+.sosmed a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.sosmed a i {
+    margin-right: 5px;
 }
