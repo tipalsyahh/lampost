@@ -19,12 +19,12 @@ function renderDetail(card) {
     // content (100 karakter saja)
     const text = card.dataset.content;
     detailContent.textContent =
-        text.length > 100 ? text.substring(0, 100) + '...' : text;
+        text.length > 100 ? text.substring(0, 400) + '...' : text;
 
     // button redirect
     detailAction.innerHTML = `
         <button class="detail-btn">
-            Baca Selengkapnya
+            Baca Selengkapnya <i class="bi bi-arrow-right"></i>
         </button>
     `;
 
@@ -50,4 +50,29 @@ cards.forEach(card => {
 window.addEventListener('DOMContentLoaded', () => {
     const randomIndex = Math.floor(Math.random() * cards.length);
     renderDetail(cards[randomIndex]);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const btnMenu = document.getElementById('btnMenu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // kunci scroll
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    btnMenu.addEventListener('click', function (e) {
+        e.preventDefault();
+        openSidebar();
+    });
+
+    overlay.addEventListener('click', closeSidebar);
 });

@@ -20,13 +20,15 @@ body {
 
     position: sticky;
     top: 0;
-    z-index: 1001; /* paling atas */
+    z-index: 1001;
+    /* paling atas */
 }
 
 /* Navbar 2 (Sekunder) */
 .navbar-sub {
     position: sticky;
-    top: 68px;      /* ⬅ tepat di bawah navbar-main */
+    top: 68px;
+    /* ⬅ tepat di bawah navbar-main */
     z-index: 1000;
 
     background-color: #fff;
@@ -107,7 +109,7 @@ body {
 
 /* CARD LIST */
 .container {
-    padding: 10px calc(80px);
+    padding: 10px calc(15%);
     display: flex;
     gap: 5px;
 }
@@ -121,6 +123,7 @@ body {
 .card-berita {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
 }
 
 .card {
@@ -147,7 +150,6 @@ body {
 .card-detail {
     margin-top: 15px;
     padding: 20px;
-    height: 350px;
     border: 1px solid #e5e7eb;
     background: #ffffff;
     display: flex;
@@ -206,5 +208,127 @@ body {
 .tagar p {
     font-size: 15px;
     color: #4d4d4d;
+    font-weight: bold;
+}
+
+.detail-btn {
+    border: none;
+    font-weight: bold;
+    color: #DC0000;
+    background-color: transparent;
+    font-size: 15px;
+    padding: 0;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* Overlay background */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease;
+}
+
+/* Overlay aktif */
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 24rem;
+    height: 100vh;
+    background: #fff;
+    color: #000;
+    box-sizing: border-box;
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+
+    z-index: 9999;
+}
+
+.sidebar.active {
+    transform: translateX(0);
+}
+
+.sidebar-isi {
+    padding: 0 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li a {
+    color: #555555;
+    border-bottom: 1px solid #aaa4a4;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    padding: 15px 0;
+}
+
+.sidebar ul li a i {
+    margin-right: 5px;
+}
+
+
+.search-sidebar {
+    padding: 15px 25px;
+    border-bottom: 1px solid #aaa4a4;
+    border-top: 1px solid #555555;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #555555;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-input:focus {
+    border-color: #555555;
+}
+
+.info {
+    padding: 20px 10px;
+}
+
+.info a {
+    display: flex;
+    padding: 20px 0;
+    gap: 10px;
+    text-decoration: none;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info a img {
+    width: 30%;
+    height: 30%;
+}
+
+.info a h3 {
+    color: #000;
+}
+
+.info h4,
+.info p {
+    color: #DC0000;
     font-weight: bold;
 }
