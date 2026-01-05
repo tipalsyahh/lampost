@@ -1,17 +1,14 @@
 const synth = window.speechSynthesis;
-let utterance;
+let utterance = null;
 let isPlaying = false;
-
 function playVoice() {
-    synth.cancel(); // reset dari awal
+    synth.cancel(); 
 
     const beritaEl = document.getElementById("berita");
     if (!beritaEl) return;
 
     const textBerita = beritaEl.innerText;
     utterance = new SpeechSynthesisUtterance(textBerita);
-
-    // Bahasa Indonesia
     utterance.lang = "id-ID";
     utterance.rate = 1;
     utterance.pitch = 1;
@@ -32,39 +29,24 @@ function stopVoice() {
         '<i class="bi bi-volume-mute-fill"></i>';
 }
 
-/* ===============================
-   AUTO PLAY SAAT HALAMAN DIMUAT
-================================ */
 window.addEventListener("load", () => {
-    setTimeout(() => {
-        playVoice();
-    }, 600);
+    stopVoice(); 
 });
 
-/* ===============================
-   TOGGLE ICON
-================================ */
 document.getElementById("voiceToggle").addEventListener("click", () => {
     if (isPlaying) {
         stopVoice();
     } else {
-        playVoice(); // selalu dari awal
+        playVoice(); 
     }
 });
 
-/* ===============================
-   FIX UTAMA: HENTIKAN SAAT PINDAH HALAMAN
-================================ */
-
-// Saat reload / pindah halaman
 window.addEventListener("beforeunload", () => {
     synth.cancel();
 });
 
-// Saat tab tidak aktif (user pindah tab / halaman SPA)
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
-        synth.cancel();
-        isPlaying = false;
+        stopVoice();
     }
 });

@@ -10,27 +10,21 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* Navbar 1 (Utama) */
 .navbar-main {
     background-color: #fff;
     padding: 14px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     position: sticky;
     top: 0;
     z-index: 1001;
-    /* paling atas */
 }
 
-/* Navbar 2 (Sekunder) */
 .navbar-sub {
     position: sticky;
     top: 68px;
-    /* ⬅ tepat di bawah navbar-main */
     z-index: 1000;
-
     background-color: #fff;
     padding: 15px 30px;
     display: flex;
@@ -107,7 +101,6 @@ body {
     gap: 5px;
 }
 
-/* CARD LIST */
 .container {
     padding: 10px calc(15%);
     display: flex;
@@ -146,7 +139,6 @@ body {
     font-size: 16px;
 }
 
-/* DETAIL */
 .card-detail {
     margin-top: 15px;
     padding: 20px;
@@ -173,15 +165,10 @@ body {
     max-height: 300px;
     overflow-y: auto;
     padding-right: 10px;
-
-    /* Firefox */
     scrollbar-width: none;
-
-    /* Internet Explorer & Edge lama */
     -ms-overflow-style: none;
 }
 
-/* Chrome, Safari, Edge */
 .detail-text::-webkit-scrollbar {
     display: none;
 }
@@ -222,7 +209,6 @@ body {
     cursor: pointer;
 }
 
-/* Overlay background */
 .overlay {
     position: fixed;
     top: 0;
@@ -237,13 +223,11 @@ body {
     transition: 0.3s ease;
 }
 
-/* Overlay aktif */
 .overlay.active {
     opacity: 1;
     visibility: visible;
 }
 
-/* Sidebar */
 .sidebar {
     position: fixed;
     top: 0;
@@ -254,10 +238,8 @@ body {
     background: #fff;
     color: #000;
     box-sizing: border-box;
-
     transform: translateX(-100%);
     transition: transform 0.3s ease;
-
     z-index: 9999;
 }
 
@@ -341,7 +323,6 @@ body {
     font-size: 15px;
 }
 
-/* Bagian atas footer */
 .footer-container {
     max-width: 900px;
     margin: auto;
@@ -372,7 +353,6 @@ body {
     text-decoration: underline;
 }
 
-/* Bagian bawah (Tentang Kami) */
 .footer-bottom {
     border-top: 1px solid #1e293b;
     padding: 20px;
