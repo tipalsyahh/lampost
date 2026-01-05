@@ -1,15 +1,17 @@
 const synth = window.speechSynthesis;
 let utterance;
-let isPlaying = true;
+let isPlaying = false;
 
 function playVoice() {
-    // Selalu mulai dari awal
-    synth.cancel();
+    synth.cancel(); // reset dari awal
 
-    const textBerita = document.getElementById("berita").innerText;
+    const beritaEl = document.getElementById("berita");
+    if (!beritaEl) return;
+
+    const textBerita = beritaEl.innerText;
     utterance = new SpeechSynthesisUtterance(textBerita);
 
-    // SET BAHASA INDONESIA
+    // Bahasa Indonesia
     utterance.lang = "id-ID";
     utterance.rate = 1;
     utterance.pitch = 1;
@@ -18,7 +20,6 @@ function playVoice() {
     synth.speak(utterance);
     isPlaying = true;
 
-    // GANTI ICON (ON)
     document.getElementById("voiceToggle").innerHTML =
         '<i class="bi bi-volume-up"></i>';
 }
@@ -27,23 +28,43 @@ function stopVoice() {
     synth.cancel();
     isPlaying = false;
 
-    // GANTI ICON (OFF)
     document.getElementById("voiceToggle").innerHTML =
         '<i class="bi bi-volume-mute-fill"></i>';
 }
 
-// Auto play saat halaman selesai dimuat
+/* ===============================
+   AUTO PLAY SAAT HALAMAN DIMUAT
+================================ */
 window.addEventListener("load", () => {
     setTimeout(() => {
         playVoice();
     }, 600);
 });
 
-// Toggle ON / OFF
+/* ===============================
+   TOGGLE ICON
+================================ */
 document.getElementById("voiceToggle").addEventListener("click", () => {
     if (isPlaying) {
         stopVoice();
     } else {
-        playVoice(); // mulai dari awal
+        playVoice(); // selalu dari awal
+    }
+});
+
+/* ===============================
+   FIX UTAMA: HENTIKAN SAAT PINDAH HALAMAN
+================================ */
+
+// Saat reload / pindah halaman
+window.addEventListener("beforeunload", () => {
+    synth.cancel();
+});
+
+// Saat tab tidak aktif (user pindah tab / halaman SPA)
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        synth.cancel();
+        isPlaying = false;
     }
 });
