@@ -53,14 +53,14 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    const btnMenu = document.getElementById('btnMenu');
+    const btnMenus = document.querySelectorAll('#btnMenu');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
 
     function openSidebar() {
         sidebar.classList.add('active');
         overlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // kunci scroll
+        document.body.style.overflow = 'hidden';
     }
 
     function closeSidebar() {
@@ -69,10 +69,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = '';
     }
 
-    btnMenu.addEventListener('click', function (e) {
-        e.preventDefault();
-        openSidebar();
+    btnMenus.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            openSidebar();
+        });
     });
 
     overlay.addEventListener('click', closeSidebar);
 });
+

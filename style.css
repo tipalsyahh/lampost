@@ -33,7 +33,6 @@ body {
     border-bottom: 1px solid #e5e7eb;
 }
 
-
 .navbar-main .logo {
     color: #ffffff;
     font-size: 20px;
@@ -43,7 +42,7 @@ body {
 }
 
 .logo-img {
-    width: 150px;
+    width: 140px;
     height: 40px;
     margin-right: 20px
 }
@@ -99,6 +98,11 @@ body {
     color: #000;
     display: flex;
     gap: 5px;
+}
+
+.login-mobile,
+.menu-mobile {
+    display: none;
 }
 
 .container {
@@ -393,4 +397,82 @@ body {
 
 .sosmed a i {
     margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        display: block;
+        padding: 10px;
+    }
+
+    .berita {
+        padding: 0;
+        width: 100%;
+    }
+
+    .card {
+        padding: 0;
+    }
+
+    .iklan {
+        display: none;
+    }
+
+    .logo ul {
+        display: none;
+    }
+
+    .logo-img {
+        width: 100px;
+        height: 25px;
+    }
+
+    .button-user {
+        gap: 10px;
+    }
+
+    .langganan {
+        padding: 10px;
+    }
+
+    .login {
+        display: none;
+    }
+
+    .login-mobile,
+    .menu-mobile {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #000;
+        font-size: 20px;
+        gap: 5px;
+    }
+
+    .navbar-sub {
+        justify-content: flex-start;
+        padding: 12px 16px;
+        gap: 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .navbar-sub::-webkit-scrollbar {
+        display: none;
+    }
+
+    .navbar-sub {
+        scrollbar-width: none;
+    }
+
+    .sosmed a{
+        font-size: 13px;
+    }
+
+    .footer-left,
+    .footer-center {
+        display: none;
+    }
 }
