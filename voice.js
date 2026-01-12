@@ -1,52 +1,56 @@
 const synth = window.speechSynthesis;
 let utterance = null;
 let isPlaying = false;
+
 function playVoice() {
-    synth.cancel(); 
+  synth.cancel();
 
-    const beritaEl = document.getElementById("berita");
-    if (!beritaEl) return;
+  const beritaEl = document.getElementById("berita");
+  if (!beritaEl) return;
 
-    const textBerita = beritaEl.innerText;
-    utterance = new SpeechSynthesisUtterance(textBerita);
-    utterance.lang = "id-ID";
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    utterance.volume = 1;
+  const textBerita = beritaEl.innerText;
+  utterance = new SpeechSynthesisUtterance(textBerita);
+  utterance.lang = "id-ID";
 
-    synth.speak(utterance);
-    isPlaying = true;
+  synth.speak(utterance);
+  isPlaying = true;
 
-    document.getElementById("voiceToggle").innerHTML =
-        '<i class="bi bi-volume-up"></i>';
+  const btn = document.getElementById("voiceToggle");
+  if (btn) {
+    btn.innerHTML = '<i class="bi bi-volume-up"></i>';
+  }
 }
 
 function stopVoice() {
-    synth.cancel();
-    isPlaying = false;
+  synth.cancel();
+  isPlaying = false;
 
-    document.getElementById("voiceToggle").innerHTML =
-        '<i class="bi bi-volume-mute-fill"></i>';
+  const btn = document.getElementById("voiceToggle");
+  if (btn) {
+    btn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
+  }
 }
 
-window.addEventListener("load", () => {
-    stopVoice(); 
-});
+/* 🔥 WAJIB: DOMContentLoaded */
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("voiceToggle");
 
-document.getElementById("voiceToggle").addEventListener("click", () => {
+  if (!btn) return; // ⛔ JIKA TIDAK ADA, STOP DI SINI
+
+  stopVoice();
+
+  btn.addEventListener("click", () => {
     if (isPlaying) {
-        stopVoice();
+      stopVoice();
     } else {
-        playVoice(); 
+      playVoice();
     }
+  });
 });
 
-window.addEventListener("beforeunload", () => {
-    synth.cancel();
-});
+/* keamanan tambahan */
+window.addEventListener("beforeunload", () => synth.cancel());
 
 document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-        stopVoice();
-    }
+  if (document.hidden) stopVoice();
 });
