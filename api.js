@@ -3,9 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('.info');
   if (!container) return;
 
-  fetch('https://lampost.co/wp-json/wp/v2/posts?per_page=6&_embed')
-    .then(res => res.json())
+  const API_URL =
+    'https://lampost.co/wp-json/wp/v2/posts?per_page=10&orderby=date&order=desc&_embed';
+
+  fetch(API_URL)
+    .then(res => {
+      if (!res.ok) throw new Error('Gagal mengambil data');
+      return res.json();
+    })
     .then(posts => {
+
+      let html = '';
 
       posts.forEach(post => {
 
@@ -18,14 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // gambar
-        let gambar = 'image/default.jpg';
-        if (post._embedded?.['wp:featuredmedia']?.[0]) {
-          gambar = post._embedded['wp:featuredmedia'][0].source_url;
-        }
+        const gambar =
+          post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+          || 'image/default.jpg';
 
-        container.innerHTML += `
-          <a href="halaman.html?id=${post.id}">
-            <img src="${gambar}" alt="${judul}">
+        html += `
+          <a href="halaman.html?id=${post.id}" class="item-berita">
+            <img src="${gambar}" alt="${judul}" loading="lazy">
             <div class="info-berita">
               <p>${kategori}</p>
               <h3>${judul}</h3>
@@ -34,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </a>
         `;
       });
+
+      container.innerHTML = html;
 
     })
     .catch(err => {

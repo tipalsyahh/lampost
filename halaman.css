@@ -31,3 +31,9 @@
     background: transparent;
     color: #333;
 }
+
+@media (max-width: 768px) {
+    .berita {
+        border: none;
+    }
+}
