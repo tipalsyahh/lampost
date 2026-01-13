@@ -1,0 +1,64 @@
+.container-beranda {
+    padding: 10px calc(5%);
+    display: flex;
+    gap: 5px;
+}
+
+.berita-beranda {
+    width: 50%;
+    border-right: 1px solid #e5e7eb;
+    padding: 10px;
+}
+
+.berita-left {
+    width: 30%;
+    padding: 10px;
+}
+
+.olahraga {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.olahraga a {
+    text-decoration: none;
+    text-align: center;
+    color: #000;
+}
+
+.img-olahraga {
+    width: 100%;
+    object-fit: contain;
+}
+
+.judul {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.tanggal {
+    font-size: 12px;
+}
+
+.hukum a {
+    color: #000;
+    text-decoration: none;
+    display: flex;
+}
+
+.hukum a p {
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+    .berita-left {
+        display: none;
+    }
+
+    .berita-beranda {
+        padding: 0;
+        width: 100%;
+        border: none;
+    }
+}

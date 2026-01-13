@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="beranda.css">
+    <link rel="icon" href="image/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Lampost</title>
+</head>
+
+<body>
+    <nav class="navbar-main">
+        <div class="logo">
+            <img src="image/lampost300.png (1).webp" alt="image" class="logo-img">
+            <ul>
+                <li><a href="#" id="btnMenu">
+                        <i class="bi bi-list"></i> Menu
+                    </a></li>
+                <li><a href="index.html">Harian</a></li>
+                <li><a href="#">Mingguan</a></li>
+                <li><a href="beranda.html">Beranda</a></li>
+            </ul>
+        </div>
+        <div class="button-user">
+            <a href="#" class="langganan">Langganan</a>
+            <a href="#" class="login"><i class="bi bi-person-circle"></i>Masuk</a>
+            <a href="#" class="login-mobile"><i class="bi bi-person-circle"></i></a>
+            <a href="#" id="btnMenu" class="menu-mobile">
+                <i class="bi bi-list"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Navbar Sekunder -->
+    <nav class="navbar-sub">
+        <ul>
+            <li><a href="#">Politik</a></li>
+            <li class="has-sub">
+                <a href="#">Pendidikan</a>
+                <ul class="sub-menu" id="sub-pendidikan">
+                    <!-- SUB AKAN MUNCUL OTOMATIS -->
+                </ul>
+            </li>
+            <li><a href="#">Ekonomi</a></li>
+            <li><a href="#">Lingkungan</a></li>
+            <li><a href="#">Wawancara</a></li>
+            <li><a href="#">Investigasi</a></li>
+            <li><a href="#">Cek Fakta</a></li>
+            <li><a href="#">Tokoh</a></li>
+            <li><a href="#">Newsllater</a></li>
+            <li><a href="#">Info Top</a></li>
+        </ul>
+    </nav>
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <center>
+            <h2>Menu</h2>
+        </center>
+        <div class="search-sidebar">
+            <input type="search" class="search-input" placeholder="Cari Artikel Disini" aria-label="Search">
+        </div>
+        <div class="sidebar-isi">
+            <ul>
+                <li><a href="#"><i class="bi bi-image-fill"></i> Foto</a></li>
+                <li><a href="#"><i class="bi bi-camera-video"></i> Vidio</a></li>
+                <li><a href="#"><i class="bi bi-mic"></i> Podcase</a></li>
+                <li><a href="#"><i class="bi bi-newspaper"></i> Infografik</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-beranda">
+        <div class="berita-left">
+            <div class="olahraga">
+                <h2>Olahraga</h2>
+
+            </div>
+            <div class="hukum">
+                <h2>Hukum</h2>
+
+            </div>
+        </div>
+        <div class="berita-beranda">
+            <h2>Berita Terkini</h2>
+            <div class="info">
+
+            </div>
+        </div>
+        <div class="iklan">
+            <div class="tagar">
+                <h3>TOPIK TRENDING</h3>
+                <p>#Banjir Sumatra</p>
+                <p>#Muzakir Manaf</p>
+                <p>#Makan Bergizi Gratis</p>
+                <p>#Purbaya Yudhi Sadewa</p>
+                <p>#Akal ImitasiMuzakir Manaf</p>
+                <p>#Prabowo</p>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="sosmed">
+            <a href="https://www.instagram.com/lampost.co/"><i class="bi bi-instagram"></i>Instagram</a>
+            <a href="https://www.facebook.com/lampungpostupdate"><i class="bi bi-facebook"></i>Fecebook</a>
+            <a href="https://x.com/lampungpost_"><i class="bi bi-twitter-x"></i></i>Twitter</a>
+            <a href="https://www.tiktok.com/@lampungpost_official"><i class="bi bi-tiktok"></i>Tiktok</a>
+        </div>
+        <div class="footer-container">
+
+            <div class="footer-left">
+                <center>
+                    <p>Affiliated with:</p>
+                </center>
+                <img src="image/media.webp" alt="Logo">
+            </div>
+
+            <div class="footer-center">
+                <h4>Sitemap</h4>
+                <a href="#">Beranda</a>
+                <a href="#">Tentang Kami</a>
+                <a href="#">Compro</a>
+                <a href="#">Ilkan</a>
+                <a href="#">Microsite</a>
+                <a href="#">RRS</a>
+                <a href="#">Pedoman Media Siber</a>
+            </div>
+        </div>
+
+        <!-- Footer bawah -->
+        <div class="footer-bottom">
+            <h4>Tentang Kami</h4>
+            <p>Alamat</p>
+            <p>Jl. Soekarno – Hatta No.108, Hajimena, Lampung Selatan</p>
+            <p>Email</p>
+            <p>redaksi@lampost.co</p>
+            <p>Telpon</p>
+            <p>(0721) 783693 (hunting), 773888 (redaksi)</p>
+            <small>© 2025 Lampost.co - Media Group. All rights reserved.</small>
+        </div>
+    </footer>
+
+
+    <script src="js/olahraga.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/microsite.js"></script>
+    <script src="js/hukum.js"></script>
+</body>
+
+</html>

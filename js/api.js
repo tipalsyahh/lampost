@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container) return;
 
   const API_URL =
-    'https://lampost.co/wp-json/wp/v2/posts?per_page=10&orderby=date&order=desc&_embed';
+    'https://lampost.co/wp-json/wp/v2/posts?per_page=20&orderby=date&order=desc&_embed';
 
   fetch(API_URL)
     .then(res => {

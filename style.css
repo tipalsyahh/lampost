@@ -305,8 +305,8 @@ body {
 }
 
 .info a img {
-    width: 30%;
-    height: 30%;
+    width: 50%;
+    object-fit: contain;
 }
 
 .info a h3 {
