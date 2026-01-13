@@ -51,6 +51,119 @@
     margin-bottom: 8px;
 }
 
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+}
+
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* Overlay teks */
+.card-text-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.7),
+        rgba(0, 0, 0, 0)
+    );
+}
+
+.card-text {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Efek hover */
+.card-link:hover .card-image {
+    transform: scale(1.05);
+}
+
+.berita-terpopuler {
+    display: grid;
+    padding: 10px calc(10%);
+    margin-bottom: 25px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* Card */
+.berita-terpopuler .card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.berita-terpopuler .card-image-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.berita-terpopuler .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+/* Overlay */
+.berita-terpopuler .card-text-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.7),
+        rgba(0,0,0,0)
+    );
+}
+
+.berita-terpopuler .card-category {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffd700;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.berita-terpopuler .card-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.4;
+}
+
+.berita-terpopuler .card-meta {
+    font-size: 12px;
+    color: #ddd;
+    margin-top: 6px;
+}
+
+/* Hover */
+.berita-terpopuler .card-link:hover .card-image {
+    transform: scale(1.06);
+}
+
 @media (max-width: 768px) {
     .berita-left {
         display: none;
