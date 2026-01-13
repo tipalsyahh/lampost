@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="beranda.css">
     <link rel="icon" href="image/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Lampost</title>
@@ -18,9 +19,9 @@
                 <li><a href="#" id="btnMenu">
                         <i class="bi bi-list"></i> Menu
                     </a></li>
-                <li><a href="index.html">Harian</a></li>
+                <li><a href="harian.html">Harian</a></li>
                 <li><a href="#">Mingguan</a></li>
-                <li><a href="beranda.html">Beranda</a></li>
+                <li><a href="index.html">Beranda</a></li>
             </ul>
         </div>
         <div class="button-user">
@@ -72,47 +73,22 @@
             </ul>
         </div>
     </div>
-    <div class="container">
-        <div class="berita">
-            <h2>Harian</h2>
-            <p>Berita mendalam harian terbit empat kali sehari untuk memenuhi kebutuhan informasi Anda.</p>
-            <div class="card-berita">
-                <div class="card" data-title="Film Ip Man"
-                    data-content="Ip Man (Hanzi: 叶问 / 葉問) adalah sebuah film seni bela diri Hong Kong tahun 2008 berdasarkan kehidupan Ip Man, seorang grandmaster seni bela diri Wing Chun dan guru legenda seniman bela diri Bruce Lee. Film ini berfokus pada peristiwa dalam kehidupan Ip yang diduga terjadi di kota Foshan selama Perang Tiongkok-Jepang. Film ini disutradarai oleh Wilson Yip, dan dibintangi oleh Donnie Yen sebagai karakter utama, dengan koreografi seni bela diri oleh Sammo Hung. Film ini dibintangi oleh Simon Yam, Lynn Hung, Lam Ka-tung, Xing Yu, Hiroyuki Ikeuchi, dan Tenma Shibuya. Film ini merupakan produksi bersama antara China dan Hong Kong, dan merupakan film terakhir yang didistribusikan oleh Mandarin Films."
-                    data-image="image/ip.webp" data-link="detail/ip-man.html">
-                    <img src="image/ip.webp" alt="Politik">
-                    <h3>Ip Man</h3>
-                </div>
-
-                <div class="card" data-title="Ekonomi"
-                    data-content="Film ini diangkat dari kisah nyata yang viral di media sosial, khususnya Twitter, dan telah tayang di bioskop sejak 30 April 2022. Cerita berfokus pada enam mahasiswa: Nur, Widya, Ayu, Bima, Anton, dan Wahyu, yang melaksanakan KKN di sebuah desa terpencil di Jawa Timur. Mereka mendapatkan izin dari orang tua dan kepala desa, Pak Prabu, yang memperingatkan mereka untuk tidak melewati batas gapura terlarang yang membatasi desa dengan hutan bernama Tapak Tilas."
-                    data-image="image/kkn.jpg" data-link="detail/kkn.html">
-                    <img src="image/kkn.jpg" alt="Ekonomi">
-                    <h3>KKN Desa Penari</h3>
-                </div>
-
-                <div class="card" data-title="Hukum"
-                    data-content="Liputan mendalam tentang hukum, keadilan, dan kasus penting."
-                    data-image="image/1131w-TrbqaWjvEpM.webp" data-link="detail/ip-man.html">
-                    <img src="image/1131w-TrbqaWjvEpM.webp" alt="Hukum">
-                    <h3>Hukum</h3>
-                </div>
-
-                <div class="card" data-title="Hukum"
-                    data-content="Liputan mendalam tentang hukum, keadilan, dan kasus penting."
-                    data-image="image/1131w-TrbqaWjvEpM.webp">
-                    <img src="image/1131w-TrbqaWjvEpM.webp" alt="Hukum">
-                    <h3>Hukum</h3>
-                </div>
+    <div class="container-beranda">
+        <div class="berita-left">
+            <div class="olahraga">
+                <h2>Olahraga</h2>
             </div>
-            <!-- DETAIL -->
-            <div class="card-detail">
-                <div class="detail-image"></div>
-                <div class="detail-text">
-                    <h2 class="detail-title"></h2>
-                    <p class="detail-content"></p>
-                    <div class="detail-action"></div>
-                </div>
+            <div class="humaniora">
+                <h2>Humaniora</h2>
+            </div>
+            <div class="hukum">
+                <h2>Hukum</h2>
+            </div>
+        </div>
+        <div class="berita-beranda">
+            <h2>Berita Terkini</h2>
+            <div class="berita-terbaru">
+
             </div>
             <div class="info">
 
@@ -128,6 +104,18 @@
                 <p>#Akal ImitasiMuzakir Manaf</p>
                 <p>#Prabowo</p>
             </div>
+            <div class="hiburan">
+                <h2>Hiburan</h2>
+            </div>
+            <div class="opini">
+                <h2>Kolom</h2>
+            </div>
+        </div>
+    </div>
+    <div class="lampung">
+        <h2>Lampung</h2>
+        <div class="berita-terpopuler">
+
         </div>
     </div>
     <footer class="footer">
@@ -172,9 +160,14 @@
     </footer>
 
 
-    <script src="js/scrip.js"></script>
+    <script src="js/olahraga.js"></script>
     <script src="js/api.js"></script>
-    <script src="js/microsite.js"></script>
+    <script src="js/hiburan.js"></script>
+    <script src="js/hukum.js"></script>
+    <script src="js/terbaru.js"></script>
+    <script src="js/populer.js"></script>
+    <script src="js/humaniora.js"></script>
+    <script src="js/opini.js"></script>
 </body>
 
 </html>

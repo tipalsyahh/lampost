@@ -15,12 +15,16 @@
     padding: 10px;
 }
 
-.olahraga {
+.olahraga,
+.humaniora,
+.hiburan {
     margin-bottom: 15px;
     border-bottom: 1px solid #e5e7eb;
 }
 
-.olahraga a {
+.olahraga a,
+.humaniora a,
+.hiburan a {
     text-decoration: none;
     text-align: center;
     color: #000;
@@ -40,13 +44,15 @@
     font-size: 12px;
 }
 
-.hukum a {
+.hukum a,
+.opini a {
     color: #000;
     text-decoration: none;
     display: flex;
 }
 
-.hukum a p {
+.hukum a p,
+.opini a p {
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 8px;
 }
@@ -97,10 +103,13 @@
     transform: scale(1.05);
 }
 
-.berita-terpopuler {
-    display: grid;
+.lampung {
     padding: 10px calc(10%);
     margin-bottom: 25px;
+}
+
+.berita-terpopuler {
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
