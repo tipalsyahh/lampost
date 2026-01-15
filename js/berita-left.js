@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!catRes.ok) throw new Error('Kategori gagal diambil');
 
     const catData = await catRes.json();
-    if (!catData.length) return;
+    if (!catData.length) {
+      container.insertAdjacentHTML(
+        'beforeend',
+        '<p>E-paper belum tersedia</p>'
+      );
+      return;
+    }
 
     const categoryId = catData[0].id;
 
@@ -31,9 +37,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) throw new Error('Post gagal diambil');
 
     const posts = await res.json();
-    if (!posts.length) return;
+    if (!posts.length) {
+      container.insertAdjacentHTML(
+        'beforeend',
+        '<p>E-paper kosong</p>'
+      );
+      return;
+    }
 
-    container.innerHTML = posts.map(post => {
+    // 3️⃣ Render card
+    let html = '';
+
+    posts.forEach(post => {
 
       const title = post.title.rendered;
       const content = post.excerpt?.rendered
@@ -44,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         post._embedded?.['wp:featuredmedia']?.[0]?.source_url
         || 'image/default.jpg';
 
-      return `
+      html += `
         <div class="card"
           data-id="${post.id}"
           data-title="${title}"
@@ -54,9 +69,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           <p>${title}</p>
         </div>
       `;
-    }).join('');
+    });
 
-    // ⭐ Random detail saat load
+    container.innerHTML = html;
+
+    // 4️⃣ Detail random (sama seperti logika awal)
     const randomPost = posts[Math.floor(Math.random() * posts.length)];
 
     detailImage.innerHTML = `<img src="${
@@ -76,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     detailBox.classList.add('active');
 
-    // Klik card
+    // 5️⃣ Klik card
     container.addEventListener('click', e => {
       const card = e.target.closest('.card');
       if (!card) return;
@@ -93,7 +110,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
   } catch (err) {
-    console.error('EPAPER ERROR:', err);
+    console.warn('EPAPER diblok oleh server (CORS)');
+
+    // ✅ Fallback aman (TANPA mengubah script lain)
+    container.insertAdjacentHTML(
+      'beforeend',
+      '<p style="opacity:.7">E-paper tidak dapat dimuat saat ini</p>'
+    );
   }
 
 });
