@@ -3,11 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('.info');
   if (!container) return;
 
-  const API_URL =
-    'https://lampost.co/wp-json/wp/v2/posts?per_page=20&orderby=date&order=desc&_embed';
+  const PER_PAGE = 10;
+  const MAX_PAGE = 10; // 10 x 10 = 100
+
+  let page = 1;
+  let isLoading = false;
+  let hasMore = true;
+
+  const API_BASE =
+    'https://lampost.co/wp-json/wp/v2/posts?orderby=date&order=desc&_embed';
 
   // ===============================
-  // FUNGSI WAKTU RELATIF
+  // WAKTU RELATIF
   // ===============================
   function waktuYangLalu(dateString) {
     const sekarang = new Date();
@@ -15,75 +22,103 @@ document.addEventListener('DOMContentLoaded', () => {
     const selisih = Math.floor((sekarang - waktuPost) / 1000);
 
     if (selisih < 60) return `${selisih} detik yang lalu`;
-
     const menit = Math.floor(selisih / 60);
     if (menit < 60) return `${menit} menit yang lalu`;
-
     const jam = Math.floor(menit / 60);
     if (jam < 24) return `${jam} jam yang lalu`;
-
     const hari = Math.floor(jam / 24);
     if (hari < 7) return `${hari} hari yang lalu`;
-
-    const minggu = Math.floor(hari / 7);
-    if (minggu < 4) return `${minggu} minggu yang lalu`;
-
-    const bulan = Math.floor(hari / 30);
-    if (bulan < 12) return `${bulan} bulan yang lalu`;
-
-    const tahun = Math.floor(hari / 365);
-    return `${tahun} tahun yang lalu`;
+    return `${Math.floor(hari / 30)} bulan yang lalu`;
   }
 
   // ===============================
-  // FETCH DATA BERITA
+  // SENTINEL (AKHIR .info)
   // ===============================
-  fetch(API_URL)
-    .then(res => {
-      if (!res.ok) throw new Error('Gagal mengambil data');
-      return res.json();
-    })
-    .then(posts => {
+  const sentinel = document.createElement('div');
+  sentinel.style.height = '1px';
+  container.appendChild(sentinel);
 
-      let html = '';
+  // ===============================
+  // LOAD POSTS
+  // ===============================
+  function loadPosts() {
+    if (isLoading || !hasMore) return;
 
-      posts.forEach(post => {
+    if (page > MAX_PAGE) {
+      hasMore = false;
+      return;
+    }
 
-        const judul = post.title.rendered;
+    isLoading = true;
 
-        // kategori
-        let kategori = 'Berita';
-        if (post._embedded?.['wp:term']?.[0]?.[0]) {
-          kategori = post._embedded['wp:term'][0][0].name;
+    fetch(`${API_BASE}&per_page=${PER_PAGE}&page=${page}`)
+      .then(res => {
+        if (!res.ok) {
+          hasMore = false;
+          return [];
+        }
+        return res.json();
+      })
+      .then(posts => {
+
+        // Page pertama → lewati data ke-1
+        if (page === 1) {
+          posts.shift();
         }
 
-        // gambar
-        const gambar =
-          post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-          || 'image/default.jpg';
+        if (!posts.length) {
+          hasMore = false;
+          return;
+        }
 
-        // waktu relatif
-        const waktu = waktuYangLalu(post.date);
+        let html = '';
 
-        html += `
-          <a href="halaman.html?id=${post.id}" class="item-berita">
-            <img src="${gambar}" alt="${judul}" loading="lazy">
-            <div class="info-berita">
-              <p class="kategori">${kategori}</p>
-              <h3 class="judul">${judul}</h3>
-              <p class="waktu">${waktu}</p>
-              <h4>Baca Selengkapnya</h4>
-            </div>
-          </a>
-        `;
+        posts.forEach(post => {
+          html += `
+            <a href="halaman.html?id=${post.id}" class="item-berita">
+              <img src="${post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'}" loading="lazy">
+              <div class="info-berita">
+                <p class="kategori">${post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita'}</p>
+                <h3 class="judul">${post.title.rendered}</h3>
+                <p class="waktu">${waktuYangLalu(post.date)}</p>
+                <h4>Baca Selengkapnya</h4>
+              </div>
+            </a>
+          `;
+        });
+
+        // Selalu sisipkan sebelum sentinel
+        sentinel.insertAdjacentHTML('beforebegin', html);
+
+        page++;
+        isLoading = false;
+      })
+      .catch(() => {
+        isLoading = false;
       });
+  }
 
-      container.innerHTML = html;
+  // ===============================
+  // INTERSECTION OBSERVER
+  // ===============================
+  const observer = new IntersectionObserver(
+    entries => {
+      if (entries[0].isIntersecting) {
+        loadPosts();
+      }
+    },
+    {
+      root: null,
+      rootMargin: '300px', // preload
+      threshold: 0
+    }
+  );
 
-    })
-    .catch(err => {
-      console.error('Gagal load list berita:', err);
-      container.innerHTML = 'Gagal memuat berita';
-    });
+  observer.observe(sentinel);
+
+  // ===============================
+  // INIT
+  // ===============================
+  loadPosts();
 
 });

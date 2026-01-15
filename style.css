@@ -305,12 +305,15 @@ body {
 }
 
 .info a img {
-    width: 50%;
+    width: 150px;
     object-fit: contain;
+    height: 150px;
 }
 
 .info a h3 {
     color: #000;
+    font: caption;
+    font-weight: bold;
 }
 
 .info h4,

@@ -2,17 +2,20 @@
     padding: 10px calc(5%);
     display: flex;
     gap: 5px;
+    align-items: flex-start;
 }
 
 .berita-beranda {
     width: 50%;
-    border-right: 1px solid #e5e7eb;
     padding: 10px;
 }
 
 .berita-left {
     width: 30%;
     padding: 10px;
+    position: sticky;
+    top: 20px; /* jarak dari atas saat mulai nempel */
+    height: fit-content;
 }
 
 .olahraga,
@@ -55,6 +58,12 @@
 .opini a p {
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 8px;
+}
+
+.hukum a p i,
+.opini a p i {
+    border: none;
+    margin-right: 8px;
 }
 
 .card-link {
@@ -150,7 +159,7 @@
 .berita-terpopuler .card-category {
     font-size: 12px;
     font-weight: 600;
-    color: #ffd700;
+    color: #DC0000;
     display: block;
     margin-bottom: 4px;
 }
