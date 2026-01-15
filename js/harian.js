@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <h1>${post.title.rendered}</h1>
         ${
           post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-            ? `<img src="${post._embedded['wp:featuredmedia'][0].source_url}">`
+            ? `<img src="${post._embedded['wp:featuredmedia'][0].source_url}" class="img-harian">`
             : ''
         }
         <div>${post.content.rendered}</div>

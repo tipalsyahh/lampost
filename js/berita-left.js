@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const catRes = await fetch(
       'https://lampost.co/epaper/wp-json/wp/v2/categories?slug=e-paper'
     );
+
+    if (!catRes.ok) throw new Error('Kategori gagal diambil');
+
     const catData = await catRes.json();
     if (!catData.length) return;
 
@@ -24,23 +27,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const res = await fetch(
       `https://lampost.co/epaper/wp-json/wp/v2/posts?categories=${categoryId}&per_page=3&_embed`
     );
+
+    if (!res.ok) throw new Error('Post gagal diambil');
+
     const posts = await res.json();
     if (!posts.length) return;
 
-    let html = '';
-
-    posts.forEach(post => {
+    container.innerHTML = posts.map(post => {
 
       const title = post.title.rendered;
       const content = post.excerpt?.rendered
         ?.replace(/<[^>]*>/g, '')
-        ?.trim();
+        ?.trim() || '';
 
       const image =
         post._embedded?.['wp:featuredmedia']?.[0]?.source_url
         || 'image/default.jpg';
 
-      html += `
+      return `
         <div class="card"
           data-id="${post.id}"
           data-title="${title}"
@@ -50,16 +54,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           <p>${title}</p>
         </div>
       `;
-    });
+    }).join('');
 
-    container.innerHTML = html;
-
-    // ⭐ 3️⃣ DETAIL RANDOM SAAT LOAD
+    // ⭐ Random detail saat load
     const randomPost = posts[Math.floor(Math.random() * posts.length)];
 
-    detailImage.innerHTML = `
-      <img src="${randomPost._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'}" alt="">
-    `;
+    detailImage.innerHTML = `<img src="${
+      randomPost._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'
+    }">`;
+
     detailTitle.textContent = randomPost.title.rendered;
     detailContent.textContent = randomPost.excerpt?.rendered
       ?.replace(/<[^>]*>/g, '')
@@ -73,12 +76,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     detailBox.classList.add('active');
 
-    // 4️⃣ Klik card → update detail
+    // Klik card
     container.addEventListener('click', e => {
       const card = e.target.closest('.card');
       if (!card) return;
 
-      detailImage.innerHTML = `<img src="${card.dataset.image}" alt="">`;
+      detailImage.innerHTML = `<img src="${card.dataset.image}">`;
       detailTitle.textContent = card.dataset.title;
       detailContent.textContent = card.dataset.content;
 
@@ -87,12 +90,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           Baca Selengkapnya
         </a>
       `;
-
-      detailBox.classList.add('active');
     });
 
   } catch (err) {
-    console.error(err);
+    console.error('EPAPER ERROR:', err);
   }
 
 });
