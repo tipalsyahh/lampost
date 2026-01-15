@@ -79,8 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <img src="${post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'}" loading="lazy">
               <div class="info-berita">
                 <p class="kategori">${post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita'}</p>
-                <h3 class="judul">${post.title.rendered}</h3>
-                <p class="waktu">${waktuYangLalu(post.date)}</p>
+                <p class="judul">${post.title.rendered}</p>
                 <h4>Baca Selengkapnya</h4>
               </div>
             </a>
