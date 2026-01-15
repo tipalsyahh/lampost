@@ -10,90 +10,139 @@ document.addEventListener('DOMContentLoaded', async () => {
   const detailContent = detailBox.querySelector('.detail-content');
   const detailAction = detailBox.querySelector('.detail-action');
 
+  // =============================
+  // 1️⃣ COBA API EPAPER (LOKAL)
+  // =============================
   try {
-    // 1️⃣ Ambil kategori e-paper
     const catRes = await fetch(
       'https://lampost.co/epaper/wp-json/wp/v2/categories?slug=e-paper'
     );
-
-    if (!catRes.ok) throw new Error('Kategori gagal diambil');
+    if (!catRes.ok) throw new Error('API ditolak');
 
     const catData = await catRes.json();
-    if (!catData.length) {
-      container.insertAdjacentHTML(
-        'beforeend',
-        '<p>E-paper belum tersedia</p>'
-      );
-      return;
-    }
+    if (!catData.length) throw new Error('Kategori kosong');
 
     const categoryId = catData[0].id;
 
-    // 2️⃣ Ambil post e-paper
     const res = await fetch(
       `https://lampost.co/epaper/wp-json/wp/v2/posts?categories=${categoryId}&per_page=3&_embed`
     );
-
-    if (!res.ok) throw new Error('Post gagal diambil');
+    if (!res.ok) throw new Error('Post gagal');
 
     const posts = await res.json();
-    if (!posts.length) {
-      container.insertAdjacentHTML(
-        'beforeend',
-        '<p>E-paper kosong</p>'
-      );
-      return;
-    }
+    if (!posts.length) throw new Error('Post kosong');
 
-    // 3️⃣ Render card
-    let html = '';
+    renderFromAPI(posts);
+    return; // ⛔ STOP kalau API sukses
 
-    posts.forEach(post => {
+  } catch (err) {
+    console.warn('API epaper gagal, fallback ke RSS');
+  }
 
-      const title = post.title.rendered;
-      const content = post.excerpt?.rendered
+  // =============================
+  // 2️⃣ FALLBACK KE RSS (ONLINE)
+  // =============================
+  try {
+    const rssRes = await fetch('https://lampost.co/epaper/feed/');
+    if (!rssRes.ok) throw new Error('RSS gagal');
+
+    const rssText = await rssRes.text();
+    const xml = new DOMParser().parseFromString(rssText, 'text/xml');
+    const items = [...xml.querySelectorAll('item')].slice(0, 3);
+
+    if (!items.length) throw new Error('RSS kosong');
+
+    renderFromRSS(items);
+
+  } catch (err) {
+    console.error('RSS juga gagal');
+
+    container.innerHTML =
+      '<p style="opacity:.7">E-paper tidak dapat dimuat saat ini</p>';
+  }
+
+  // =============================
+  // 🔧 RENDER DARI API
+  // =============================
+  function renderFromAPI(posts) {
+    container.innerHTML = posts.map(post => {
+      const img =
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+        'image/default.jpg';
+
+      const text = post.excerpt?.rendered
         ?.replace(/<[^>]*>/g, '')
         ?.trim() || '';
 
-      const image =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/default.jpg';
-
-      html += `
+      return `
         <div class="card"
           data-id="${post.id}"
-          data-title="${title}"
-          data-content="${content}"
-          data-image="${image}">
-          <img src="${image}" alt="${title}" loading="lazy">
-          <p>${title}</p>
+          data-title="${post.title.rendered}"
+          data-content="${text}"
+          data-image="${img}">
+          <img src="${img}" loading="lazy">
+          <p>${post.title.rendered}</p>
         </div>
       `;
+    }).join('');
+
+    initDetail(posts.map(p => ({
+      id: p.id,
+      title: p.title.rendered,
+      content: p.excerpt?.rendered?.replace(/<[^>]*>/g, '') || '',
+      image: p._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'
+    })));
+  }
+
+  // =============================
+  // 🔧 RENDER DARI RSS
+  // =============================
+  function renderFromRSS(items) {
+    const posts = items.map(item => {
+      const title = item.querySelector('title')?.textContent || '';
+      const link = item.querySelector('link')?.textContent || '#';
+      const desc = item.querySelector('description')?.textContent || '';
+
+      const imgMatch = desc.match(/<img[^>]+src="([^">]+)"/);
+      const image = imgMatch ? imgMatch[1] : 'image/default.jpg';
+
+      const content = desc.replace(/<[^>]*>/g, '').trim();
+
+      return { title, link, image, content };
     });
 
-    container.innerHTML = html;
+    container.innerHTML = posts.map((p, i) => `
+      <div class="card"
+        data-index="${i}"
+        data-title="${p.title}"
+        data-content="${p.content}"
+        data-image="${p.image}"
+        data-link="${p.link}">
+        <img src="${p.image}" loading="lazy">
+        <p>${p.title}</p>
+      </div>
+    `).join('');
 
-    // 4️⃣ Detail random (sama seperti logika awal)
-    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+    initDetail(posts, true);
+  }
 
-    detailImage.innerHTML = `<img src="${
-      randomPost._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'
-    }">`;
+  // =============================
+  // ⭐ DETAIL & CLICK
+  // =============================
+  function initDetail(posts, isRSS = false) {
+    const random = posts[Math.floor(Math.random() * posts.length)];
 
-    detailTitle.textContent = randomPost.title.rendered;
-    detailContent.textContent = randomPost.excerpt?.rendered
-      ?.replace(/<[^>]*>/g, '')
-      ?.trim();
+    detailImage.innerHTML = `<img src="${random.image}">`;
+    detailTitle.textContent = random.title;
+    detailContent.textContent = random.content;
 
     detailAction.innerHTML = `
-      <a href="koran.html?id=${randomPost.id}" class="detail-btn">
+      <a href="${isRSS ? random.link : `koran.html?id=${random.id}`}"
+         class="detail-btn">
         Baca Selengkapnya
       </a>
     `;
 
-    detailBox.classList.add('active');
-
-    // 5️⃣ Klik card
     container.addEventListener('click', e => {
       const card = e.target.closest('.card');
       if (!card) return;
@@ -103,20 +152,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       detailContent.textContent = card.dataset.content;
 
       detailAction.innerHTML = `
-        <a href="koran.html?id=${card.dataset.id}" class="detail-btn">
+        <a href="${isRSS ? card.dataset.link : `koran.html?id=${card.dataset.id}`}"
+           class="detail-btn">
           Baca Selengkapnya
         </a>
       `;
     });
-
-  } catch (err) {
-    console.warn('EPAPER diblok oleh server (CORS)');
-
-    // ✅ Fallback aman (TANPA mengubah script lain)
-    container.insertAdjacentHTML(
-      'beforeend',
-      '<p style="opacity:.7">E-paper tidak dapat dimuat saat ini</p>'
-    );
   }
 
 });
