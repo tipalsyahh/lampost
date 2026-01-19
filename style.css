@@ -194,7 +194,6 @@ body {
 }
 
 .tagar {
-    padding: 20px;
     border: 1px solid #e5e7eb;
 }
 
@@ -434,6 +433,10 @@ body {
 .iklan-image {
     width: 100%;
     border: 1px solid #000;
+}
+
+.epaper-image {
+    width: 100%;
 }
 
 @media (max-width: 768px) {
