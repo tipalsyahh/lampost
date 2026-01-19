@@ -426,8 +426,17 @@ body {
     width: 100%;
 }
 
-.iklan-showcase {
+.iklan-gambar {
     padding: 10px calc(18%);
+    margin-top: 10px;
+}
+
+.gambar {
+    width: 100%;
+}
+
+.iklan-showcase {
+   margin-top: 15px;
 }
 
 .iklan-image {
@@ -525,7 +534,7 @@ body {
         max-width: 18rem;
     }
 
-    .iklan-showcase {
+    .iklan-gambar {
         padding: 10px;
     }
 }
