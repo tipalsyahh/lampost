@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!container) return;
 
   try {
-    // Proxy agar lolos CORS
+    // 🌐 Proxy CORS
     const proxy = 'https://api.allorigins.win/raw?url=';
     const target = encodeURIComponent('https://lampost.co/microweb/teknokrat/');
 
@@ -14,25 +14,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const html = await res.text();
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
-    // 🔎 Ambil artikel (aman untuk berbagai struktur)
+    // 🔎 Ambil artikel (fleksibel)
     const items = doc.querySelectorAll('article, .post, .item');
 
     let output = '';
 
     items.forEach(item => {
 
-      // 🔗 Link
-      let link = item.querySelector('a')?.getAttribute('href') || '#';
-      if (link.startsWith('/')) {
-        link = 'https://lampost.co' + link;
-      }
+      // 🔗 LINK
+      let link = item.querySelector('a')?.getAttribute('href') || '';
+      if (!link) return;
+      if (link.startsWith('/')) link = 'https://lampost.co' + link;
 
-      // 📝 Judul
+      // 📝 JUDUL
       const judul =
-        item.querySelector('h1, h2, h3')?.innerText?.trim()
-        || 'Tanpa Judul';
+        item.querySelector('h1, h2, h3')?.innerText?.trim() ||
+        'Tanpa Judul';
 
-      // 🖼️ Gambar (FIX lazyload)
+      // 🖼️ GAMBAR (lazyload aman)
       const imgEl = item.querySelector('img');
       let gambar =
         imgEl?.getAttribute('data-src') ||
@@ -45,23 +44,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         gambar = 'https://lampost.co' + gambar;
       }
 
-      // 🚫 Skip jika bukan konten valid
-      if (!link || !judul) return;
+      // 📅 TANGGAL (banyak fallback)
+      let tanggal =
+        item.querySelector('time')?.innerText?.trim() ||
+        item.querySelector('.date, .post-date, .entry-date')?.innerText?.trim() ||
+        '';
+
+      // fallback → tanggal hari ini
+      if (!tanggal) {
+        tanggal = new Date().toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
 
       output += `
-        <a href="${link}" class="item-info" target="_blank" rel="noopener">
+        <a href="${link}" class="item-info" target="_blank" rel="noopener noreferrer">
           <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+          <div class="berita-microweb">
           <p class="judul">${judul}</p>
+          <p class="tanggal">${tanggal}</p>
+          </div>
         </a>
       `;
     });
 
-    // 🔥 Jika kosong
+    // 🚫 Jika tidak ada konten
     if (!output) {
       output = '<p style="opacity:.7">Konten tidak tersedia</p>';
     }
 
-    // Masukkan ke container
     container.innerHTML = output;
 
   } catch (err) {
