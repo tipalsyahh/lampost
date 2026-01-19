@@ -8,6 +8,8 @@ body {
     scrollbar-width: none;
     -ms-overflow-style: none;
     font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .navbar-main {
@@ -402,23 +404,23 @@ body {
 }
 
 .has-sub {
-  position: relative;
+    position: relative;
 }
 
 .sub-menu {
-  display: none;
-  position: absolute;
-  background: #fff;
-  padding: 10px;
-  z-index: 999;
+    display: none;
+    position: absolute;
+    background: #fff;
+    padding: 10px;
+    z-index: 999;
 }
 
 .has-sub:hover .sub-menu {
-  display: block;
+    display: block;
 }
 
 .sub-menu li {
-  list-style: none;
+    list-style: none;
 }
 
 .img-harian {
@@ -426,7 +428,7 @@ body {
 }
 
 .iklan-showcase {
-    padding: 10px calc(15%);
+    padding: 10px calc(18%);
 }
 
 .iklan-image {
@@ -503,12 +505,20 @@ body {
         scrollbar-width: none;
     }
 
-    .sosmed a{
+    .sosmed a {
         font-size: 13px;
     }
 
     .footer-left,
     .footer-center {
         display: none;
+    }
+
+    .sidebar {
+        max-width: 18rem;
+    }
+
+    .iklan-showcase {
+        padding: 10px;
     }
 }
