@@ -462,7 +462,7 @@ body {
 }
 
 .iklan-showcase {
-   margin-top: 15px;
+    margin-top: 15px;
 }
 
 .iklan-image {
@@ -525,25 +525,6 @@ body {
         gap: 5px;
     }
 
-    .navbar-sub {
-        justify-content: flex-start;
-        padding: 12px 16px;
-        gap: 16px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-        overflow: visible;
-    }
-
-    .navbar-sub::-webkit-scrollbar {
-        display: none;
-    }
-
-    .navbar-sub {
-        scrollbar-width: none;
-    }
-
     .sosmed a {
         font-size: 13px;
     }
@@ -565,22 +546,57 @@ body {
         padding: 10px;
     }
 
-    .navbar-sub ul li:focus-within > .sub-menu {
+    .navbar-sub {
         display: flex;
+        justify-content: flex-start;
+        padding: 12px 16px;
+        gap: 16px;
+
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
     }
 
-    /* pastikan tidak mendorong elemen lain */
+    .navbar-sub::-webkit-scrollbar {
+        display: none;
+    }
+
+    .navbar-sub ul {
+        display: flex;
+        gap: 16px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
     .navbar-sub ul li {
         position: relative;
-        z-index: 100;
     }
 
     .navbar-sub ul li .sub-menu {
-        position: absolute;   /* tetap overlay */
-        top: 100%;
-        left: 0;
-        width: 100%;
-        z-index: 9999;        /* di atas elemen lain */
-        background-color: #fff;
+        position: fixed;
+        display: none;
+        flex-direction: column;
+
+        min-width: 180px;
+        padding: 10px 0;
+
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        z-index: 9999;
     }
+
+    .navbar-sub ul li:focus-within>.sub-menu {
+        display: flex;
+    }
+
+    @media (hover: hover) {
+        .navbar-sub ul li:hover>.sub-menu {
+            display: flex;
+        }
+    }
+
 }
