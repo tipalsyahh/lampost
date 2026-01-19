@@ -182,11 +182,11 @@
     transform: scale(1.06);
 }
 
-.iklan {
+/* .iklan {
   min-height: 120px;
   overflow: hidden;
 }
-
+ */
 
 @media (max-width: 768px) {
     .berita-left {
