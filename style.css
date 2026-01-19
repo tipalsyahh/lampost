@@ -96,7 +96,7 @@ body {
     top: 100%;
     left: 0;
     background-color: #fff;
-    min-width: 180px;
+    min-width: 250px;
     padding: 10px 0;
     display: none;
     flex-direction: column;
@@ -533,6 +533,7 @@ body {
         overflow-y: hidden;
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
+        overflow: visible;
     }
 
     .navbar-sub::-webkit-scrollbar {
@@ -566,9 +567,20 @@ body {
 
     .navbar-sub ul li:focus-within > .sub-menu {
         display: flex;
-        position: static; /* turun ke bawah menu */
-        border: none;
-        padding-left: 10px;
+    }
+
+    /* pastikan tidak mendorong elemen lain */
+    .navbar-sub ul li {
+        position: relative;
         z-index: 100;
+    }
+
+    .navbar-sub ul li .sub-menu {
+        position: absolute;   /* tetap overlay */
+        top: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 9999;        /* di atas elemen lain */
+        background-color: #fff;
     }
 }
