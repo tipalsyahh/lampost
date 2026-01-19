@@ -425,6 +425,15 @@ body {
     width: 100%;
 }
 
+.iklan-showcase {
+    padding: 10px calc(15%);
+}
+
+.iklan-image {
+    width: 100%;
+    border: 1px solid #000;
+}
+
 @media (max-width: 768px) {
     .container {
         display: block;
