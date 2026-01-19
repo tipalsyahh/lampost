@@ -14,21 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
     'https://lampost.co/wp-json/wp/v2/posts?orderby=date&order=desc&_embed';
 
   // ===============================
-  // WAKTU RELATIF
+  // FORMAT TANGGAL ABSOLUT
   // ===============================
-  function waktuYangLalu(dateString) {
-    const sekarang = new Date();
-    const waktuPost = new Date(dateString);
-    const selisih = Math.floor((sekarang - waktuPost) / 1000);
-
-    if (selisih < 60) return `${selisih} detik yang lalu`;
-    const menit = Math.floor(selisih / 60);
-    if (menit < 60) return `${menit} menit yang lalu`;
-    const jam = Math.floor(menit / 60);
-    if (jam < 24) return `${jam} jam yang lalu`;
-    const hari = Math.floor(jam / 24);
-    if (hari < 7) return `${hari} hari yang lalu`;
-    return `${Math.floor(hari / 30)} bulan yang lalu`;
+  function formatTanggal(dateString) {
+    const bulan = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    const date = new Date(dateString);
+    const hari = date.getDate();
+    const bln = bulan[date.getMonth()];
+    const tahun = date.getFullYear();
+    return `${hari} ${bln} ${tahun}`;
   }
 
   // ===============================
@@ -74,13 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = '';
 
         posts.forEach(post => {
+          // ✅ Gunakan tanggal absolut
+          const tanggal = formatTanggal(post.date);
+
           html += `
             <a href="halaman.html?id=${post.id}" class="item-berita">
               <img src="${post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'}" loading="lazy">
               <div class="info-berita">
-                <p class="kategori">${post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita'}</p>
                 <p class="judul">${post.title.rendered}</p>
-                <h4>Baca Selengkapnya</h4>
+                <div class="detail-info">
+                  <p class="kategori">${post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita'}</p>
+                  <p class="tanggal">${tanggal}</p>
+                </div>
               </div>
             </a>
           `;
