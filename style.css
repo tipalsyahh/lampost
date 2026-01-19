@@ -10,6 +10,16 @@ body {
     font-family: 'Montserrat', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transform: translateY(-30px);
+    opacity: 0;
+    animation: slideDown 1.2s ease forwards;
+}
+
+@keyframes slideDown {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .navbar-main {
@@ -490,10 +500,22 @@ body {
     color: #000;
 }
 
+h2 {
+    font-weight: 800;
+}
+
+.berita-mobile {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .container {
         display: block;
         padding: 10px;
+    }
+
+    .berita-mobile {
+        display: block;
     }
 
     .berita {
@@ -559,10 +581,6 @@ body {
     .judul {
         font-weight: normal;
         font-size: 12px;
-    }
-
-    .lampung {
-        display: none;
     }
 
     .sidebar {

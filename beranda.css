@@ -48,20 +48,23 @@
 }
 
 .hukum a,
-.opini a {
+.opini a,
+.teknologi a {
     color: #000;
     text-decoration: none;
     display: flex;
 }
 
 .hukum a p,
-.opini a p {
+.opini a p,
+.teknologi a p {
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 8px;
 }
 
 .hukum a p i,
-.opini a p i {
+.opini a p i,
+.teknologi a p i {
     border: none;
     margin-right: 8px;
 }
@@ -182,11 +185,9 @@
     transform: scale(1.06);
 }
 
-/* .iklan {
-  min-height: 120px;
-  overflow: hidden;
+.ekonomi a {
+    margin-bottom: 15px;
 }
- */
 
 @media (max-width: 768px) {
     .berita-left {
@@ -197,5 +198,18 @@
         padding: 0;
         width: 100%;
         border: none;
+    }
+
+    .lampung {
+        padding: 10px;
+        margin: 0;
+    }
+
+    .berita-terpopuler {
+        display: block;
+    }
+
+    .berita-terpopuler a {
+        margin-bottom: 15px;
     }
 }

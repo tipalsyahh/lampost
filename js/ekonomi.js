@@ -1,13 +1,29 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-  const container = document.querySelector('.berita-terbaru');
+  const container = document.querySelector('.ekonomi');
   if (!container) return;
 
-  const API_URL =
-    'https://lampost.co/wp-json/wp/v2/posts?per_page=1&orderby=date&order=desc&_embed';
+  // Ambil kategori langsung dari URL yang sudah ada
+  const kategoriIDs = [];
+  try {
+    const catRes = await fetch('https://lampost.co/wp-json/wp/v2/categories?slug=ekonomi-dan-bisnis');
+    if (catRes.ok) {
+      const catData = await catRes.json();
+      if (catData[0]?.id) kategoriIDs.push(catData[0].id);
+    }
+  } catch (e) {
+    console.error('Gagal ambil kategori', e);
+  }
+
+  if (kategoriIDs.length === 0) {
+    container.innerHTML = 'Kategori tidak ditemukan';
+    return;
+  }
+
+  // Ambil 5 berita terbaru dari kategori yang dipilih
+  const API_URL = `https://lampost.co/wp-json/wp/v2/posts?categories=${kategoriIDs.join(',')}&per_page=5&orderby=date&order=desc&_embed`;
 
   try {
-
     const res = await fetch(API_URL);
     if (!res.ok) throw new Error('Gagal mengambil data');
 
@@ -25,31 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       // gambar
-      const gambar =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/default.jpg';
-
-      // ===== AUTHOR (FIX UTAMA) =====
-      let author = 'Admin';
-
-      // 1️⃣ Coba dari _embed (jika tersedia)
-      if (post._embedded?.author?.[0]?.name) {
-        author = post._embedded.author[0].name;
-      }
-      // 2️⃣ Fallback: fetch user berdasarkan author ID
-      else if (post.author) {
-        try {
-          const authorRes = await fetch(
-            `https://lampost.co/wp-json/wp/v2/users/${post.author}`
-          );
-          if (authorRes.ok) {
-            const authorData = await authorRes.json();
-            author = authorData.name;
-          }
-        } catch (e) {
-          author = 'Admin';
-        }
-      }
+      const gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg';
 
       // tanggal
       const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
@@ -61,19 +53,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       html += `
         <a href="halaman.html?id=${post.id}" class="card-link">
           <div class="card-image-wrapper">
-
             <img src="${gambar}" alt="${judul}" class="card-image" loading="lazy">
-
             <div class="card-text-overlay">
               <span class="card-text">${judul}</span>
-
               <div class="card-meta">
-                <span class="card-author">lampost</span>
                 <span class="card-date">${tanggal}</span>
+                <span class="card-category">${kategori}</span>
               </div>
-
             </div>
-
           </div>
         </a>
       `;
