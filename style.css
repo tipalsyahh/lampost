@@ -514,6 +514,10 @@ body {
         display: none;
     }
 
+    .lampung {
+        display: none;
+    }
+
     .sidebar {
         max-width: 18rem;
     }
