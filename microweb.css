@@ -26,11 +26,27 @@
 .judul {
     color: #000;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
+}
+
+.info-microweb {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .tanggal {
     color: #797979;
+}
+
+.kategori {
+    font-size: 12px;
+    color: #DC0000;
+}
+
+.deskripsi {
+    color: #797979;
+    font-size: 15px;
 }
 
 .bener {

@@ -4,83 +4,84 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!container) return;
 
   try {
-    // 🌐 Proxy CORS
-    const proxy = 'https://api.allorigins.win/raw?url=';
-    const target = encodeURIComponent('https://lampost.co/microweb/teknokrat/');
+    /* ========================
+       🌐 REST API WORDPRESS
+    ======================== */
+    const api =
+      'https://lampost.co/microweb/teknokrat/wp-json/wp/v2/posts' +
+      '?per_page=13&orderby=date&order=desc&_embed';
 
-    const res = await fetch(proxy + target);
-    if (!res.ok) throw new Error('Gagal mengambil halaman');
+    const res = await fetch(api);
+    if (!res.ok) throw new Error('Gagal mengambil API');
 
-    const html = await res.text();
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-
-    // 🔎 Ambil artikel (fleksibel)
-    const items = doc.querySelectorAll('article, .post, .item');
+    const posts = await res.json();
 
     let output = '';
 
-    items.forEach(item => {
+    posts.forEach(post => {
 
-      // 🔗 LINK
-      let link = item.querySelector('a')?.getAttribute('href') || '';
-      if (!link) return;
-      if (link.startsWith('/')) link = 'https://lampost.co' + link;
+      /* 🔗 LINK */
+      const link = post.link;
 
-      // 📝 JUDUL
-      const judul =
-        item.querySelector('h1, h2, h3')?.innerText?.trim() ||
-        'Tanpa Judul';
+      /* 📝 JUDUL */
+      const judul = post.title.rendered;
 
-      // 🖼️ GAMBAR (lazyload aman)
-      const imgEl = item.querySelector('img');
-      let gambar =
-        imgEl?.getAttribute('data-src') ||
-        imgEl?.getAttribute('data-lazy-src') ||
-        imgEl?.getAttribute('src') ||
-        imgEl?.src ||
-        'image/ai.jpg';
+      /* 📰 DESKRIPSI */
+      let deskripsi =
+        post.excerpt?.rendered
+          ?.replace(/<[^>]+>/g, '')
+          ?.trim() || '';
 
-      if (gambar && gambar.startsWith('/')) {
-        gambar = 'https://lampost.co' + gambar;
+      if (deskripsi.length > 150) {
+        deskripsi = deskripsi.slice(0, 150) + '...';
       }
 
-      // 📅 TANGGAL (banyak fallback)
-      let tanggal =
-        item.querySelector('time')?.innerText?.trim() ||
-        item.querySelector('.date, .post-date, .entry-date')?.innerText?.trim() ||
-        '';
+      /* 🏷️ KATEGORI */
+      const category =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
 
-      // fallback → tanggal hari ini
-      if (!tanggal) {
-        tanggal = new Date().toLocaleDateString('id-ID', {
+      /* 🖼️ GAMBAR (FULL, TIDAK BLUR) */
+      const media =
+        post._embedded?.['wp:featuredmedia']?.[0];
+
+      const gambar =
+        media?.source_url || 'image/ai.jpg';
+
+      /* 📅 TANGGAL */
+      const tanggal = new Date(post.date)
+        .toLocaleDateString('id-ID', {
           day: '2-digit',
           month: 'long',
           year: 'numeric'
         });
-      }
 
+      /* 🧱 OUTPUT */
       output += `
-        <a href="${link}" class="item-info" target="_blank" rel="noopener noreferrer">
-          <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+        <a href="berita.microweb.html?id=${post.id}" class="item-info">
+          <img
+            src="${gambar}"
+            alt="${judul}"
+            class="img-microweb"
+            loading="lazy">
           <div class="berita-microweb">
-          <p class="judul">${judul}</p>
-          <p class="tanggal">${tanggal}</p>
+            <p class="judul">${judul}</p>
+            <div class="info-microweb">
+              <p class="tanggal">${tanggal}</p>
+              <p class="kategori">${category}</p>
+            </div>
+            <p class="deskripsi">${deskripsi}</p>
           </div>
         </a>
       `;
     });
 
-    // 🚫 Jika tidak ada konten
-    if (!output) {
-      output = '<p style="opacity:.7">Konten tidak tersedia</p>';
-    }
-
-    container.innerHTML = output;
+    container.innerHTML =
+      output || '<p>Konten tidak tersedia</p>';
 
   } catch (err) {
-    console.error('Microweb gagal dimuat:', err);
+    console.error('API gagal dimuat:', err);
     container.innerHTML =
-      '<p style="opacity:.7">Iklan tidak dapat dimuat saat ini</p>';
+      '<p>Konten gagal dimuat</p>';
   }
 
 });

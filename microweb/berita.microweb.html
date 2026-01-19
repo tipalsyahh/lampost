@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="beranda.css">
-    <link rel="icon" href="image/logo.png" type="image/png">
+    <link rel="stylesheet" href="../halaman.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="../image/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Lampost</title>
 </head>
@@ -14,14 +14,14 @@
 <body>
     <nav class="navbar-main">
         <div class="logo">
-            <img src="image/lampost300.png (1).webp" alt="image" class="logo-img">
+            <img src="../image/lampost300.png (1).webp" alt="image" class="logo-img">
             <ul>
                 <li><a href="#" id="btnMenu">
                         <i class="bi bi-list"></i> Menu
                     </a></li>
-                <li><a href="harian.html">Harian</a></li>
+                <li><a href="../harian.html">Harian</a></li>
                 <li><a href="#">Mingguan</a></li>
-                <li><a href="index.html">Beranda</a></li>
+                <li><a href="../index.html">Beranda</a></li>
             </ul>
         </div>
         <div class="button-user">
@@ -38,15 +38,7 @@
     <nav class="navbar-sub">
         <ul>
             <li><a href="#">Politik</a></li>
-            <li class="has-sub">
-                <a href="#">Pendidikan</a>
-                <ul class="sub-menu">
-                    <li><a href="#">SD</a></li>
-                    <li><a href="#">SMP</a></li>
-                    <li><a href="#">SMA</a></li>
-                    <li><a href="#">Perguruan Tinggi</a></li>
-                </ul>
-            </li>
+            <li><a href="#">Hukum</a></li>
             <li><a href="#">Ekonomi</a></li>
             <li><a href="#">Lingkungan</a></li>
             <li><a href="#">Wawancara</a></li>
@@ -62,7 +54,7 @@
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
         <center>
-            <h2>MENU</h2>
+            <h2>Menu</h2>
         </center>
         <div class="search-sidebar">
             <input type="search" class="search-input" placeholder="Cari Artikel Disini" aria-label="Search">
@@ -79,59 +71,38 @@
             </ul>
         </div>
     </div>
-    <div class="iklan-gambar">
-        <a href="#">
-            <img src="image/baner-unioil.jpg" alt="img" class="gambar">
-        </a>
-    </div>
-    <div class="container-beranda">
-        <div class="berita-left">
-            <div class="olahraga">
-                <h2>OLAHRAGA</h2>
-            </div>
-            <div class="humaniora">
-                <h2>HUMANIORA</h2>
-            </div>
-            <div class="hukum">
-                <h2>HUKUM</h2>
-            </div>
-        </div>
-        <div class="berita-beranda">
-            <h2>BERITA TERKINI</h2>
-            <div class="berita-terbaru">
+    <div class="container">
+        <div class="berita" id="berita">
+            <h1 class="judul-berita"></h1>
 
-            </div>
-            <div class="iklan-showcase">
-                <a href="https://s.id/Lampostco">
-                    <img src="image/ads_showcase.jpg" alt="img" class="iklan-image">
-                </a>
-            </div>
-            <div class="info">
+            <p class="meta-berita">
+                Oleh <strong>Lampost</strong> |
+                <span id="tanggal"></span>
+                <button id="voiceToggle" class="voice-btn">
+                    <i class="bi bi-volume-up"></i>
+                </button>
+            </p>
 
-            </div>
+            <img class="gambar-berita">
+
+            <div class="isi-berita"></div>
+
+            <a href="../index.html" class="baca-selengkapnya">
+                Baca berita terkait lainnya
+            </a>
         </div>
+
+
         <div class="iklan">
-            <h2>KORAN DIGITAL</h2>
             <div class="tagar">
-                <a href="harian.html">
-                    <img src="image/EPAPER-LAMPUNG-POST-2024-01-01.webp" alt="img" class="epaper-image">
-                </a>
+                <h3>TOPIK TRENDING</h3>
+                <p>#Banjir Sumatra</p>
+                <p>#Muzakir Manaf</p>
+                <p>#Makan Bergizi Gratis</p>
+                <p>#Purbaya Yudhi Sadewa</p>
+                <p>#Akal ImitasiMuzakir Manaf</p>
+                <p>#Prabowo</p>
             </div>
-            <!-- <div class="epeper">
-                <h2>Koran Digital</h2>
-            </div> -->
-            <div class="hiburan">
-                <h2>HIBURAN</h2>
-            </div>
-            <div class="opini">
-                <h2>KOLOM</h2>
-            </div>
-        </div>
-    </div>
-    <div class="lampung">
-        <h2>LAMPUNG</h2>
-        <div class="berita-terpopuler">
-
         </div>
     </div>
     <footer class="footer">
@@ -174,18 +145,9 @@
             <small>© 2025 Lampost.co - Media Group. All rights reserved.</small>
         </div>
     </footer>
-
-
-    <script src="js/olahraga.js"></script>
-    <script src="js/scrip.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/hiburan.js"></script>
-    <script src="js/hukum.js"></script>
-    <script src="js/terbaru.js"></script>
-    <script src="js/populer.js"></script>
-    <script src="js/humaniora.js"></script>
-    <script src="js/opini.js"></script>
-    <script src="js/berita-left.js"></script>
+    <script src="../js/voice.js"></script>
+    <script src="../js/detail.teknokrat.js"></script>
+    <script src="../js/scrip.js"></script>
 </body>
 
 </html>
