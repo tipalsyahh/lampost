@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../halaman.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../beranda.css">
+    <link rel="stylesheet" href="../microweb.css">
     <link rel="icon" href="../image/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Lampost</title>
@@ -62,7 +63,7 @@
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
         <center>
-            <h2>Menu</h2>
+            <h2>MENU</h2>
         </center>
         <div class="search-sidebar">
             <input type="search" class="search-input" placeholder="Cari Artikel Disini" aria-label="Search">
@@ -73,43 +74,42 @@
                 <li><a href="#"><i class="bi bi-camera-video"></i> Vidio</a></li>
                 <li><a href="#"><i class="bi bi-mic"></i> Podcase</a></li>
                 <li><a href="#"><i class="bi bi-newspaper"></i> Infografik</a></li></br>
-                <li><a href="harian.html"><i class="bi bi-calendar3"></i> Harian</a></li>
+                <li><a href="../harian.html"><i class="bi bi-calendar3"></i> Harian</a></li>
                 <li><a href="#"><i class="bi bi-calendar3"></i> Mingguan</a></li>
-                <li><a href="index.html"><i class="bi bi-house-door"></i> Beranda</a></li>
+                <li><a href="../index.html"><i class="bi bi-house-door"></i> Beranda</a></li>
             </ul>
         </div>
     </div>
-    <div class="container">
-        <div class="berita" id="berita">
-            <h1 class="judul-berita"></h1>
+    <div class="bener">
+        <img src="../image/unila-banner.gif" alt="img" class="gif-tekno">
+    </div>
+    <div class="container-microweb">
+        <div class="berita-microweb">
+            <h2>BERITA TERKINI</h2>
+            <div class="berita-terbaru">
 
-            <p class="meta-berita">
-                Oleh <strong>Lampost</strong> |
-                <span id="tanggal"></span>
-                <button id="voiceToggle" class="voice-btn">
-                    <i class="bi bi-volume-up"></i>
-                </button>
-            </p>
+            </div>
+            <div class="home">
 
-            <img class="gambar-berita">
+            </div>
+            <!-- <div class="iklan-microweb">
+                <a href="#">
+                    <img src="../image/PENERIMAAN-TEKNOKRAT.jpg" alt="image" class="img-iklan-microweb">
+                </a>
+            </div> -->
+            <div class="Pendidikan">
 
-            <div class="isi-berita"></div>
-
-            <a href="../index.html" class="baca-selengkapnya">
-                Baca berita terkait lainnya
-            </a>
+            </div>
         </div>
-
-
         <div class="iklan">
+            <h2>KORAN DIGITAL</h2>
             <div class="tagar">
-                <h3>TOPIK TRENDING</h3>
-                <p>#Banjir Sumatra</p>
-                <p>#Muzakir Manaf</p>
-                <p>#Makan Bergizi Gratis</p>
-                <p>#Purbaya Yudhi Sadewa</p>
-                <p>#Akal ImitasiMuzakir Manaf</p>
-                <p>#Prabowo</p>
+                <a href="../harian.html">
+                    <img src="../image/epaper-unila.jpg" alt="img" class="epaper-image">
+                </a>
+            </div>
+            <div class="terbaru">
+                <h2>BERITA TERKINI</h2>
             </div>
         </div>
     </div>
@@ -120,24 +120,22 @@
             <a href="https://x.com/lampungpost_"><i class="bi bi-twitter-x"></i></i>Twitter</a>
             <a href="https://www.tiktok.com/@lampungpost_official"><i class="bi bi-tiktok"></i>Tiktok</a>
         </div>
-        <div class="footer-container">
+        <div class="footer-microweb">
 
             <div class="footer-left">
                 <center>
-                    <p>Affiliated with:</p>
+                    <h3>Affiliated with:</h3>
                 </center>
                 <img src="../image/lampost300.png (1).webp" alt="Logo">
+                <p>Microsite ini adalah laman berita kerja sama Harian Umum Lampung Post dengan Universitas Teknokrat
+                    Indonesia. Lampost.co adalah situs berita yang diterbitkan oleh PT. Suara Nada Alam Indah. NIB :
+                    9120102863787 yang berkedudukan di Lampung, tepatnya Gedung Lampung Post Jalan Soekarno-Hatta No.
+                    108 Rajabasa, Bandar Lampung.</p>
             </div>
 
             <div class="footer-center">
-                <h4>Sitemap</h4>
-                <a href="#">Beranda</a>
-                <a href="#">Tentang Kami</a>
-                <a href="#">Compro</a>
-                <a href="#">Ilkan</a>
-                <a href="#">Microsite</a>
-                <a href="#">RRS</a>
-                <a href="#">Pedoman Media Siber</a>
+                <center><h3>UNIVERSITAS LAMPUNG</h3></center>
+                <img src="../image/logo_unila.png" alt="image" class="logo-microweb">
             </div>
         </div>
 
@@ -153,10 +151,13 @@
             <small>© 2025 Lampost.co - Media Group. All rights reserved.</small>
         </div>
     </footer>
-    <script src="../js/voice.js"></script>
-    <script src="../js/unila/detail.unila.js"></script>
+
+
+    <script src="../js/unila/unila.js"></script>
+    <script src="../js/teknokrat/unila.pendidikan.js"></script>
     <script src="../js/scrip.js"></script>
     <script src="../js/navbar.js"></script>
+    <script src="../js/unila/terbaru.js"></script>
 </body>
 
 </html>
