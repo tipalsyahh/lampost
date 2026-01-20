@@ -5,11 +5,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     /* ========================
-       🌐 REST API WORDPRESS
+       🌐 REST API via Proxy
+       Ganti URL proxy sesuai server kamu
     ======================== */
-    const api =
-      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
-      '?per_page=13&orderby=date&order=desc&_embed';
+    const api = 'https://server-anda.com/proxy?endpoint=/microweb/universitaslampung/wp-json/wp/v2/posts?per_page=6&orderby=date&order=desc&_embed';
 
     const res = await fetch(api);
     if (!res.ok) throw new Error('Gagal mengambil API');
@@ -40,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const category =
         post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
 
-      /* 🖼️ GAMBAR (FULL, TIDAK BLUR) */
+      /* 🖼️ GAMBAR */
       const media =
         post._embedded?.['wp:featuredmedia']?.[0];
 
