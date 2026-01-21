@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-  const container = document.querySelector('.Pendidikan');
+  const container = document.querySelector('.prestasi-terbaru');
   if (!container) return;
 
   try {
     /* ========================
-       1️⃣ AMBIL ID KATEGORI PENDIDIKAN
+       1️⃣ AMBIL ID KATEGORI
     ======================== */
     const catRes = await fetch(
-      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=inspirasi'
+      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=prestasi-mahasiswa'
     );
     if (!catRes.ok) throw new Error('Gagal ambil kategori');
 
     const catData = await catRes.json();
-    if (!catData.length) throw new Error('Kategori pendidikan tidak ditemukan');
+    if (!catData.length) throw new Error('Kategori tidak ditemukan');
 
     const kategoriId = catData[0].id;
 
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ======================== */
     const api =
       'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
-      `?categories=${kategoriId}&per_page=13&orderby=date&order=desc&_embed`;
+      `?categories=${kategoriId}&per_page=2&orderby=date&order=desc&_embed`;
 
     const res = await fetch(api);
     if (!res.ok) throw new Error('Gagal mengambil API');
@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     posts.forEach(post => {
 
-      const link = post.link;
       const judul = post.title.rendered;
 
       let deskripsi =
@@ -46,11 +45,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Pendidikan';
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Prestasi Mahasiswa';
 
       const media =
         post._embedded?.['wp:featuredmedia']?.[0];
 
+      // ⬅️ POLA YANG TERBUKTI AMAN
       const gambar =
         media?.source_url || 'image/ai.jpg';
 
@@ -63,9 +63,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       output += `
         <a href="berita.microweb.html?id=${post.id}" class="item-info">
-          <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
-          <div class="berita-microweb">
-            <p class="judul">${judul}</p>
+          <img src="${gambar}" alt="${judul}" class="img-unila" loading="lazy">
+          <div class="berita-unila">
+            <p class="judul-unila">${judul}</p>
             <div class="info-microweb">
               <p class="tanggal">${tanggal}</p>
               <p class="kategori">${category}</p>
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     container.innerHTML =
-      output || '<p>Konten pendidikan tidak tersedia</p>';
+      output || '<p>Konten Prestasi Mahasiswa tidak tersedia</p>';
 
   } catch (err) {
     console.error('API gagal dimuat:', err);

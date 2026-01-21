@@ -15,6 +15,55 @@
     object-fit: contain;
 }
 
+.prestasi-terbaru {
+    display: flex;
+    gap: 5px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.prestasi-terbaru a {
+    width: 50%;
+    text-decoration: none;
+}
+
+.prestasi-lanjutan {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.prestasi-lanjutan > * {
+  width: calc(50% - 8px);
+}
+
+.prestasi-lanjutan a {
+    text-decoration: none;
+}
+
+.judul-unila-lanjutan {
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+}
+
+.deskripsi-unila-lanjutan {
+    color: #797979;
+    font-size: 14px;
+    margin-top: 0;
+}
+
+.img-unila {
+    width: 100%;
+    object-fit: cover;
+}
+
+.judul-unila {
+    margin: 0;
+    font-size: 16px;
+    color: #000;
+    font-weight: bold;
+}
+
 .home a,
 .Pendidikan a {
     display: flex;
@@ -78,7 +127,7 @@
 }
 
 .logo-microweb {
-    width: calc(100vh * 0.45);
+    width: calc(100vh * 0.35);
 }
 
 .footer-left {
