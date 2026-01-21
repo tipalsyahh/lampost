@@ -14,8 +14,7 @@
     width: 30%;
     padding: 10px;
     position: sticky;
-    top: 20px; /* jarak dari atas saat mulai nempel */
-    height: fit-content;
+    top: 10px;
 }
 
 .olahraga,

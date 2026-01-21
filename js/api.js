@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="halaman.html?id=${post.id}" class="item-berita">
               <img src="${post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'}" loading="lazy">
               <div class="info-berita">
-                <p class="judul">${post.title.rendered}</p>
+                <p class="judul" id="utama">${post.title.rendered}</p>
                 <div class="detail-info">
                   <p class="kategori">${post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita'}</p>
                   <p class="tanggal">${tanggal}</p>

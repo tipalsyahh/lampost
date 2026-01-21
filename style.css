@@ -7,7 +7,7 @@ body {
     overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    font-family: 'Montserrat', sans-serif;
+     font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transform: translateY(-30px);
@@ -227,9 +227,11 @@ body {
 .iklan {
     padding: 20px;
     width: 30%;
+    position: sticky;
+    top: 10px;
 }
 
-.tagar {
+/* .tagar {
     border: 1px solid #e5e7eb;
 }
 
@@ -237,7 +239,7 @@ body {
     font-size: 15px;
     color: #4d4d4d;
     font-weight: bold;
-}
+} */
 
 .detail-btn {
     border: none;
@@ -340,6 +342,7 @@ body {
     gap: 10px;
     text-decoration: none;
     border-bottom: 1px solid #e5e7eb;
+    align-items: center;
 }
 
 .info a img {
@@ -351,6 +354,10 @@ body {
 .judul {
     color: #000;
     font-weight: bold;
+}
+
+#utama {
+    margin-top: 0;
 }
 
 .info h4 {

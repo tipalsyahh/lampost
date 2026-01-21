@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
       output += `
-        <a href="berita.microweb.html?id=${post.id}" class="item-info">
+        <a href="berita.unila.html?id=${post.id}" class="item-info">
           <img src="${gambar}" alt="${judul}" class="img-unila" loading="lazy">
           <div class="berita-unila">
             <p class="judul-unila">${judul}</p>

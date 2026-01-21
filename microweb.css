@@ -1,20 +1,20 @@
 .container-microweb {
-  padding: 10px calc(8%);
-  display: flex;
-  gap: 5px;
-  align-items: flex-start;
+    padding: 10px calc(8%);
+    display: flex;
+    gap: 5px;
+    align-items: flex-start;
 }
 
 .berita-microweb {
-  width: 70%;
-  padding: 10px;
+    width: 70%;
+    padding: 10px;
 }
 
 .iklan-parent {
-  width: 30%;
-  padding: 20px;
-  position: sticky;
-  top: 10px; /* jarak dari atas saat mulai menempel */
+    width: 30%;
+    padding: 20px;
+    position: sticky;
+    top: 10px;
 }
 
 
@@ -36,13 +36,13 @@
 }
 
 .prestasi-lanjutan {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
-.prestasi-lanjutan > * {
-  width: calc(50% - 8px);
+.prestasi-lanjutan>* {
+    width: calc(50% - 8px);
 }
 
 .prestasi-lanjutan a {
@@ -71,6 +71,47 @@
     font-size: 16px;
     color: #000;
     font-weight: bold;
+}
+
+.berita-ubl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    /* jarak antar item */
+}
+
+.berita-ubl>* {
+    width: calc(50% - 8px);
+    box-sizing: border-box;
+}
+
+.img-ubl {
+    width: 120px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.judul-ubl {
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+    margin: 0;
+}
+
+.load-more {
+    margin-top: 20px;
+    height: 30px;
+    width: 250px;
+    border: 1px solid #e5e7eb;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.berita-ubl a {
+    display: flex;
+    padding: 10px 0;
+    gap: 10px;
+    text-decoration: none;
 }
 
 .home a,
@@ -153,7 +194,7 @@
 }
 
 .img-terbaru {
-        width: 150px;
+    width: 150px;
     object-fit: contain;
     height: 150px;
 }
@@ -180,7 +221,24 @@
         padding: 0;
     }
 
+    .iklan-parent {
+        width: 100%;
+        padding: 0;
+    }
+
     .bener {
         padding: 10px;
+    }
+
+    .footer-microweb {
+        padding: 0;
+    }
+
+    .berita-ubl {
+        display: block;
+    }
+
+    .berita-ubl>* {
+        width: 100%;
     }
 }
