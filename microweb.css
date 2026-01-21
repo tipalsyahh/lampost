@@ -1,13 +1,22 @@
 .container-microweb {
-    padding: 10px calc(8%);
-    display: flex;
-    gap: 5px;
+  padding: 10px calc(8%);
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
 }
 
 .berita-microweb {
-    width: 70%;
-    padding: 10px;
+  width: 70%;
+  padding: 10px;
 }
+
+.iklan-parent {
+  width: 30%;
+  padding: 20px;
+  position: sticky;
+  top: 10px; /* jarak dari atas saat mulai menempel */
+}
+
 
 .img-microweb {
     width: 300px;
