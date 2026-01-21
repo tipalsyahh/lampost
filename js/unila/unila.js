@@ -1,87 +1,107 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
   const container = document.querySelector('.home');
-  if (!container) return;
+  const loadMoreBtn = document.getElementById('loadMore');
+  if (!container || !loadMoreBtn) return;
 
-  try {
-    /* ========================
-       🌐 REST API WORDPRESS
-    ======================== */
-    const api =
-      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
-      '?per_page=13&orderby=date&order=desc&_embed';
+  const PER_PAGE = 10;
+  let page = 1;
+  let isLoading = false;
+  let hasMore = true;
 
-    const res = await fetch(api);
-    if (!res.ok) throw new Error('Gagal mengambil API');
+  async function loadPosts() {
+    if (isLoading || !hasMore) return;
+    isLoading = true;
 
-    const posts = await res.json();
+    try {
+      const api =
+        'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
+        `?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
 
-    let output = '';
-
-    posts.forEach(post => {
-
-      /* 🔗 LINK */
-      const link = post.link;
-
-      /* 📝 JUDUL */
-      const judul = post.title.rendered;
-
-      /* 📰 DESKRIPSI */
-      let deskripsi =
-        post.excerpt?.rendered
-          ?.replace(/<[^>]+>/g, '')
-          ?.trim() || '';
-
-      if (deskripsi.length > 150) {
-        deskripsi = deskripsi.slice(0, 150) + '...';
+      const res = await fetch(api);
+      if (!res.ok) {
+        if (res.status === 400) {
+          hasMore = false;
+          loadMoreBtn.style.display = 'none';
+          return;
+        }
+        throw new Error('API gagal');
       }
 
-      /* 🏷️ KATEGORI */
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
+      const posts = await res.json();
 
-      /* 🖼️ GAMBAR (FULL, TIDAK BLUR) */
-      const media =
-        post._embedded?.['wp:featuredmedia']?.[0];
+      if (!posts.length) {
+        hasMore = false;
+        loadMoreBtn.style.display = 'none';
+        return;
+      }
 
-      const gambar =
-        media?.source_url || 'image/ai.jpg';
+      let output = '';
 
-      /* 📅 TANGGAL */
-      const tanggal = new Date(post.date)
-        .toLocaleDateString('id-ID', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
+      posts.forEach(post => {
 
-      /* 🧱 OUTPUT */
-      output += `
-        <a href="berita.unila.html?id=${post.id}" class="item-info">
-          <img
-            src="${gambar}"
-            alt="${judul}"
-            class="img-microweb"
-            loading="lazy">
-          <div class="berita-microweb">
-            <p class="judul">${judul}</p>
-            <div class="info-microweb">
-              <p class="tanggal">${tanggal}</p>
-              <p class="kategori">${category}</p>
+        const judul = post.title.rendered;
+        const slug = post.slug;
+
+        /* 🔗 LINK TANPA ID */
+        const link = `berita.unila.html?judul=${slug}`;
+
+        let deskripsi =
+          post.excerpt?.rendered
+            ?.replace(/<[^>]+>/g, '')
+            ?.trim() || '';
+
+        if (deskripsi.length > 150) {
+          deskripsi = deskripsi.slice(0, 150) + '...';
+        }
+
+        const kategori =
+          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Unila';
+
+        const gambar =
+          post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+          || 'image/ai.jpg';
+
+        const tanggal = new Date(post.date)
+          .toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+          });
+
+        const editor =
+          post._embedded?.author?.[0]?.name || 'Redaksi';
+
+        output += `
+          <a href="${link}" class="item-info">
+            <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+            <div class="berita-microweb">
+              <p class="judul">${judul}</p>
+              <div class="info-microweb">
+                <p class="editor">By ${editor}</p>
+                <p class="tanggal">${tanggal}</p>
+                <p class="kategori">${kategori}</p>
+              </div>
+              <p class="deskripsi">${deskripsi}</p>
             </div>
-            <p class="deskripsi">${deskripsi}</p>
-          </div>
-        </a>
-      `;
-    });
+          </a>
+        `;
+      });
 
-    container.innerHTML =
-      output || '<p>Konten tidak tersedia</p>';
+      container.insertAdjacentHTML('beforeend', output);
+      page++;
 
-  } catch (err) {
-    console.error('API gagal dimuat:', err);
-    container.innerHTML =
-      '<p>Konten gagal dimuat</p>';
+    } catch (err) {
+      console.error(err);
+    } finally {
+      isLoading = false;
+    }
   }
+
+  /* LOAD AWAL */
+  loadPosts();
+
+  /* LOAD MORE */
+  loadMoreBtn.addEventListener('click', loadPosts);
 
 });
