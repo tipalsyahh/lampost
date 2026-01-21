@@ -213,4 +213,8 @@
         margin-bottom: 15px;
     }
 
+    .kategori {
+        display: none;
+    }
+
 }
