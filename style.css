@@ -106,7 +106,7 @@ body {
     top: 100%;
     left: 0;
     background-color: #fff;
-    min-width: 250px;
+    min-width: 270px;
     padding: 10px 0;
     display: none;
     flex-direction: column;
@@ -571,7 +571,11 @@ h2 {
     }
 
     .sosmed a {
-        font-size: 13px;
+        font-size: 0;
+    }
+
+    .sosmed a i {
+        font-size: 23px;
     }
 
     .footer-left,
