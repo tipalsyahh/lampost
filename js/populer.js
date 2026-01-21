@@ -52,22 +52,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     posts.forEach(post => {
 
+      /* 📝 JUDUL */
       const judul = post.title.rendered;
 
+      /* 🔗 URL JUDUL (PAKAI SLUG) */
+      const link = `halaman.html?judul=${post.slug}`;
+
+      /* ✍️ EDITOR (CO-AUTHORS LAMPOST) */
+      const editor =
+        post._embedded?.['wp:term']?.[2]?.[0]?.name ||
+        'Redaksi';
+
+      /* 🖼️ GAMBAR */
       const gambar =
         post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
         'image/default.jpg';
 
+      /* ⏱️ WAKTU */
       const waktu = waktuYangLalu(post.date);
 
       html += `
-        <a href="halaman.html?id=${post.id}" class="card-link">
+        <a href="${link}" class="card-link">
           <div class="card-image-wrapper">
             <img src="${gambar}" alt="${judul}" class="card-image" loading="lazy">
+
             <div class="card-text-overlay">
               <span class="card-category">Lampung</span>
               <span class="card-text">${judul}</span>
-              <div class="card-meta">${waktu}</div>
+
+              <div class="card-meta">
+              <span class="editor">By ${editor}</span>
+                <span class="waktu">${waktu}</span>
+              </div>
             </div>
           </div>
         </a>

@@ -32,6 +32,11 @@
     color: #333;
 }
 
+.editor {
+    font-size: 12px;
+    color: #45b4f5;
+}
+
 @media (max-width: 768px) {
     .berita {
         border: none;

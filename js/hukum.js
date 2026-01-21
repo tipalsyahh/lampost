@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!container) return;
 
   try {
-    // 1️⃣ Ambil ID kategori hukum dari slug
+    // ===============================
+    // 1️⃣ AMBIL ID KATEGORI HUKUM
+    // ===============================
     const catRes = await fetch(
       'https://lampost.co/wp-json/wp/v2/categories?slug=hukum'
     );
@@ -21,7 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const categoryId = catData[0].id;
 
-    // 2️⃣ Ambil berita hukum
+    // ===============================
+    // 2️⃣ AMBIL BERITA HUKUM
+    // ===============================
     const res = await fetch(
       `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=5&orderby=date&order=desc&_embed`
     );
@@ -33,26 +37,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     posts.forEach(post => {
 
+      /* 📝 JUDUL */
       const judul = post.title.rendered;
-      const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
 
-      const gambar =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/ai.jpg';
+      /* 🔗 URL JUDUL (PAKAI SLUG) */
+      const link = `halaman.html?judul=${post.slug}`;
 
       html += `
-        <a href="halaman.html?id=${post.id}" class="item-hukum">
+        <a href="${link}" class="item-hukum">
           <p><i class="bi bi-caret-right-fill"></i></p>
           <p>${judul}</p>
         </a>
       `;
     });
 
-    // 🔥 Sisipkan hasil ke dalam section hukum
+    // ===============================
+    // 3️⃣ SISIPKAN KE DOM
+    // ===============================
     container.insertAdjacentHTML('beforeend', html);
 
   } catch (err) {

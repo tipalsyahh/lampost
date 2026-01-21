@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!container) return;
 
   try {
-    // Ambil ID kategori olahraga dari slug
+    // ===============================
+    // AMBIL ID KATEGORI OLAHRAGA
+    // ===============================
     const catRes = await fetch(
       'https://lampost.co/wp-json/wp/v2/categories?slug=olahraga'
     );
@@ -21,7 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const categoryId = catData[0].id;
 
-    // Ambil berita olahraga
+    // ===============================
+    // AMBIL BERITA OLAHRAGA
+    // ===============================
     const res = await fetch(
       `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=3&orderby=date&order=desc&_embed`
     );
@@ -33,27 +37,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     posts.forEach(post => {
 
+      /* 📝 JUDUL */
       const judul = post.title.rendered;
+
+      /* 🔗 URL JUDUL (PAKAI SLUG) */
+      const link = `halaman.html?judul=${post.slug}`;
+
+      /* 📅 TANGGAL */
       const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
       });
 
+      /* ✍️ EDITOR (CO-AUTHORS LAMPOST) */
+      const editor =
+        post._embedded?.['wp:term']?.[2]?.[0]?.name ||
+        'Redaksi';
+
+      /* 🖼️ GAMBAR */
       const gambar =
         post._embedded?.['wp:featuredmedia']?.[0]?.source_url
         || 'image/ai.jpg';
 
       html += `
-        <a href="halaman.html?id=${post.id}" class="item-olahraga">
+        <a href="${link}" class="item-olahraga">
           <img src="${gambar}" alt="${judul}" class="img-olahraga" loading="lazy">
           <p class="judul">${judul}</p>
-          <p class="tanggal">${tanggal}</p>
+
+          <div class="meta">
+          <span class="editor">By ${editor}</span>
+            <span class="tanggal">${tanggal}</span>
+          </div>
         </a>
       `;
     });
 
-    // 🔥 Sisipkan SETELAH <h2>
+    // ===============================
+    // SISIPKAN KE DOM
+    // ===============================
     container.insertAdjacentHTML('beforeend', html);
 
   } catch (err) {

@@ -14,44 +14,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     const posts = await res.json();
     let html = '';
 
-    for (const post of posts) {
+    posts.forEach(post => {
 
+      /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      // kategori
-      let kategori = 'Berita';
-      if (post._embedded?.['wp:term']?.[0]?.[0]) {
-        kategori = post._embedded['wp:term'][0][0].name;
-      }
+      /* 🔗 LINK (SLUG) */
+      const link = `halaman.html?judul=${post.slug}`;
 
-      // gambar
+      /* ✍️ EDITOR (CO-AUTHORS LAMPOST) */
+      const editor =
+        post._embedded?.['wp:term']?.[2]?.[0]?.name ||
+        'Redaksi';
+
+      /* 🏷️ KATEGORI */
+      const kategori =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name ||
+        'Berita';
+
+      /* 🖼️ GAMBAR */
       const gambar =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/default.jpg';
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+        'image/default.jpg';
 
-      // ===== AUTHOR (FIX UTAMA) =====
-      let author = 'Admin';
-
-      // 1️⃣ Coba dari _embed (jika tersedia)
-      if (post._embedded?.author?.[0]?.name) {
-        author = post._embedded.author[0].name;
-      }
-      // 2️⃣ Fallback: fetch user berdasarkan author ID
-      else if (post.author) {
-        try {
-          const authorRes = await fetch(
-            `https://lampost.co/wp-json/wp/v2/users/${post.author}`
-          );
-          if (authorRes.ok) {
-            const authorData = await authorRes.json();
-            author = authorData.name;
-          }
-        } catch (e) {
-          author = 'Admin';
-        }
-      }
-
-      // tanggal
+      /* 📅 TANGGAL */
       const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
         day: '2-digit',
         month: 'long',
@@ -59,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
       html += `
-        <a href="halaman.html?id=${post.id}" class="card-link">
+        <a href="${link}" class="card-link">
           <div class="card-image-wrapper">
 
             <img src="${gambar}" alt="${judul}" class="card-image" loading="lazy">
@@ -68,8 +54,9 @@ document.addEventListener('DOMContentLoaded', async () => {
               <span class="card-text">${judul}</span>
 
               <div class="card-meta">
-                <span class="card-author">lampost</span>
+                <span class="card-author">By ${editor}</span>
                 <span class="card-date">${tanggal}</span>
+                <span class="card-category">${kategori}</span>
               </div>
 
             </div>
@@ -77,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </a>
       `;
-    }
+    });
 
     container.innerHTML = html;
 
