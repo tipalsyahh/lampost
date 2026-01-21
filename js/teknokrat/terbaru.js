@@ -15,16 +15,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) throw new Error('Gagal mengambil API');
 
     const posts = await res.json();
-
     let output = '';
 
     posts.forEach(post => {
 
-      /* 🔗 LINK */
-      const link = post.link;
-
       /* 📝 JUDUL */
       const judul = post.title.rendered;
+
+      /* 🔤 SLUG (JUDUL UNTUK URL) */
+      const slug = post.slug;
+
+      /* 🔗 LINK DETAIL PAKAI JUDUL */
+      const link = `berita.teknokrat.html?judul=${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =
@@ -40,12 +42,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       const category =
         post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
 
-      /* 🖼️ GAMBAR (FULL, TIDAK BLUR) */
-      const media =
-        post._embedded?.['wp:featuredmedia']?.[0];
-
+      /* 🖼️ GAMBAR */
       const gambar =
-        media?.source_url || 'image/ai.jpg';
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+        || 'image/ai.jpg';
 
       /* 📅 TANGGAL */
       const tanggal = new Date(post.date)
@@ -57,12 +57,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       /* 🧱 OUTPUT */
       output += `
-        <a href="berita.teknokrat.html?id=${post.id}" class="item-microweb">
+        <a href="${link}" class="item-microweb">
           <img
             src="${gambar}"
             alt="${judul}"
             class="img-terbaru"
             loading="lazy">
+
           <div class="berita-microweb">
             <p class="judul-terbaru">${judul}</p>
             <div class="info-microweb">

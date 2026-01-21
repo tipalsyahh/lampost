@@ -154,7 +154,7 @@
 
 .home a,
 .Pendidikan a,
-.ubl-lanjutan a {
+.ubl-lanjutan a{
     display: flex;
     gap: 10px;
     text-decoration: none;
@@ -246,6 +246,10 @@
     color: #000;
 }
 
+.gambar-berita {
+    width: 100%;
+}
+
 @media (max-width: 768px) {
     .container-microweb {
         padding: 10px;
@@ -304,5 +308,9 @@
 
     .berita-ubl>* {
         width: 100%;
+    }
+
+    .tanggal {
+        display: none;
     }
 }

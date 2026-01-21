@@ -23,16 +23,44 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const post = posts[0];
 
+    /* ========================
+       📝 JUDUL
+    ======================== */
     document.querySelector('.judul-berita').innerHTML =
       post.title.rendered;
 
-    document.querySelector('.isi-berita').innerHTML =
-      post.content.rendered;
+    /* ========================
+       📰 ISI BERITA
+    ======================== */
+    const isi = document.querySelector('.isi-berita');
+    isi.innerHTML = post.content.rendered;
 
-    document.querySelector('.gambar-berita').src =
-      post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-      || 'image/default.jpg';
+    /* ========================
+       🖼️ PAKSA IMG TIDAK MELEBIHI PARENT
+    ======================== */
+    const imgs = isi.querySelectorAll('img');
+    imgs.forEach(img => {
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      img.style.display = 'block';
+    });
 
+    /* ========================
+       🖼️ GAMBAR UTAMA
+    ======================== */
+    const gambar = document.querySelector('.gambar-berita');
+    if (gambar) {
+      gambar.src =
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+        || 'image/default.jpg';
+
+      gambar.style.maxWidth = '100%';
+      gambar.style.height = 'auto';
+    }
+
+    /* ========================
+       📅 TANGGAL
+    ======================== */
     document.getElementById('tanggal').innerText =
       new Date(post.date).toLocaleDateString('id-ID', {
         weekday: 'long',
@@ -41,6 +69,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         year: 'numeric'
       });
 
+    /* ========================
+       ✍️ EDITOR
+    ======================== */
     const editor = document.getElementById('editor');
     if (editor) {
       editor.innerText =

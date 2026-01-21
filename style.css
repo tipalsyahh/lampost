@@ -24,6 +24,7 @@ body {
 
 .navbar-main {
     background-color: #fff;
+    border-bottom: 1px solid #e5e7eb;
     padding: 14px 30px;
     display: flex;
     justify-content: space-between;
@@ -35,13 +36,12 @@ body {
 
 .navbar-sub {
     position: sticky;
-    top: 68px;
+    top: 68.5px;
     z-index: 1000;
     background-color: #fff;
     padding: 15px 30px;
     display: flex;
     justify-content: center;
-    border-top: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
 }
 
