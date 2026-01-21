@@ -20,15 +20,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     posts.forEach(post => {
 
-      const link = post.link;
+      /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      const media =
-        post._embedded?.['wp:featuredmedia']?.[0];
+      /* 🔤 SLUG → URL */
+      const slug = post.slug;
+      const link = `berita.ubl.html?judul=${slug}`;
 
+      /* 🖼️ GAMBAR */
       const gambar =
-        media?.source_url || 'image/ai.jpg';
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+        || 'image/ai.jpg';
 
+      /* 📅 TANGGAL */
       const tanggal = new Date(post.date)
         .toLocaleDateString('id-ID', {
           day: '2-digit',
@@ -36,19 +40,26 @@ document.addEventListener('DOMContentLoaded', async () => {
           year: 'numeric'
         });
 
+      /* 🏷️ KATEGORI */
       const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
+
+      /* ✍️ EDITOR */
+      const editor =
+        post._embedded?.author?.[0]?.name || 'Redaksi';
 
       output += `
-        <a href="berita.ubl.html?id=${post.id}" class="item-info">
+        <a href="${link}" class="item-info">
           <img
             src="${gambar}"
             alt="${judul}"
             class="img-ubl"
             loading="lazy">
+
           <div class="berita-microweb">
             <p class="judul-ubl">${judul}</p>
             <div class="info-microweb">
+            <p class="editor">By ${editor}</p>
               <p class="tanggal">${tanggal}</p>
               <p class="kategori">${category}</p>
             </div>

@@ -33,8 +33,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     posts.forEach(post => {
 
+      /* 📝 JUDUL */
       const judul = post.title.rendered;
 
+      /* 🔤 SLUG → URL */
+      const slug = post.slug;
+      const link = `berita.unila.html?judul=${slug}`;
+
+      /* 📰 DESKRIPSI */
       let deskripsi =
         post.excerpt?.rendered
           ?.replace(/<[^>]+>/g, '')
@@ -44,16 +50,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         deskripsi = deskripsi.slice(0, 150) + '...';
       }
 
+      /* 🏷️ KATEGORI */
       const category =
         post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Prestasi Mahasiswa';
 
-      const media =
-        post._embedded?.['wp:featuredmedia']?.[0];
-
-      // ⬅️ POLA YANG TERBUKTI AMAN
+      /* 🖼️ GAMBAR */
       const gambar =
-        media?.source_url || 'image/ai.jpg';
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+        || 'image/ai.jpg';
 
+      /* 📅 TANGGAL */
       const tanggal = new Date(post.date)
         .toLocaleDateString('id-ID', {
           day: '2-digit',
@@ -61,15 +67,23 @@ document.addEventListener('DOMContentLoaded', async () => {
           year: 'numeric'
         });
 
+      /* ✍️ EDITOR */
+      const editor =
+        post._embedded?.author?.[0]?.name || 'Redaksi';
+
       output += `
-        <a href="berita.unila.html?id=${post.id}" class="item-info">
+        <a href="${link}" class="item-info">
           <img src="${gambar}" alt="${judul}" class="img-unila" loading="lazy">
+
           <div class="berita-unila">
             <p class="judul-unila">${judul}</p>
+
             <div class="info-microweb">
+            <p class="editor">Oleh ${editor}</p>
               <p class="tanggal">${tanggal}</p>
               <p class="kategori">${category}</p>
             </div>
+
             <p class="deskripsi">${deskripsi}</p>
           </div>
         </a>

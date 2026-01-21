@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const posts = await res.json();
 
-      if (posts.length === 0) {
+      if (!posts.length) {
         loadMoreBtn.style.display = 'none';
         return;
       }
@@ -31,18 +31,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
       posts.forEach(post => {
 
-        const link = post.link;
+        /* 📝 JUDUL */
         const judul = post.title.rendered;
 
-        const category =
-          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
+        /* 🔤 SLUG UNTUK URL */
+        const slug = post.slug;
 
-        const media =
-          post._embedded?.['wp:featuredmedia']?.[0];
+        /* 🔗 LINK BERDASARKAN JUDUL */
+        const link = `berita.ubl.html?judul=${slug}`;
 
+        /* 🏷️ KATEGORI */
+        const kategori =
+          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
+
+        /* 🖼️ GAMBAR */
         const gambar =
-          media?.source_url || 'image/ai.jpg';
+          post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+          || 'image/ai.jpg';
 
+        /* 📅 TANGGAL */
         const tanggal = new Date(post.date)
           .toLocaleDateString('id-ID', {
             day: '2-digit',
@@ -50,8 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
             year: 'numeric'
           });
 
+        /* ✍️ EDITOR */
+        const editor =
+          post._embedded?.author?.[0]?.name || 'Redaksi';
+
         output += `
-          <a href="berita.ubl.html?id=${post.id}" class="item-info">
+          <a href="${link}" class="item-info">
             <img
               src="${gambar}"
               alt="${judul}"
@@ -60,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="berita-microweb">
               <p class="judul-ubl">${judul}</p>
               <div class="info-microweb">
+              <p class="editor">By ${editor}</p>
                 <p class="tanggal">${tanggal}</p>
-                <p class="kategori">${category}</p>
               </div>
             </div>
           </a>
@@ -79,10 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Load pertama
+  // Load awal
   loadPosts();
 
-  // Klik tombol → load 10 lagi
+  // Load 10 lagi
   loadMoreBtn.addEventListener('click', loadPosts);
 
 });

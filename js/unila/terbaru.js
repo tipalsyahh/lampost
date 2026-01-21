@@ -17,26 +17,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     posts.forEach(post => {
 
+      /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      let deskripsi =
-        post.excerpt?.rendered
-          ?.replace(/<[^>]+>/g, '')
-          ?.trim() || '';
+      /* 🔤 SLUG → URL (SESUAI CONTOH ANDA) */
+      const slug = post.slug;
+      const link = `berita.unila.html?judul=${slug}`;
 
-      if (deskripsi.length > 150) {
-        deskripsi = deskripsi.slice(0, 150) + '...';
-      }
-
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Inspirasi';
-
+      /* 🖼️ GAMBAR */
       const media =
         post._embedded?.['wp:featuredmedia']?.[0];
 
       const gambar =
         media?.source_url || 'image/ai.jpg';
 
+      /* 📅 TANGGAL */
       const tanggal = new Date(post.date)
         .toLocaleDateString('id-ID', {
           day: '2-digit',
@@ -45,8 +40,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
       output += `
-        <a href="berita.unila.html?id=${post.id}" class="item-microweb">
-          <img src="${gambar}" alt="${judul}" class="img-terbaru" loading="lazy">
+        <a href="${link}" class="item-microweb">
+          <img
+            src="${gambar}"
+            alt="${judul}"
+            class="img-terbaru"
+            loading="lazy">
+
           <div class="berita-microweb">
             <p class="judul-terbaru">${judul}</p>
             <div class="info-microweb">
