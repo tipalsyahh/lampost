@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-  const container = document.querySelector('.home');
+  const container = document.querySelector('.ubl-lanjutan');
   if (!container) return;
 
   try {
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ======================== */
     const api =
       'https://lampost.co/microweb/ubl/wp-json/wp/v2/posts' +
-      '?per_page=1&offset=1&orderby=date&order=desc&_embed';
+      '?per_page=4&offset=2&orderby=date&order=desc&_embed';
 
     const res = await fetch(api);
     if (!res.ok) throw new Error('Gagal mengambil API');
@@ -22,18 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const link = post.link;
       const judul = post.title.rendered;
-
-      let deskripsi =
-        post.excerpt?.rendered
-          ?.replace(/<[^>]+>/g, '')
-          ?.trim() || '';
-
-      if (deskripsi.length > 150) {
-        deskripsi = deskripsi.slice(0, 150) + '...';
-      }
-
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
 
       const media =
         post._embedded?.['wp:featuredmedia']?.[0];
@@ -48,20 +36,22 @@ document.addEventListener('DOMContentLoaded', async () => {
           year: 'numeric'
         });
 
+      const category =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
+
       output += `
         <a href="berita.ubl.html?id=${post.id}" class="item-info">
           <img
             src="${gambar}"
             alt="${judul}"
-            class="img-microweb"
+            class="img-ubl"
             loading="lazy">
           <div class="berita-microweb">
-            <p class="judul">${judul}</p>
+            <p class="judul-ubl">${judul}</p>
             <div class="info-microweb">
               <p class="tanggal">${tanggal}</p>
               <p class="kategori">${category}</p>
             </div>
-            <p class="deskripsi">${deskripsi}</p>
           </div>
         </a>
       `;

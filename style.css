@@ -338,10 +338,9 @@ body {
 
 .info a {
     display: flex;
-    padding: 20px 0;
+    padding: 10px 0;
     gap: 10px;
     text-decoration: none;
-    border-bottom: 1px solid #e5e7eb;
     align-items: center;
 }
 

@@ -30,7 +30,8 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
-.prestasi-terbaru a {
+.prestasi-terbaru a,
+.ubl-terbaru a {
     width: 50%;
     text-decoration: none;
 }
@@ -66,7 +67,8 @@
     object-fit: cover;
 }
 
-.judul-unila {
+.judul-unila,
+.judul-utama-ubl {
     margin: 0;
     font-size: 16px;
     color: #000;
@@ -88,7 +90,7 @@
 .img-ubl {
     width: 120px;
     height: 100px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .judul-ubl {
@@ -99,28 +101,63 @@
 }
 
 .load-more {
-    margin-top: 20px;
+    margin: 20px auto;
     height: 30px;
     width: 250px;
     border: 1px solid #e5e7eb;
     background-color: transparent;
     cursor: pointer;
+    display: block;
+    position: relative;
+}
+
+.load-more::before,
+.load-more::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background-color: #e5e7eb;
+}
+
+.load-more::before {
+    right: 100%;
+    margin-right: 16px;
+}
+
+.load-more::after {
+    left: 100%;
+    margin-left: 16px;
+}
+
+.ubl-terbaru {
+    width: 50%;
+}
+
+#ubl-berita {
+    width: 100%;
 }
 
 .berita-ubl a {
     display: flex;
     padding: 10px 0;
-    gap: 10px;
+    gap: 15px;
     text-decoration: none;
 }
 
-.home a,
-.Pendidikan a {
+.ubl-buttom {
     display: flex;
-    padding: 20px 0;
+    gap: 15px;
+    align-items: stretch;
+}
+
+.home a,
+.Pendidikan a,
+.ubl-lanjutan a {
+    display: flex;
     gap: 10px;
     text-decoration: none;
-    border-bottom: 1px solid #e5e7eb;
 }
 
 .judul {
@@ -228,6 +265,28 @@
 
     .bener {
         padding: 10px;
+    }
+
+    #epeper-microweb {
+        width: 90%;
+        padding: 10px;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .ubl-buttom {
+        display: block;
+    }
+
+    .ubl-terbaru {
+        width: 100%;
+    }
+
+    .ubl-terbaru a {
+        display: flex;
+        width: 100%;
+        gap: 10px;
     }
 
     .footer-microweb {
