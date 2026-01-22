@@ -22,11 +22,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      /* 🔤 SLUG (JUDUL UNTUK URL) */
+      /* 🔤 SLUG JUDUL */
       const slug = post.slug;
 
-      /* 🔗 LINK DETAIL PAKAI JUDUL */
-      const link = `berita.teknokrat.html?judul=${slug}`;
+      /* 🏷️ KATEGORI */
+      const category =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
+
+      /* 🏷️ SLUG KATEGORI */
+      const categorySlug =
+        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'teknokrat';
+
+      /* 🔗 LINK DETAIL (KATEGORI DULU, BARU JUDUL) */
+      const link = `berita.teknokrat.html?${categorySlug}|${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =
@@ -37,10 +45,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (deskripsi.length > 150) {
         deskripsi = deskripsi.slice(0, 150) + '...';
       }
-
-      /* 🏷️ KATEGORI */
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
 
       /* 🖼️ GAMBAR */
       const gambar =

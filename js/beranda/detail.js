@@ -3,8 +3,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const berita = document.getElementById('berita');
   if (!berita) return;
 
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get('judul');
+  // 🔥 Ambil kategori & slug judul dari URL
+  const query = window.location.search.replace('?', '');
+  const [kategoriSlug, slug] = query.split('|');
 
   if (!slug) {
     berita.innerHTML = '<p>Berita tidak ditemukan</p>';
@@ -69,13 +70,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
     /* ========================
-       ✍️ EDITOR (FIX)
+       ✍️ EDITOR
     ======================== */
     const editor = document.getElementById('editor');
     if (editor) {
       editor.innerText =
         post._embedded?.['wp:term']?.[2]?.[0]?.name ||
         'Redaksi';
+    }
+
+    /* ========================
+       🏷️ KATEGORI (DITAMPILKAN)
+    ======================== */
+    const kategoriEl = document.getElementById('kategori');
+    if (kategoriEl) {
+      const kategoriNama =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name ||
+        kategoriSlug ||
+        'Berita';
+
+      kategoriEl.innerText = kategoriNama;
     }
 
   } catch (err) {

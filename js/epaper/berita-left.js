@@ -74,9 +74,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         ?.replace(/<[^>]*>/g, '')
         ?.trim() || '';
 
+      const kategoriSlug =
+        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
+
       return `
         <div class="card"
-          data-id="${post.id}"
+          data-kategori="${kategoriSlug}"
+          data-slug="${post.slug}"
           data-title="${post.title.rendered}"
           data-content="${text}"
           data-image="${img}">
@@ -87,7 +91,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).join('');
 
     initDetail(posts.map(p => ({
-      id: p.id,
+      kategori: p._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita',
+      slug: p.slug,
       title: p.title.rendered,
       content: p.excerpt?.rendered?.replace(/<[^>]*>/g, '') || '',
       image: p._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg'
@@ -137,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     detailContent.textContent = random.content;
 
     detailAction.innerHTML = `
-      <a href="${isRSS ? random.link : `koran.html?id=${random.id}`}"
+      <a href="${isRSS ? random.link : `koran.html?${random.kategori}|${random.slug}`}"
          class="detail-btn">
         Baca Selengkapnya
       </a>
@@ -152,8 +157,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       detailContent.textContent = card.dataset.content;
 
       detailAction.innerHTML = `
-        <a href="${isRSS ? card.dataset.link : `koran.html?id=${card.dataset.id}`}"
-           class="detail-btn">
+        <a href="${
+          isRSS
+            ? card.dataset.link
+            : `koran.html?${card.dataset.kategori}|${card.dataset.slug}`
+        }" class="detail-btn">
           Baca Selengkapnya
         </a>
       `;

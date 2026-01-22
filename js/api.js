@@ -61,21 +61,24 @@ document.addEventListener('DOMContentLoaded', () => {
           /* 📝 JUDUL */
           const judul = post.title.rendered;
 
-          /* 🔗 LINK */
-          const link = `halaman.html?judul=${post.slug}`;
+          /* 🏷️ KATEGORI */
+          const kategori =
+            post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita';
+
+          /* 🏷️ KATEGORI SLUG */
+          const kategoriSlug =
+            post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
+
+          /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+          const link = `halaman.html?${kategoriSlug}|${post.slug}`;
 
           /* 📅 TANGGAL */
           const tanggal = formatTanggal(post.date);
 
-          /* ✍️ EDITOR (CO-AUTHORS LAMPOST) */
+          /* ✍️ EDITOR */
           const editor =
             post._embedded?.['wp:term']?.[2]?.[0]?.name ||
             'Redaksi';
-
-          /* 🏷️ KATEGORI */
-          const kategori =
-            post._embedded?.['wp:term']?.[0]?.[0]?.name ||
-            'Berita';
 
           /* 🖼️ GAMBAR */
           const gambar =

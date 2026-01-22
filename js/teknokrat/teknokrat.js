@@ -43,8 +43,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const judul = post.title.rendered;
         const slug = post.slug;
 
-        /* 🔗 LINK TANPA ID */
-        const link = `berita.teknokrat.html?judul=${slug}`;
+        /* 🏷️ KATEGORI */
+        const kategori =
+          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
+
+        /* 🏷️ KATEGORI SLUG */
+        const kategoriSlug =
+          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'teknokrat';
+
+        /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+        const link = `berita.teknokrat.html?${kategoriSlug}|${slug}`;
 
         let deskripsi =
           post.excerpt?.rendered
@@ -54,9 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (deskripsi.length > 150) {
           deskripsi = deskripsi.slice(0, 150) + '...';
         }
-
-        const kategori =
-          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Teknokrat';
 
         const gambar =
           post._embedded?.['wp:featuredmedia']?.[0]?.source_url

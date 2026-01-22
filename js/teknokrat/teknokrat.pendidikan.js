@@ -35,11 +35,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      /* 🔤 SLUG UNTUK URL */
+      /* 🔤 SLUG JUDUL */
       const slug = post.slug;
 
-      /* 🔗 LINK DETAIL (PAKAI JUDUL) */
-      const link = `berita.teknokrat.html?judul=${slug}`;
+      /* 🏷️ KATEGORI */
+      const category =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Pendidikan';
+
+      /* 🏷️ SLUG KATEGORI */
+      const categorySlug =
+        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'pendidikan';
+
+      /* 🔗 LINK DETAIL (KATEGORI DULU, BARU JUDUL) */
+      const link = `berita.teknokrat.html?${categorySlug}|${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =
@@ -50,10 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (deskripsi.length > 150) {
         deskripsi = deskripsi.slice(0, 150) + '...';
       }
-
-      /* 🏷️ KATEGORI */
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Pendidikan';
 
       /* 🖼️ GAMBAR */
       const gambar =
@@ -81,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p class="judul">${judul}</p>
 
             <div class="info-microweb">
-            <p class="editor">By ${editor}</p>
+              <p class="editor">By ${editor}</p>
               <p class="tanggal">${tanggal}</p>
               <p class="kategori">${category}</p>
             </div>
