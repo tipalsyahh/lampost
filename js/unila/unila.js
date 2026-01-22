@@ -9,17 +9,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   let hasMore = true;
 
   const BASE_API = 'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts';
+  const PROXY = 'https://api.allorigins.win/raw?url=';
 
   async function loadPosts() {
     if (isLoading || !hasMore) return;
     isLoading = true;
 
     try {
-      // Tetap pakai _embed untuk featured media, author, kategori
       const api = `${BASE_API}?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
+      const res = await fetch(PROXY + encodeURIComponent(api));
 
-      // Fetch langsung tanpa proxy
-      const res = await fetch(api);
       if (!res.ok) {
         if (res.status === 400) {
           hasMore = false;
@@ -36,7 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      // ⚡ Gunakan DocumentFragment agar append ke DOM sekali
       const fragment = document.createDocumentFragment();
 
       posts.forEach(post => {
@@ -51,8 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         let deskripsi = post.excerpt?.rendered?.replace(/<[^>]+>/g, '')?.trim() || '';
         if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
-        // Ambil gambar dari featured media
-        const gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/ai.jpg';
+        // Ambil gambar dari _embedded, jika proxy gagal fallback ke 'image/ai.jpg'
+        let gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/ai.jpg';
 
         const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
           day: '2-digit',
@@ -72,6 +70,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         img.alt = judul;
         img.className = 'img-microweb';
         img.loading = 'lazy';
+
+        // Optional: jika gambar gagal load, pakai fallback
+        img.onerror = () => {
+          img.src = 'image/ai.jpg';
+        };
 
         const beritaDiv = document.createElement('div');
         beritaDiv.className = 'berita-microweb';
@@ -121,6 +124,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Load awal
   loadPosts();
 
-  // Load more
+  // Load More
   loadMoreBtn.addEventListener('click', loadPosts);
 });
