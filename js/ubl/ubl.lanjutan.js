@@ -23,9 +23,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      /* 🔤 SLUG → URL */
+      /* 🔤 SLUG JUDUL */
       const slug = post.slug;
-      const link = `berita.ubl.html?judul=${slug}`;
+
+      /* 🏷️ KATEGORI */
+      const kategori =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
+
+      /* 🏷️ SLUG KATEGORI */
+      const kategoriSlug =
+        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
+
+      /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+      const link = `berita.ubl.html?${kategoriSlug}|${slug}`;
 
       /* 🖼️ GAMBAR */
       const gambar =
@@ -39,10 +49,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           month: 'long',
           year: 'numeric'
         });
-
-      /* 🏷️ KATEGORI */
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
 
       /* ✍️ EDITOR */
       const editor =
@@ -59,9 +65,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="berita-microweb">
             <p class="judul-ubl">${judul}</p>
             <div class="info-microweb">
-            <p class="editor">By ${editor}</p>
+              <p class="editor">By ${editor}</p>
               <p class="tanggal">${tanggal}</p>
-              <p class="kategori">${category}</p>
+              <p class="kategori">${kategori}</p>
             </div>
           </div>
         </a>

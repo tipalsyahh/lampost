@@ -23,9 +23,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      /* 🔤 SLUG → URL */
+      /* 🔤 SLUG JUDUL */
       const slug = post.slug;
-      const link = `berita.ubl.html?judul=${slug}`;
+
+      /* 🏷️ KATEGORI */
+      const category =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
+
+      /* 🏷️ SLUG KATEGORI */
+      const kategoriSlug =
+        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
+
+      /* 🔗 LINK (KATEGORI | JUDUL) */
+      const link = `berita.ubl.html?${kategoriSlug}|${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =
@@ -36,10 +46,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (deskripsi.length > 150) {
         deskripsi = deskripsi.slice(0, 150) + '...';
       }
-
-      /* 🏷️ KATEGORI */
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
 
       /* 🖼️ GAMBAR */
       const gambar =

@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-
   const container = document.querySelector('.home');
   const loadMoreBtn = document.getElementById('loadMore');
   if (!container || !loadMoreBtn) return;
@@ -9,16 +8,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   let isLoading = false;
   let hasMore = true;
 
+  // 🌐 API + PROXY CORS
+  const BASE_API = 'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts';
+  const PROXY = 'https://api.allorigins.win/raw?url=';
+
   async function loadPosts() {
     if (isLoading || !hasMore) return;
     isLoading = true;
 
     try {
       const api =
-        'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
-        `?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
+        `${BASE_API}?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
 
-      const res = await fetch(api);
+      const res = await fetch(PROXY + encodeURIComponent(api));
       if (!res.ok) {
         if (res.status === 400) {
           hasMore = false;
@@ -36,16 +38,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      let output = '';
-
       posts.forEach(post => {
+        /* 🏷️ KATEGORI */
+        const kategoriNama =
+          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Unila';
+        const kategoriSlug =
+          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'unila';
 
+        const kategoriUrl = `kategori.unila.html?kategori=${kategoriSlug}`;
+
+        /* 📝 JUDUL */
         const judul = post.title.rendered;
         const slug = post.slug;
 
-        /* 🔗 LINK TANPA ID */
-        const link = `berita.unila.html?judul=${slug}`;
+        /* 🔗 URL JUDUL */
+        const link = `berita.unila.html?berita-terkini|${slug}`;
 
+        /* 📰 DESKRIPSI */
         let deskripsi =
           post.excerpt?.rendered
             ?.replace(/<[^>]+>/g, '')
@@ -55,13 +64,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           deskripsi = deskripsi.slice(0, 150) + '...';
         }
 
-        const kategori =
-          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Unila';
-
+        /* 🖼️ GAMBAR */
         const gambar =
-          post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-          || 'image/ai.jpg';
+          post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+          'image/ai.jpg';
 
+        /* 📅 TANGGAL */
         const tanggal = new Date(post.date)
           .toLocaleDateString('id-ID', {
             day: '2-digit',
@@ -69,39 +77,64 @@ document.addEventListener('DOMContentLoaded', async () => {
             year: 'numeric'
           });
 
+        /* ✍️ EDITOR */
         const editor =
           post._embedded?.author?.[0]?.name || 'Redaksi';
 
-        output += `
-          <a href="${link}" class="item-info">
-            <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
-            <div class="berita-microweb">
-              <p class="judul">${judul}</p>
-              <div class="info-microweb">
-                <p class="editor">By ${editor}</p>
-                <p class="tanggal">${tanggal}</p>
-                <p class="kategori">${kategori}</p>
-              </div>
-              <p class="deskripsi">${deskripsi}</p>
-            </div>
-          </a>
-        `;
+        // ===== DOM AMAN (ANTI XSS) =====
+        const linkEl = document.createElement('a');
+        linkEl.href = link;
+        linkEl.className = 'item-info';
+
+        const img = document.createElement('img');
+        img.src = gambar;
+        img.alt = judul;
+        img.className = 'img-microweb';
+        img.loading = 'lazy';
+
+        const beritaDiv = document.createElement('div');
+        beritaDiv.className = 'berita-microweb';
+
+        const judulP = document.createElement('p');
+        judulP.className = 'judul';
+        judulP.textContent = judul;
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'info-microweb';
+
+        const editorP = document.createElement('p');
+        editorP.className = 'editor';
+        editorP.textContent = `By ${editor}`;
+
+        const tanggalP = document.createElement('p');
+        tanggalP.className = 'tanggal';
+        tanggalP.textContent = tanggal;
+
+        const kategoriLink = document.createElement('a');
+        kategoriLink.href = kategoriUrl;
+        kategoriLink.className = 'kategori';
+        kategoriLink.textContent = kategoriNama;
+
+        // ⬇️ KATEGORI DI SAMPING TANGGAL
+        infoDiv.append(editorP, tanggalP, kategoriLink);
+
+        const deskripsiP = document.createElement('p');
+        deskripsiP.className = 'deskripsi';
+        deskripsiP.textContent = deskripsi;
+
+        beritaDiv.append(judulP, infoDiv, deskripsiP);
+        linkEl.append(img, beritaDiv);
+        container.appendChild(linkEl);
       });
 
-      container.insertAdjacentHTML('beforeend', output);
       page++;
-
     } catch (err) {
-      console.error(err);
+      console.error('Gagal load berita Unila:', err);
     } finally {
       isLoading = false;
     }
   }
 
-  /* LOAD AWAL */
   loadPosts();
-
-  /* LOAD MORE */
   loadMoreBtn.addEventListener('click', loadPosts);
-
 });

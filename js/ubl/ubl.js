@@ -34,15 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
         /* 📝 JUDUL */
         const judul = post.title.rendered;
 
-        /* 🔤 SLUG UNTUK URL */
+        /* 🔤 SLUG JUDUL */
         const slug = post.slug;
-
-        /* 🔗 LINK BERDASARKAN JUDUL */
-        const link = `berita.ubl.html?judul=${slug}`;
 
         /* 🏷️ KATEGORI */
         const kategori =
           post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
+
+        /* 🏷️ SLUG KATEGORI */
+        const kategoriSlug =
+          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
+
+        /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+        const link = `berita.ubl.html?${kategoriSlug}|${slug}`;
 
         /* 🖼️ GAMBAR */
         const gambar =
@@ -71,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="berita-microweb">
               <p class="judul-ubl">${judul}</p>
               <div class="info-microweb">
-              <p class="editor">By ${editor}</p>
+                <p class="editor">By ${editor}</p>
                 <p class="tanggal">${tanggal}</p>
               </div>
             </div>
