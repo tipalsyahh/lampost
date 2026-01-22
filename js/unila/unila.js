@@ -8,23 +8,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   let isLoading = false;
   let hasMore = true;
 
-  // 🌐 API WordPress (langsung, tanpa proxy)
+  // 🌐 API + PROXY CORS (TIDAK MENGUBAH URL)
   const BASE_API = 'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts';
+  const PROXY = 'https://api.allorigins.win/raw?url=';
 
   async function loadPosts() {
     if (isLoading || !hasMore) return;
     isLoading = true;
 
-    // 🚫 Cek online
-    if (!navigator.onLine) {
-      console.warn('Sedang offline, berita tidak bisa dimuat');
-      isLoading = false;
-      return;
-    }
-
     try {
       const api = `${BASE_API}?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
-      const res = await fetch(api);
+      const res = await fetch(PROXY + encodeURIComponent(api));
 
       if (!res.ok) {
         if (res.status === 400) {
@@ -42,30 +36,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      const fragment = document.createDocumentFragment();
-
       posts.forEach(post => {
+        /* 🏷️ KATEGORI */
         const kategoriNama = post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Unila';
         const kategoriSlug = post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'unila';
         const kategoriUrl = `kategori.unila.html?kategori=${kategoriSlug}`;
 
+        /* 📝 JUDUL */
         const judul = post.title.rendered;
         const slug = post.slug;
+
+        /* 🔗 URL JUDUL */
         const link = `berita.unila.html?berita-terkini|${slug}`;
 
+        /* 📰 DESKRIPSI */
         let deskripsi = post.excerpt?.rendered?.replace(/<[^>]+>/g, '')?.trim() || '';
         if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
+        /* 🖼️ GAMBAR */
         const gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/ai.jpg';
 
+        /* 📅 TANGGAL */
         const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
           day: '2-digit',
           month: 'long',
           year: 'numeric'
         });
 
+        /* ✍️ EDITOR */
         const editor = post._embedded?.author?.[0]?.name || 'Redaksi';
 
+        // ===== DOM AMAN (ANTI XSS) =====
         const linkEl = document.createElement('a');
         linkEl.href = link;
         linkEl.className = 'item-info';
@@ -99,6 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         kategoriLink.className = 'kategori';
         kategoriLink.textContent = kategoriNama;
 
+        // ✅ KATEGORI DI SAMPING TANGGAL
         infoDiv.append(editorP, tanggalP, kategoriLink);
 
         const deskripsiP = document.createElement('p');
@@ -108,10 +110,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         beritaDiv.append(judulP, infoDiv, deskripsiP);
         linkEl.append(img, beritaDiv);
 
-        fragment.appendChild(linkEl);
+        container.appendChild(linkEl);
       });
 
-      container.appendChild(fragment);
       page++;
     } catch (err) {
       console.error('Gagal load berita Unila:', err);
@@ -120,9 +121,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // LOAD AWAL
+  /* LOAD AWAL */
   loadPosts();
 
-  // LOAD MORE
+  /* LOAD MORE */
   loadMoreBtn.addEventListener('click', loadPosts);
 });
