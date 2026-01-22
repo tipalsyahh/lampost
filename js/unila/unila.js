@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-
   const container = document.querySelector('.home');
   const loadMoreBtn = document.getElementById('loadMore');
   if (!container || !loadMoreBtn) return;
@@ -9,36 +8,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   let isLoading = false;
   let hasMore = true;
 
-  async function fetchPosts(url) {
-    try {
-      // Jika origin file:// atau online, pakai proxy untuk file://
-      if (location.protocol === 'file:') {
-        const proxy = 'https://api.allorigins.win/get?url=';
-        const res = await fetch(proxy + encodeURIComponent(url));
-        if (!res.ok) throw new Error('Proxy API gagal');
-        const data = await res.json();
-        return JSON.parse(data.contents);
-      } else {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('API gagal');
-        return await res.json();
-      }
-    } catch (err) {
-      console.error('Error fetchPosts:', err);
-      return [];
-    }
-  }
+  // 🌐 API + PROXY CORS (TIDAK MENGUBAH URL)
+  const BASE_API = 'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts';
+  const PROXY = 'https://api.allorigins.win/raw?url=';
 
   async function loadPosts() {
     if (isLoading || !hasMore) return;
     isLoading = true;
 
     try {
-      const apiUrl =
-        'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
-        `?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
+      const api =
+        `${BASE_API}?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
 
-      const posts = await fetchPosts(apiUrl);
+      const res = await fetch(PROXY + encodeURIComponent(api));
+      if (!res.ok) {
+        if (res.status === 400) {
+          hasMore = false;
+          loadMoreBtn.style.display = 'none';
+          return;
+        }
+        throw new Error('API gagal');
+      }
+
+      const posts = await res.json();
 
       if (!posts.length) {
         hasMore = false;
@@ -46,73 +38,106 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      let output = '';
-
       posts.forEach(post => {
-        const judul = post.title?.rendered || 'Tidak ada judul';
-        const slug = post.slug || '';
+        /* 🏷️ KATEGORI */
+        const kategoriNama =
+          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Unila';
+        const kategoriSlug =
+          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'unila';
 
-        // Kategori
-        let kategori = 'Universitaslampung';
-        let kategoriSlug = 'Universitaslampung';
-        try {
-          const terms = post._embedded?.['wp:term']?.[0];
-          if (terms && terms.length) {
-            kategori = terms[0].name || kategori;
-            kategoriSlug = terms[0].slug || kategoriSlug;
-          }
-        } catch {}
+        const kategoriUrl = `kategori.unila.html?kategori=${kategoriSlug}`;
 
-        // Link
-        const link = `berita.unila.html?${kategoriSlug}|${slug}`;
+        /* 📝 JUDUL */
+        const judul = post.title.rendered;
+        const slug = post.slug;
 
-        // Deskripsi
-        let deskripsi = post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
-        if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
+        /* 🔗 URL JUDUL (FORMAT YANG DIMINTA) */
+        const link = `berita.unila.html?berita-terkini|${slug}`;
 
-        // Gambar
-        const gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/ai.jpg';
+        /* 📰 DESKRIPSI */
+        let deskripsi =
+          post.excerpt?.rendered
+            ?.replace(/<[^>]+>/g, '')
+            ?.trim() || '';
 
-        // Tanggal
-        const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
+        if (deskripsi.length > 150) {
+          deskripsi = deskripsi.slice(0, 150) + '...';
+        }
 
-        // Editor
-        const editor = post._embedded?.author?.[0]?.name || 'Redaksi';
+        /* 🖼️ GAMBAR */
+        const gambar =
+          post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+          'image/ai.jpg';
 
-        output += `
-          <a href="${link}" class="item-info">
-            <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
-            <div class="berita-microweb">
-              <p class="judul">${judul}</p>
-              <div class="info-microweb">
-                <p class="editor">By ${editor}</p>
-                <p class="tanggal">${tanggal}</p>
-                <p class="kategori">${kategori}</p>
-              </div>
-              <p class="deskripsi">${deskripsi}</p>
-            </div>
-          </a>
-        `;
+        /* 📅 TANGGAL */
+        const tanggal = new Date(post.date)
+          .toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+          });
+
+        /* ✍️ EDITOR */
+        const editor =
+          post._embedded?.author?.[0]?.name || 'Redaksi';
+
+        // ===== DOM AMAN (ANTI XSS) =====
+        const linkEl = document.createElement('a');
+        linkEl.href = link;
+        linkEl.className = 'item-info';
+
+        const img = document.createElement('img');
+        img.src = gambar;
+        img.alt = judul;
+        img.className = 'img-microweb';
+        img.loading = 'lazy';
+
+        const beritaDiv = document.createElement('div');
+        beritaDiv.className = 'berita-microweb';
+
+        const judulP = document.createElement('p');
+        judulP.className = 'judul';
+        judulP.textContent = judul;
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'info-microweb';
+
+        const editorP = document.createElement('p');
+        editorP.className = 'editor';
+        editorP.textContent = `By ${editor}`;
+
+        const tanggalP = document.createElement('p');
+        tanggalP.className = 'tanggal';
+        tanggalP.textContent = tanggal;
+
+        const kategoriLink = document.createElement('a');
+        kategoriLink.href = kategoriUrl;
+        kategoriLink.className = 'kategori';
+        kategoriLink.textContent = kategoriNama;
+
+        // ✅ KATEGORI DI SAMPING TANGGAL
+        infoDiv.append(editorP, tanggalP, kategoriLink);
+
+        const deskripsiP = document.createElement('p');
+        deskripsiP.className = 'deskripsi';
+        deskripsiP.textContent = deskripsi;
+
+        beritaDiv.append(judulP, infoDiv, deskripsiP);
+        linkEl.append(img, beritaDiv);
+        container.appendChild(linkEl);
       });
 
-      container.insertAdjacentHTML('beforeend', output);
       page++;
-
     } catch (err) {
-      console.error('Error loadPosts:', err);
+      console.error('Gagal load berita Unila:', err);
     } finally {
       isLoading = false;
     }
   }
 
-  // Load awal
+  /* LOAD AWAL */
   loadPosts();
 
-  // Load more
+  /* LOAD MORE — LOGIKA TIDAK DIUBAH */
   loadMoreBtn.addEventListener('click', loadPosts);
-
 });
