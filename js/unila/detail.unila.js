@@ -3,9 +3,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   const berita = document.getElementById('berita');
   if (!berita) return;
 
-  // 🔥 Ambil kategori & slug judul dari URL
-  const query = window.location.search.replace('?', '');
-  const [kategoriSlug, slug] = query.split('|');
+  const BASE = 'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2';
+
+  /* ========================
+     🔁 PROXY FALLBACK
+  ======================== */
+  const PROXIES = [
+    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => `https://corsproxy.io/?${encodeURIComponent(url)}`
+  ];
+
+  async function fetchWithProxy(url) {
+    for (const build of PROXIES) {
+      try {
+        const res = await fetch(build(url));
+        if (!res.ok) throw new Error('Proxy gagal');
+        return await res.json();
+      } catch {
+        console.warn('Proxy gagal, lanjut...');
+      }
+    }
+    throw new Error('Semua proxy gagal');
+  }
+
+  /* ========================
+     🔗 AMBIL SLUG
+  ======================== */
+  const query = decodeURIComponent(location.search.replace('?', ''));
+  const [, slug] = query.split('|');
 
   if (!slug) {
     berita.innerHTML = '<p>Berita tidak ditemukan</p>';
@@ -13,88 +38,97 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const api =
-      `https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts?slug=${slug}&_embed`;
+    /* ========================
+       📡 LOAD POST (TANPA EMBED)
+    ======================== */
+    const posts = await fetchWithProxy(
+      `${BASE}/posts?slug=${slug}`
+    );
 
-    const res = await fetch(api);
-    if (!res.ok) throw new Error('Gagal ambil berita');
-
-    const posts = await res.json();
-    if (!posts.length) throw new Error('Berita tidak ada');
-
+    if (!posts.length) throw new Error('Post kosong');
     const post = posts[0];
 
     /* ========================
        📝 JUDUL
     ======================== */
-    document.querySelector('.judul-berita').innerHTML =
-      post.title.rendered;
+    document.querySelector('.judul-berita') &&
+      (document.querySelector('.judul-berita').innerHTML =
+        post.title.rendered);
 
     /* ========================
-       📰 ISI BERITA
+       📰 ISI
     ======================== */
     const isi = document.querySelector('.isi-berita');
-    isi.innerHTML = post.content.rendered;
-
-    /* ========================
-       🖼️ PAKSA IMG RESPONSIVE
-    ======================== */
-    isi.querySelectorAll('img').forEach(img => {
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      img.style.display = 'block';
-    });
-
-    /* ========================
-       🖼️ GAMBAR UTAMA
-    ======================== */
-    const gambar = document.querySelector('.gambar-berita');
-    if (gambar) {
-      gambar.src =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/default.jpg';
-
-      gambar.style.maxWidth = '100%';
-      gambar.style.height = 'auto';
+    if (isi) {
+      isi.innerHTML = post.content.rendered;
+      isi.querySelectorAll('img').forEach(img => {
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
+      });
     }
 
     /* ========================
        📅 TANGGAL
     ======================== */
-    document.getElementById('tanggal').innerText =
-      new Date(post.date).toLocaleDateString('id-ID', {
+    const tanggal = document.getElementById('tanggal');
+    if (tanggal) {
+      tanggal.innerText = new Date(post.date).toLocaleDateString('id-ID', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
         year: 'numeric'
       });
+    }
 
     /* ========================
-       ✍️ EDITOR (DIPERBAIKI)
+       ✍️ EDITOR
     ======================== */
     const editor = document.getElementById('editor');
     if (editor) {
-      editor.innerText =
-        post._embedded?.author?.[0]?.name ||
-        'Redaksi';
+      try {
+        const author = await fetchWithProxy(
+          `${BASE}/users/${post.author}`
+        );
+        editor.innerText = author.name || 'Redaksi';
+      } catch {
+        editor.innerText = 'Redaksi';
+      }
     }
 
     /* ========================
        🏷️ KATEGORI
     ======================== */
-    const kategoriEl = document.getElementById('kategori');
-    if (kategoriEl) {
-      const kategoriNama =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name ||
-        kategoriSlug ||
-        'Berita';
+    const kategori = document.getElementById('kategori');
+    if (kategori && post.categories?.length) {
+      try {
+        const cat = await fetchWithProxy(
+          `${BASE}/categories/${post.categories[0]}`
+        );
+        kategori.innerText = cat.name || 'Berita';
+      } catch {
+        kategori.innerText = 'Berita';
+      }
+    }
 
-      kategoriEl.innerText = kategoriNama;
+    /* ========================
+       🖼️ GAMBAR (STABIL)
+    ======================== */
+    const gambar = document.querySelector('.gambar-berita');
+    if (gambar && post.featured_media) {
+      try {
+        const media = await fetchWithProxy(
+          `${BASE}/media/${post.featured_media}`
+        );
+        gambar.src = media.source_url || 'image/default.jpg';
+      } catch {
+        gambar.src = 'image/default.jpg';
+      }
     }
 
   } catch (err) {
     console.error(err);
-    berita.innerHTML = '<p>Gagal memuat berita</p>';
+    berita.innerHTML =
+      '<p>Konten gagal dimuat. Silakan refresh.</p>';
   }
 
 });
