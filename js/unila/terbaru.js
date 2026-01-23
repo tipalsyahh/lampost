@@ -1,69 +1,101 @@
 document.addEventListener('DOMContentLoaded', async () => {
-
   const container = document.querySelector('.terbaru');
   if (!container) return;
 
   try {
+    /* ========================
+       1️⃣ AMBIL ID KATEGORI
+    ======================== */
+    const catRes = await fetch(
+      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=inspirasi'
+    );
+
+    if (!catRes.ok) throw new Error('Gagal ambil kategori');
+
+    const catData = await catRes.json();
+    if (!catData.length) throw new Error('Kategori tidak ditemukan');
+
+    const kategoriId = catData[0].id;
+
+    /* ========================
+       2️⃣ AMBIL POST BERDASARKAN KATEGORI
+    ======================== */
     const api =
       'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
-      '?filter[category_name]=inspirasi&per_page=6&orderby=date&order=desc&_embed';
+      `?categories=${kategoriId}&per_page=5&orderby=date&order=desc&_embed`;
 
     const res = await fetch(api);
-    if (!res.ok) throw new Error('Gagal mengambil API');
+    if (!res.ok) throw new Error('Gagal mengambil post');
 
     const posts = await res.json();
+    if (!posts.length) {
+      container.innerHTML = '<p>Konten Prestasi Mahasiswa tidak tersedia</p>';
+      return;
+    }
 
-    let output = '';
+    const fragment = document.createDocumentFragment();
 
     posts.forEach(post => {
+      /* 🏷️ KATEGORI */
+      const kategori =
+        post._embedded?.['wp:term']?.[0]?.[0] || {
+          slug: 'prestasi-mahasiswa',
+          name: 'Prestasi Mahasiswa'
+        };
 
       /* 📝 JUDUL */
       const judul = post.title.rendered;
-
-      /* 🔤 SLUG → URL (SESUAI CONTOH ANDA) */
       const slug = post.slug;
-      const link = `berita.unila.html?judul=${slug}`;
+
+      /* 🔗 URL (SESUAI SCRIPT LAMA) */
+      const linkBerita = `berita.unila.html?berita-terkini|${slug}`;
+      const linkKategori = `kategori.unila.html?kategori=${kategori.slug}`;
+
+      /* 📰 DESKRIPSI */
+      let deskripsi =
+        post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
+      if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
       /* 🖼️ GAMBAR */
-      const media =
-        post._embedded?.['wp:featuredmedia']?.[0];
-
       const gambar =
-        media?.source_url || 'image/ai.jpg';
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+        'image/ai.jpg';
+
+      /* ✍️ EDITOR */
+      const editor = post._embedded?.author?.[0]?.name || 'Redaksi';
 
       /* 📅 TANGGAL */
-      const tanggal = new Date(post.date)
-        .toLocaleDateString('id-ID', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
+      const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
 
-      output += `
-        <a href="${link}" class="item-microweb">
-          <img
-            src="${gambar}"
-            alt="${judul}"
-            class="img-terbaru"
-            loading="lazy">
+      const a = document.createElement('a');
+      a.href = linkBerita;
+      a.className = 'item-info';
 
-          <div class="berita-microweb">
-            <p class="judul-terbaru">${judul}</p>
-            <div class="info-microweb">
-              <p class="tanggal">${tanggal}</p>
-            </div>
+      a.innerHTML = `
+        <img src="${gambar}" class="img-terbaru" loading="lazy" alt="${judul}">
+        <div class="berita-unila">
+          <p class="judul-unila">${judul}</p>
+
+          <div class="info-microweb">
+            <p class="editor">By ${editor}</p>
+            <p class="tanggal">${tanggal}</p>
+              <p class="kategori">${kategori.name}</p>
           </div>
-        </a>
+        </div>
       `;
+
+      fragment.appendChild(a);
     });
 
-    container.innerHTML =
-      output || '<p>Konten Inspirasi tidak tersedia</p>';
+    container.innerHTML = '';
+    container.appendChild(fragment);
 
   } catch (err) {
     console.error('API gagal dimuat:', err);
-    container.innerHTML =
-      '<p>Konten gagal dimuat</p>';
+    container.innerHTML = '<p>Konten gagal dimuat</p>';
   }
-
 });

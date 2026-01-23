@@ -24,6 +24,12 @@
     object-fit: contain;
 }
 
+.terbaru a {
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+
 .prestasi-terbaru {
     display: flex;
     gap: 5px;
@@ -246,8 +252,8 @@
 }
 
 .img-terbaru {
-    width: 150px;
-    object-fit: contain;
+    width: 100%;
+    object-fit: cover;
     height: 150px;
 }
 
@@ -335,9 +341,9 @@
     .ubl-terbaru {
         width: 100%;
     }
-
+    
     .ubl-terbaru a {
-        display: flex;
+        display: block;
         width: 100%;
         gap: 10px;
     }
