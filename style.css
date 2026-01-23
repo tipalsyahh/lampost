@@ -332,7 +332,6 @@ body {
     padding: 10px 0;
     gap: 10px;
     text-decoration: none;
-    align-items: center;
 }
 
 .info a img {
@@ -653,5 +652,8 @@ h2 {
         }
     }
 
-}
+    .kategori {
+        display: none;
+    }
 
+}

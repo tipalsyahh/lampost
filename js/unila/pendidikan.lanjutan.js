@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
-
   const container = document.querySelector('.prestasi-lanjutan');
   if (!container) return;
 
   try {
     /* ========================
-       1️⃣ AMBIL ID KATEGORI
+       1️⃣ AMBIL ID KATEGORI KABAR KKN
     ======================== */
     const catRes = await fetch(
-      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=prestasi-mahasiswa'
+      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=kabar-kkn'
     );
+
     if (!catRes.ok) throw new Error('Gagal ambil kategori');
 
     const catData = await catRes.json();
-    if (!catData.length) throw new Error('Kategori tidak ditemukan');
+    if (!catData.length) throw new Error('Kategori kabar-kkn tidak ditemukan');
 
     const kategoriId = catData[0].id;
 
@@ -22,74 +22,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     ======================== */
     const api =
       'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
-      `?categories=${kategoriId}&per_page=4&orderby=date&order=desc&_embed`;
+      `?categories=${kategoriId}&per_page=6&orderby=date&order=desc&_embed`;
 
     const res = await fetch(api);
-    if (!res.ok) throw new Error('Gagal mengambil API');
+    if (!res.ok) throw new Error('Gagal mengambil post');
 
     const posts = await res.json();
+    if (!posts.length) {
+      container.innerHTML = '<p>Kabar KKN belum tersedia</p>';
+      return;
+    }
 
-    let output = '';
+    const fragment = document.createDocumentFragment();
 
     posts.forEach(post => {
+      /* 🏷️ KATEGORI */
+      const kategori =
+        post._embedded?.['wp:term']?.[0]?.[0] || {
+          slug: 'kabar-kkn',
+          name: 'Kabar KKN'
+        };
 
       /* 📝 JUDUL */
       const judul = post.title.rendered;
-
-      /* 🔤 SLUG → URL */
       const slug = post.slug;
-      const link = `berita.unila.html?judul=${slug}`;
+
+      /* 🔗 URL */
+      const linkBerita = `berita.unila.html?berita-terkini|${slug}`;
+      const linkKategori = `kategori.unila.html?kategori=${kategori.slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =
-        post.excerpt?.rendered
-          ?.replace(/<[^>]+>/g, '')
-          ?.trim() || '';
-
-      if (deskripsi.length > 150) {
-        deskripsi = deskripsi.slice(0, 150) + '...';
-      }
-
-      /* 🏷️ KATEGORI */
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Prestasi Mahasiswa';
-
-      /* 📅 TANGGAL */
-      const tanggal = new Date(post.date)
-        .toLocaleDateString('id-ID', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
+        post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
+      if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
       /* ✍️ EDITOR */
-      const editor =
-        post._embedded?.author?.[0]?.name || 'Redaksi';
+      const editor = post._embedded?.author?.[0]?.name || 'Redaksi';
 
-      output += `
-        <a href="${link}" class="item-info">
-          <div class="berita-unila">
-            <p class="judul-unila-lanjutan">${judul}</p>
+      /* 📅 TANGGAL */
+      const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
 
-            <div class="info-microweb">
-              <p class="editor">Oleh ${editor}</p>
-              <p class="tanggal">${tanggal}</p>
-              <p class="kategori">${category}</p>
-            </div>
+      const a = document.createElement('a');
+      a.href = linkBerita;
+      a.className = 'item-info';
 
-            <p class="deskripsi-unila-lanjutan">${deskripsi}</p>
+      a.innerHTML = `
+        <div class="berita-unila">
+          <p class="judul-unila-lanjutan">${judul}</p>
+
+          <div class="info-microweb">
+            <p class="editor">By ${editor}</p>
+            <p class="tanggal">${tanggal}</p>
+            <a class="kategori" href="${linkKategori}">
+              ${kategori.name}
+            </a>
           </div>
-        </a>
+
+          <p class="deskripsi-unila-lanjutan">${deskripsi}</p>
+        </div>
       `;
+
+      fragment.appendChild(a);
     });
 
-    container.innerHTML =
-      output || '<p>Konten Prestasi Mahasiswa tidak tersedia</p>';
+    container.innerHTML = '';
+    container.appendChild(fragment);
 
   } catch (err) {
     console.error('API gagal dimuat:', err);
-    container.innerHTML =
-      '<p>Konten gagal dimuat</p>';
+    container.innerHTML = '<p>Konten gagal dimuat</p>';
   }
-
 });

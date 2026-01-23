@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="judul">${judul}</p>
             <div class="info-microweb">
               <p class="editor">By ${editor}</p>
-              <p class="tanggal">${tanggal}</p>
+              <p class="tanggal" id="tanggal-unila">${tanggal}</p>
               <a class="kategori" href="kategori.unila.html?kategori=${kategori.slug || 'unila'}">
                 ${kategori.name || 'Unila'}
               </a>

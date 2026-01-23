@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-
   const container = document.querySelector('.prestasi-terbaru');
   if (!container) return;
 
@@ -10,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const catRes = await fetch(
       'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=prestasi-mahasiswa'
     );
+
     if (!catRes.ok) throw new Error('Gagal ambil kategori');
 
     const catData = await catRes.json();
@@ -25,78 +25,81 @@ document.addEventListener('DOMContentLoaded', async () => {
       `?categories=${kategoriId}&per_page=2&orderby=date&order=desc&_embed`;
 
     const res = await fetch(api);
-    if (!res.ok) throw new Error('Gagal mengambil API');
+    if (!res.ok) throw new Error('Gagal mengambil post');
 
     const posts = await res.json();
+    if (!posts.length) {
+      container.innerHTML = '<p>Konten Prestasi Mahasiswa tidak tersedia</p>';
+      return;
+    }
 
-    let output = '';
+    const fragment = document.createDocumentFragment();
 
     posts.forEach(post => {
+      /* 🏷️ KATEGORI */
+      const kategori =
+        post._embedded?.['wp:term']?.[0]?.[0] || {
+          slug: 'prestasi-mahasiswa',
+          name: 'Prestasi Mahasiswa'
+        };
 
       /* 📝 JUDUL */
       const judul = post.title.rendered;
-
-      /* 🔤 SLUG → URL */
       const slug = post.slug;
-      const link = `berita.unila.html?judul=${slug}`;
+
+      /* 🔗 URL (SESUAI SCRIPT LAMA) */
+      const linkBerita = `berita.unila.html?berita-terkini|${slug}`;
+      const linkKategori = `kategori.unila.html?kategori=${kategori.slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =
-        post.excerpt?.rendered
-          ?.replace(/<[^>]+>/g, '')
-          ?.trim() || '';
-
-      if (deskripsi.length > 150) {
-        deskripsi = deskripsi.slice(0, 150) + '...';
-      }
-
-      /* 🏷️ KATEGORI */
-      const category =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Prestasi Mahasiswa';
+        post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
+      if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
       /* 🖼️ GAMBAR */
       const gambar =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/ai.jpg';
-
-      /* 📅 TANGGAL */
-      const tanggal = new Date(post.date)
-        .toLocaleDateString('id-ID', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+        'image/ai.jpg';
 
       /* ✍️ EDITOR */
-      const editor =
-        post._embedded?.author?.[0]?.name || 'Redaksi';
+      const editor = post._embedded?.author?.[0]?.name || 'Redaksi';
 
-      output += `
-        <a href="${link}" class="item-info">
-          <img src="${gambar}" alt="${judul}" class="img-unila" loading="lazy">
+      /* 📅 TANGGAL */
+      const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
 
-          <div class="berita-unila">
-            <p class="judul-unila">${judul}</p>
+      const a = document.createElement('a');
+      a.href = linkBerita;
+      a.className = 'item-info';
 
-            <div class="info-microweb">
-            <p class="editor">Oleh ${editor}</p>
-              <p class="tanggal">${tanggal}</p>
-              <p class="kategori">${category}</p>
-            </div>
+      a.innerHTML = `
+        <img src="${gambar}" class="img-unila" loading="lazy" alt="${judul}">
+        <div class="berita-unila">
+          <p class="judul-unila">${judul}</p>
 
-            <p class="deskripsi">${deskripsi}</p>
+          <div class="info-microweb">
+            <p class="editor">By ${editor}</p>
+            <p class="tanggal">${tanggal}</p>
+            <a class="kategori" href="${linkKategori}">
+              ${kategori.name}
+            </a>
           </div>
-        </a>
+
+          <p class="deskripsi-unila-lanjutan">${deskripsi}</p>
+        </div>
       `;
+
+      fragment.appendChild(a);
     });
 
-    container.innerHTML =
-      output || '<p>Konten Prestasi Mahasiswa tidak tersedia</p>';
+    container.innerHTML = '';
+    container.appendChild(fragment);
 
   } catch (err) {
     console.error('API gagal dimuat:', err);
-    container.innerHTML =
-      '<p>Konten gagal dimuat</p>';
+    container.innerHTML = '<p>Konten gagal dimuat</p>';
   }
-
 });

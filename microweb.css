@@ -30,7 +30,10 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
-.prestasi-terbaru a,
+.prestasi-terbaru a {
+    text-decoration: none;
+}
+
 .ubl-terbaru a {
     width: 50%;
     text-decoration: none;
@@ -135,6 +138,11 @@
     width: 50%;
 }
 
+.img-ubl-terbaru {
+    width: 100%;
+    object-fit: contain;
+}
+
 #ubl-berita {
     width: 100%;
 }
@@ -148,7 +156,7 @@
 
 .ubl-buttom {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     align-items: stretch;
 }
 
@@ -174,6 +182,7 @@
 
 .tanggal {
     color: #797979;
+    margin: 0;
 }
 
 .kategori {
@@ -310,7 +319,7 @@
         width: 100%;
     }
 
-    .tanggal {
+    #tanggal-unila {
         display: none;
     }
 }

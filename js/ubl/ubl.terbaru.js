@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <img
             src="${gambar}"
             alt="${judul}"
-            class="img-microweb"
+            class="img-ubl-terbaru"
             loading="lazy">
 
           <div class="berita-microweb" id="ubl-berita">
