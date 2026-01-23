@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
        1️⃣ AMBIL ID KATEGORI
     ======================== */
     const catRes = await fetch(
-      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=prestasi-mahasiswa'
+      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/categories?slug=inspirasi'
     );
 
     if (!catRes.ok) throw new Error('Gagal ambil kategori');
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <p class="judul-unila">${judul}</p>
 
           <div class="info-microweb">
-            <p class="editor">By ${editor}</p>
+            <p class="editor-kkn">By ${editor}</p>
             <p class="tanggal">${tanggal}</p>
             <a class="kategori" href="${linkKategori}">
               ${kategori.name}

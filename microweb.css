@@ -68,6 +68,7 @@
 .img-unila {
     width: 100%;
     object-fit: cover;
+    height: 300px;
 }
 
 .judul-unila,
@@ -162,7 +163,7 @@
 
 .home a,
 .Pendidikan a,
-.ubl-lanjutan a{
+.ubl-lanjutan a {
     display: flex;
     gap: 10px;
     text-decoration: none;
@@ -190,7 +191,8 @@
     color: #DC0000;
 }
 
-.editor {
+.editor,
+.editor-kkn {
     font-size: 12px;
     color: #45b4f5;
 }
@@ -321,5 +323,22 @@
 
     #tanggal-unila {
         display: none;
+    }
+
+    .img-unila {
+        height: 150px;
+    }
+    
+    .editor-kkn {
+        display: none;
+    }
+
+    .tanggal {
+        color: #DC0000;
+        margin: 0 0 10px 0;
+    }
+
+    .judul-unila {
+        margin: 10px 0 10px 0;
     }
 }
