@@ -14,15 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     'https://lampost.co/wp-json/wp/v2/posts?orderby=date&order=desc&_embed';
 
   // ===============================
-  // FORMAT TANGGAL
+  // FORMAT TANGGAL (21/1/2026)
   // ===============================
   function formatTanggal(dateString) {
-    const bulan = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-    ];
     const d = new Date(dateString);
-    return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
+    return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
   }
 
   // ===============================
@@ -69,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const kategoriSlug =
             post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
 
-          /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+          /* 🔗 LINK */
           const link = `halaman.html?${kategoriSlug}|${post.slug}`;
 
           /* 📅 TANGGAL */
@@ -77,8 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           /* ✍️ EDITOR */
           const editor =
-            post._embedded?.['wp:term']?.[2]?.[0]?.name ||
-            'Redaksi';
+            post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
 
           /* 🖼️ GAMBAR */
           const gambar =
@@ -94,9 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="detail-info">
                   <p class="editor">By ${editor}</p>
                   <p class="tanggal">${tanggal}</p>
-                  <p class="kategori">${kategori}</p>
                 </div>
 
+                <p class="kategori">${kategori}</p>
               </div>
             </a>
           `;
