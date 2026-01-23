@@ -45,7 +45,7 @@ body {
 }
 
 .logo-img {
-    width: 160px;
+    width: 180px;
     height: 40px;
     margin-right: 20px
 }
@@ -562,6 +562,10 @@ h2 {
         color: #000;
         font-size: 20px;
         gap: 5px;
+    }
+
+    .info {
+        padding: 0;
     }
 
     .sosmed a {

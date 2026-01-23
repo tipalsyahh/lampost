@@ -190,6 +190,9 @@
 }
 
 @media (max-width: 768px) {
+    .container-beranda {
+        padding: 15px 10px;
+    }
     .berita-left {
         display: none;
     }
@@ -215,6 +218,10 @@
 
     .kategori {
         display: none;
+    }
+
+    .card-meta span {
+        font-size: 14px;
     }
 
 }
