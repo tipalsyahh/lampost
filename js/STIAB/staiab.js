@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const loadMoreBtn = document.getElementById('loadMore');
   if (!container || !loadMoreBtn) return;
 
-  const PER_PAGE = 10;
+  const PER_PAGE = 6;
   let page = 1;
   let isLoading = false;
   let hasMore = true;
@@ -80,12 +80,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         output += `
           <a href="${link}" class="item-info">
             <img src="${gambar}" alt="${judul}" class="img-staiab" loading="lazy">
-            <div class="berita-microweb">
+            <div class="berita-staiab">
+            <p class="kategori-staiab">${kategori}</p>
               <p class="judul">${judul}</p>
               <div class="info-microweb">
                 <p class="editor">By ${editor}</p>
                 <p class="tanggal">${tanggal}</p>
-                <p class="kategori">${kategori}</p>
               </div>
               <p class="deskripsi">${deskripsi}</p>
             </div>
