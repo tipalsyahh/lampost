@@ -135,9 +135,6 @@
     margin-left: 16px;
 }
 
-.ubl-terbaru {
-    width: 50%;
-}
 
 .img-ubl-terbaru {
     width: 100%;
@@ -181,7 +178,7 @@
     gap: 5px;
 }
 
-.tanggal {
+.tanggal{
     color: #797979;
     margin: 0;
 }
@@ -333,7 +330,7 @@
         display: none;
     }
 
-    .tanggal {
+    #tanggal-unila-berita {
         color: #DC0000;
         margin: 0 0 10px 0;
     }

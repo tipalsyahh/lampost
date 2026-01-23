@@ -70,12 +70,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
     /* ========================
-       ✍️ EDITOR
+       ✍️ EDITOR (DIPERBAIKI)
     ======================== */
     const editor = document.getElementById('editor');
     if (editor) {
       editor.innerText =
-        post._embedded?.['wp:term']?.[2]?.[0]?.name ||
+        post._embedded?.author?.[0]?.name ||
         'Redaksi';
     }
 

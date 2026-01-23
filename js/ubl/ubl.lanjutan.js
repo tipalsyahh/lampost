@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ======================== */
     const api =
       'https://lampost.co/microweb/ubl/wp-json/wp/v2/posts' +
-      '?per_page=4&offset=2&orderby=date&order=desc&_embed';
+      '?per_page=6&offset=2&orderby=date&order=desc&_embed';
 
     const res = await fetch(api);
     if (!res.ok) throw new Error('Gagal mengambil API');
