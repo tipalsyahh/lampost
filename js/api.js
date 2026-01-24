@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.querySelector('.info');
-  if (!container) return;
+  const loadMoreBtn = document.getElementById('loadMore');
+  if (!container || !loadMoreBtn) return;
 
-  const PER_PAGE = 10;
+  const PER_PAGE = 14;
   const MAX_PAGE = 10;
 
   let page = 1;
@@ -22,104 +23,104 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================
-  // SENTINEL
-  // ===============================
-  const sentinel = document.createElement('div');
-  sentinel.style.height = '1px';
-  container.appendChild(sentinel);
-
-  // ===============================
   // LOAD POSTS
   // ===============================
-  function loadPosts() {
+  async function loadPosts() {
     if (isLoading || !hasMore) return;
     if (page > MAX_PAGE) {
       hasMore = false;
+      loadMoreBtn.style.display = 'none';
       return;
     }
 
     isLoading = true;
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.textContent = 'Loading...';
 
-    fetch(`${API_BASE}&per_page=${PER_PAGE}&page=${page}`)
-      .then(res => res.ok ? res.json() : [])
-      .then(posts => {
+    try {
+      const res = await fetch(
+        `${API_BASE}&per_page=${PER_PAGE}&page=${page}`
+      );
 
-        if (page === 1) posts.shift();
-        if (!posts.length) {
-          hasMore = false;
-          return;
-        }
+      if (!res.ok) {
+        hasMore = false;
+        loadMoreBtn.style.display = 'none';
+        return;
+      }
 
-        let html = '';
+      let posts = await res.json();
 
-        posts.forEach(post => {
+      // 🔥 buang post pertama di halaman awal
+      if (page === 1) posts.shift();
 
-          /* 📝 JUDUL */
-          const judul = post.title.rendered;
+      if (!posts.length) {
+        hasMore = false;
+        loadMoreBtn.style.display = 'none';
+        return;
+      }
 
-          /* 🏷️ KATEGORI */
-          const kategori =
-            post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita';
+      let html = '';
 
-          /* 🏷️ KATEGORI SLUG */
-          const kategoriSlug =
-            post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
+      posts.forEach(post => {
 
-          /* 🔗 LINK */
-          const link = `halaman.html?${kategoriSlug}|${post.slug}`;
+        /* 📝 JUDUL */
+        const judul = post.title.rendered;
 
-          /* 📅 TANGGAL */
-          const tanggal = formatTanggal(post.date);
+        /* 🏷️ KATEGORI */
+        const kategori =
+          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita';
 
-          /* ✍️ EDITOR */
-          const editor =
-            post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
+        const kategoriSlug =
+          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
 
-          /* 🖼️ GAMBAR */
-          const gambar =
-            post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-            'image/default.jpg';
+        /* 🔗 LINK */
+        const link = `halaman.html?${kategoriSlug}|${post.slug}`;
 
-          html += `
-            <a href="${link}" class="item-berita">
-              <img src="${gambar}" loading="lazy" alt="${judul}">
-              <div class="info-berita">
-                <p class="judul">${judul}</p>
+        /* 📅 TANGGAL */
+        const tanggal = formatTanggal(post.date);
 
-                <div class="detail-info">
-                  <p class="editor">By ${editor}</p>
-                  <p class="tanggal">${tanggal}</p>
-                </div>
+        /* ✍️ EDITOR */
+        const editor =
+          post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
 
-                <p class="kategori">${kategori}</p>
+        /* 🖼️ GAMBAR (TANPA LAZY LOAD) */
+        const gambar =
+          post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+          'image/default.jpg';
+
+        html += `
+          <a href="${link}" class="item-berita">
+            <img src="${gambar}" alt="${judul}">
+            <div class="info-berita">
+              <p class="judul">${judul}</p>
+
+              <div class="detail-info">
+                <p class="editor">By ${editor}</p>
+                <p class="tanggal">${tanggal}</p>
               </div>
-            </a>
-          `;
-        });
 
-        sentinel.insertAdjacentHTML('beforebegin', html);
+              <p class="kategori">${kategori}</p>
+            </div>
+          </a>
+        `;
+      });
 
-        page++;
-        isLoading = false;
-      })
-      .catch(() => isLoading = false);
+      container.insertAdjacentHTML('beforeend', html);
+      page++;
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      isLoading = false;
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = 'Load More';
+    }
   }
-
-  // ===============================
-  // OBSERVER
-  // ===============================
-  const observer = new IntersectionObserver(
-    entries => {
-      if (entries[0].isIntersecting) loadPosts();
-    },
-    { rootMargin: '300px' }
-  );
-
-  observer.observe(sentinel);
 
   // ===============================
   // INIT
   // ===============================
   loadPosts();
+  loadMoreBtn.addEventListener('click', loadPosts);
 
 });
