@@ -523,6 +523,10 @@ h2 {
         padding: 10px;
     }
 
+    .navbar-main {
+        padding: 14px 10px;
+    }
+
     .berita-mobile {
         display: block;
     }
