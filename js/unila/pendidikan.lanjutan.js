@@ -57,14 +57,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
       /* ✍️ EDITOR */
-      const editor = post._embedded?.author?.[0]?.name || 'Redaksi';
+      const editor =
+        post._embedded?.author?.[0]?.name || 'Redaksi';
 
-      /* 📅 TANGGAL */
-      const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-      });
+      /* =========================
+         📅 TANGGAL → ANGKA
+         FORMAT: DD/MM/YYYY
+      ========================= */
+      const d = new Date(post.date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      const tanggal = `${day}/${month}/${year}`;
 
       const a = document.createElement('a');
       a.href = linkBerita;

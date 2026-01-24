@@ -47,12 +47,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const link = `detail.bedah-tajuk.html?${kategoriSlug}|${slug}`;
 
-      /* 📅 TANGGAL → ANGKA */
-      const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
+      /* =========================
+         📅 TANGGAL → ANGKA (DD/MM/YYYY)
+      ========================= */
+      const d = new Date(post.date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      const tanggal = `${day}/${month}/${year}`;
 
       const editor =
         post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';

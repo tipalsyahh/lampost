@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const api = `${BASE_API}?per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
-      const res = await fetch(api); // ✅ TANPA PROXY
+      const res = await fetch(api); // ✅ tanpa proxy
 
       if (!res.ok) {
         hasMore = false;
@@ -42,20 +42,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let deskripsi = post.excerpt?.rendered
           ?.replace(/<[^>]+>/g, '')
-          .trim() || '';
-        if (deskripsi.length > 120) deskripsi = deskripsi.slice(0, 120) + '…';
+          ?.trim() || '';
+        if (deskripsi.length > 120) {
+          deskripsi = deskripsi.slice(0, 120) + '…';
+        }
 
         const gambar =
           post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
           'image/ai.jpg';
 
-        const editor = post._embedded?.author?.[0]?.name || 'Redaksi';
+        const editor =
+          post._embedded?.author?.[0]?.name || 'Redaksi';
 
-        const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
+        /* =========================
+           📅 TANGGAL → ANGKA
+           FORMAT: DD/MM/YYYY
+        ========================= */
+        const d = new Date(post.date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const tanggal = `${day}/${month}/${year}`;
 
         const linkEl = document.createElement('a');
         linkEl.href = `berita.unila.html?berita-terkini|${slug}`;

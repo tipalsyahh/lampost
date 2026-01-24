@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const res = await fetch(`https://lampost.co/wp-json/wp/v2/posts?slug=${slug}&_embed`);
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/posts?slug=${slug}&_embed`
+    );
     if (!res.ok) throw new Error('Gagal ambil berita');
 
     const posts = await res.json();
@@ -20,30 +22,53 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const post = posts[0];
 
-    // Judul
-    document.querySelector('.judul-berita').innerHTML = post.title.rendered;
+    /* =========================
+       JUDUL
+    ========================= */
+    document.querySelector('.judul-berita').innerHTML =
+      post.title.rendered;
 
-    // Editor & Tanggal
-    document.getElementById('editor').innerText = post._embedded?.author?.[0]?.name || 'Redaksi';
-    document.getElementById('tanggal').innerText = new Date(post.date).toLocaleDateString('id-ID', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    /* =========================
+       EDITOR (SAMA DENGAN HOME)
+    ========================= */
+    const editor =
+      post._embedded?.['wp:term']?.[2]?.[0]?.name ||
+      post._embedded?.author?.[0]?.name ||
+      'Redaksi';
 
-    // Kategori
+    document.getElementById('editor').innerText = editor;
+
+    /* =========================
+       TANGGAL
+    ========================= */
+    document.getElementById('tanggal').innerText =
+      new Date(post.date).toLocaleDateString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+    /* =========================
+       KATEGORI
+    ========================= */
     const kategoriEl = document.getElementById('kategori');
-    if (kategoriEl)
-      kategoriEl.innerText = post._embedded?.['wp:term']?.[0]?.[0]?.name || kategoriSlug || 'Berita';
+    if (kategoriEl) {
+      kategoriEl.innerText =
+        post._embedded?.['wp:term']?.[0]?.[0]?.name ||
+        kategoriSlug ||
+        'Berita';
+    }
 
-    // Konten
+    /* =========================
+       KONTEN
+    ========================= */
     const isi = document.querySelector('.isi-berita');
     isi.innerHTML = post.content.rendered || '';
 
-    // ===========================
-    // Manual mapping slug -> YouTube videoId
-    // ===========================
+    /* =========================
+       VIDEO YOUTUBE (MANUAL MAP)
+    ========================= */
     const videoIdMap = {
       'kpk-endus-aroma-korupsi-ada-bau-busuk-kuota-haji': 'HOterxKOtXE',
       'menteri-purbaya-masih-pakai-gaya-koboi-bagaimana-respon-prabowo': 'm5nnBanrkYo',
@@ -51,64 +76,59 @@ document.addEventListener('DOMContentLoaded', async () => {
       'politik-nasi-goreng-jalan-konsolidasi-prabowo-megawati': 'AxsUHgzTWes',
       'ada-apa-dibalik-vonis-ringan-kasus-korupsi-timah': 'qxbIf6r6U84',
       'prabowo-wacanakan-akan-maafkan-koruptor-asal-uang-negara-kembali-apa-rakyat-indonesia-setuju': 'nMlvqLRkzjo',
-      'hari-santri-nasional-i-kemandirian-pesantren-menuju-indonesia-maju-bedah-tajuk-lampung-post': 'yJ9-aAqINKU', // contoh
-      // tambahkan slug lain di sini jika ada
+      'hari-santri-nasional-i-kemandirian-pesantren-menuju-indonesia-maju-bedah-tajuk-lampung-post': 'yJ9-aAqINKU'
     };
 
     const videoId = videoIdMap[slug];
 
-    if (videoId) {
-      // Buat div thumbnail
+    if (videoId && videoId.length === 11) {
+
       const thumbDiv = document.createElement('div');
       thumbDiv.className = 'yt-thumbnail';
-      thumbDiv.style.backgroundImage = `url('https://i.ytimg.com/vi/${videoId}/sddefault.jpg')`;
-      thumbDiv.style.cursor = 'pointer';
-      thumbDiv.style.width = '100%';
-      thumbDiv.style.paddingTop = '56.25%'; // 16:9 ratio
-      thumbDiv.style.backgroundSize = 'cover';
-      thumbDiv.style.backgroundPosition = 'center';
-      thumbDiv.style.position = 'relative';
-      thumbDiv.style.marginBottom = '1rem';
+      thumbDiv.style.cssText = `
+        background-image:url('https://i.ytimg.com/vi/${videoId}/hqdefault.jpg');
+        width:100%;
+        padding-top:56.25%;
+        background-size:cover;
+        background-position:center;
+        position:relative;
+        cursor:pointer;
+        margin-bottom:1rem;
+      `;
 
-      // Play icon overlay
       const playIcon = document.createElement('div');
-      playIcon.textContent = '▶';
-      playIcon.style.position = 'absolute';
-      playIcon.style.top = '50%';
-      playIcon.style.left = '50%';
-      playIcon.style.transform = 'translate(-50%, -50%)';
-      playIcon.style.fontSize = '3rem';
-      playIcon.style.color = 'white';
-      playIcon.style.textShadow = '0 0 5px black';
+      playIcon.innerText = '▶';
+      playIcon.style.cssText = `
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+        font-size:64px;
+        color:white;
+        text-shadow:0 0 10px rgba(0,0,0,.8);
+      `;
+
       thumbDiv.appendChild(playIcon);
 
-      // Klik thumbnail → tampilkan iframe embed YouTube
       thumbDiv.addEventListener('click', () => {
-        const iframeWrapper = document.createElement('div');
-        iframeWrapper.style.position = 'relative';
-        iframeWrapper.style.width = '100%';
-        iframeWrapper.style.paddingBottom = '56.25%';
-
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        iframe.allowFullscreen = true;
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.position = 'absolute';
-        iframe.style.top = '0';
-        iframe.style.left = '0';
-        iframe.style.border = '0';
-
-        iframeWrapper.appendChild(iframe);
-        thumbDiv.replaceWith(iframeWrapper);
+        thumbDiv.outerHTML = `
+          <iframe
+            width="100%"
+            height="360"
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        `;
       });
 
-      // Tambahkan thumbnail di atas konten
       isi.prepend(thumbDiv);
     }
 
-    // Buat semua gambar di konten responsive
+    /* =========================
+       RESPONSIVE IMAGE
+    ========================= */
     isi.querySelectorAll('img').forEach(img => {
       img.style.maxWidth = '100%';
       img.style.height = 'auto';
@@ -118,5 +138,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error(err);
     berita.innerHTML = '<p>Gagal memuat berita</p>';
   }
-
 });

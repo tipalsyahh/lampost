@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const kategoriSlug =
           post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'teknokrat';
 
-        /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+        /* 🔗 LINK */
         const link = `berita.teknokrat.html?${kategoriSlug}|${slug}`;
 
         let deskripsi =
@@ -67,12 +67,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           post._embedded?.['wp:featuredmedia']?.[0]?.source_url
           || 'image/ai.jpg';
 
-        const tanggal = new Date(post.date)
-          .toLocaleDateString('id-ID', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-          });
+        /* =========================
+           📅 TANGGAL → ANGKA
+           FORMAT: DD/MM/YYYY
+        ========================= */
+        const d = new Date(post.date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const tanggal = `${day}/${month}/${year}`;
 
         const editor =
           post._embedded?.author?.[0]?.name || 'Redaksi';

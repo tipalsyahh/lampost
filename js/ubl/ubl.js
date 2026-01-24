@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const kategoriSlug =
           post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
 
-        /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+        /* 🔗 LINK */
         const link = `berita.ubl.html?${kategoriSlug}|${slug}`;
 
         /* 🖼️ GAMBAR */
@@ -53,13 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
           post._embedded?.['wp:featuredmedia']?.[0]?.source_url
           || 'image/ai.jpg';
 
-        /* 📅 TANGGAL */
-        const tanggal = new Date(post.date)
-          .toLocaleDateString('id-ID', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-          });
+        /* =========================
+           📅 TANGGAL → ANGKA
+           FORMAT: DD/MM/YYYY
+        ========================= */
+        const d = new Date(post.date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const tanggal = `${day}/${month}/${year}`;
 
         /* ✍️ EDITOR */
         const editor =
@@ -77,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="info-microweb">
                 <p class="editor">By ${editor}</p>
                 <p class="tanggal">${tanggal}</p>
+                <p class="kategori">${kategori}</p>
               </div>
             </div>
           </a>
