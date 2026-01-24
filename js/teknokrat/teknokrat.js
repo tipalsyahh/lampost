@@ -85,10 +85,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
             <div class="berita-microweb">
               <p class="judul">${judul}</p>
+              <p class="kategori">${kategori}</p>
               <div class="info-microweb">
                 <p class="editor">By ${editor}</p>
                 <p class="tanggal">${tanggal}</p>
-                <p class="kategori">${kategori}</p>
               </div>
               <p class="deskripsi">${deskripsi}</p>
             </div>
