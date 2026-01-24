@@ -246,7 +246,6 @@
 .item-microweb {
     display: flex;
     padding: 20px 0;
-    gap: 10px;
     text-decoration: none;
     border-bottom: 1px solid #e5e7eb;
 }
@@ -299,6 +298,13 @@
     text-decoration: none;
     display: flex;
 }
+
+.img-terbaru-teknokrat {
+    width: 50%;
+    object-fit: contain;
+    height: 150px;
+}
+
 
 @media (max-width: 768px) {
     .container-microweb {

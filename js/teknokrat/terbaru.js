@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <img
             src="${gambar}"
             alt="${judul}"
-            class="img-terbaru"
+            class="img-terbaru-teknokrat"
             loading="lazy">
 
           <div class="berita-microweb">
