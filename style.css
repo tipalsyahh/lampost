@@ -593,6 +593,10 @@ h2 {
         display: none;
     }
 
+    .footer-container {
+        padding: 0;
+    }
+
     .info a img {
         width: 80px;
         height: 80px;
