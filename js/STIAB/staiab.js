@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       posts.forEach(post => {
 
+        /* 📝 JUDUL & SLUG */
         const judul = post.title.rendered;
         const slug = post.slug;
 
@@ -51,9 +52,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const kategoriSlug =
           post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'stiab';
 
-        /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+        /* 🔗 LINK */
         const link = `berita.stiab.html?${kategoriSlug}|${slug}`;
 
+        /* 📰 DESKRIPSI */
         let deskripsi =
           post.excerpt?.rendered
             ?.replace(/<[^>]+>/g, '')
@@ -63,17 +65,22 @@ document.addEventListener('DOMContentLoaded', async () => {
           deskripsi = deskripsi.slice(0, 150) + '...';
         }
 
+        /* 🖼️ GAMBAR */
         const gambar =
           post._embedded?.['wp:featuredmedia']?.[0]?.source_url
           || 'image/ai.jpg';
 
-        const tanggal = new Date(post.date)
-          .toLocaleDateString('id-ID', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-          });
+        /* =========================
+           📅 TANGGAL → ANGKA
+           FORMAT: DD/MM/YYYY
+        ========================= */
+        const d = new Date(post.date);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const tanggal = `${day}/${month}/${year}`;
 
+        /* ✍️ EDITOR */
         const editor =
           post._embedded?.author?.[0]?.name || 'Redaksi';
 
@@ -81,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <a href="${link}" class="item-info">
             <img src="${gambar}" alt="${judul}" class="img-staiab" loading="lazy">
             <div class="berita-staiab">
-            <p class="kategori-staiab">${kategori}</p>
+              <p class="kategori">${kategori}</p>
               <p class="judul">${judul}</p>
               <div class="info-microweb">
                 <p class="editor">By ${editor}</p>

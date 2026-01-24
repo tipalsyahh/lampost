@@ -72,12 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
           <img src="${gambar}" class="img-microweb" loading="lazy" alt="${judul}">
           <div class="berita-microweb">
             <p class="judul">${judul}</p>
+            <a class="kategori" href="kategori.unila.html?kategori=${kategori.slug || 'unila'}">
+              ${kategori.name || 'Unila'}
+            </a>
             <div class="info-microweb">
               <p class="editor">By ${editor}</p>
               <p class="tanggal" id="tanggal-unila">${tanggal}</p>
-              <a class="kategori" href="kategori.unila.html?kategori=${kategori.slug || 'unila'}">
-                ${kategori.name || 'Unila'}
-              </a>
             </div>
             <p class="deskripsi">${deskripsi}</p>
           </div>

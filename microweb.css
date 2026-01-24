@@ -1,5 +1,5 @@
 .container-microweb {
-    padding: 10px calc(8%);
+    padding: 10px calc(5%);
     display: flex;
     gap: 5px;
     align-items: flex-start;
@@ -12,7 +12,6 @@
 
 .iklan-parent {
     width: 30%;
-    padding: 20px;
     position: sticky;
     top: 10px;
 }
@@ -22,6 +21,10 @@
     width: 300px;
     height: 250px;
     object-fit: contain;
+}
+
+.terbaru {
+    margin-top: 10px;
 }
 
 .terbaru a {
@@ -191,8 +194,9 @@
 }
 
 .kategori {
-    font-size: 12px;
+    font-size: 15px;
     color: #DC0000;
+    margin: 10px 0 10px 0;
 }
 
 .editor,
@@ -332,6 +336,10 @@
         padding: 10px;
     }
 
+    .terbaru a {
+        gap: 10px;
+    }
+
     #epeper-microweb {
         width: 90%;
         padding: 10px;
@@ -366,21 +374,8 @@
         width: 100%;
     }
 
-    #tanggal-unila {
-        display: none;
-    }
-
     .img-unila {
         height: 150px;
-    }
-    
-    .editor-kkn {
-        display: none;
-    }
-
-    #tanggal-unila-berita {
-        color: #DC0000;
-        margin: 0 0 10px 0;
     }
 
     .judul-unila {

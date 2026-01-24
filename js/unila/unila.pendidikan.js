@@ -84,12 +84,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="berita-unila">
           <p class="judul-unila">${judul}</p>
 
+          <a class="kategori" href="${linkKategori}">
+            ${kategori.name}
+          </a>
           <div class="info-microweb">
             <p class="editor-kkn">By ${editor}</p>
             <p class="tanggal" id="tanggal-unila-berita">${tanggal}</p>
-            <a class="kategori" href="${linkKategori}">
-              ${kategori.name}
-            </a>
           </div>
 
           <p class="deskripsi-unila-lanjutan">${deskripsi}</p>
