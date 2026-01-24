@@ -45,7 +45,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Manual mapping slug -> YouTube videoId
     // ===========================
     const videoIdMap = {
-      'kpk-endus-aroma-korupsi-ada-bau-busuk-kuota-haji': 'HOterxKOtXE', // contoh
+      'kpk-endus-aroma-korupsi-ada-bau-busuk-kuota-haji': 'HOterxKOtXE',
+      'menteri-purbaya-masih-pakai-gaya-koboi-bagaimana-respon-prabowo': 'm5nnBanrkYo',
+      'ruu-tni-kebangkitan-dwifungsi-abri-ancaman-demokrasi': 'vBwNCV0nS_4',
+      'politik-nasi-goreng-jalan-konsolidasi-prabowo-megawati': 'AxsUHgzTWes',
+      'ada-apa-dibalik-vonis-ringan-kasus-korupsi-timah': 'qxbIf6r6U84',
+      'prabowo-wacanakan-akan-maafkan-koruptor-asal-uang-negara-kembali-apa-rakyat-indonesia-setuju': 'nMlvqLRkzjo',
+      'hari-santri-nasional-i-kemandirian-pesantren-menuju-indonesia-maju-bedah-tajuk-lampung-post': 'yJ9-aAqINKU', // contoh
       // tambahkan slug lain di sini jika ada
     };
 
