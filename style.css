@@ -509,6 +509,14 @@ h2 {
     margin-bottom: 15px;
 }
 
+#kolom {
+    min-width: 150px;
+}
+
+#vidio {
+    min-width: 170px;
+}
+
 @media (max-width: 768px) {
     .container {
         display: block;
@@ -538,8 +546,8 @@ h2 {
     }
 
     .logo-img {
-        width: 120px;
-        height: 25px;
+        width: 140px;
+        height: 30px;
     }
 
     .button-user {

@@ -309,6 +309,18 @@
     height: 150px;
 }
 
+.home-forum-guru a {
+    display: flex;
+    text-decoration: none;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.img-forum-guru {
+    width: 300px;
+    height: 250px;
+    object-fit: cover;
+}
 
 @media (max-width: 768px) {
     .container-microweb {
@@ -330,6 +342,10 @@
     .iklan-parent {
         width: 100%;
         padding: 0;
+    }
+
+    .judul {
+        font-size: 15px;
     }
 
     .bener {
