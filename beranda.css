@@ -193,6 +193,7 @@
     .container-beranda {
         padding: 15px 10px;
     }
+
     .berita-left {
         display: none;
     }
@@ -218,6 +219,13 @@
 
     .card-meta span {
         font-size: 14px;
+    }
+
+    .card-image-wrapper {
+        width: 90%;
+        box-shadow: 0 8px 24px rgb(0 0 0 / 63%);
+        margin-left: auto;
+        margin-right: auto;
     }
 
 }
