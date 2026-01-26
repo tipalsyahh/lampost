@@ -163,8 +163,6 @@ body {
 }
 
 .berita {
-    width: 70%;
-    border-right: 1px solid #e5e7eb;
     padding: 10px;
 }
 
@@ -356,12 +354,90 @@ body {
     text-decoration: none;
 }
 
+/* ================================
+   HOVER EFFECT : LIFT + SHADOW
+   ================================ */
+.home a:hover,
+.Pendidikan a:hover,
+.ubl-lanjutan a:hover,
 .info a:hover {
+    position: relative;
+    z-index: 10;
+    transform: translateY(-3px);
     box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.527),
-    0 8px 20px rgba(0, 0, 0, 0.521);
-    border-radius: 10px;
+        0 2px 8px rgba(0,0,0,0.12),
+        0 8px 20px rgba(0,0,0,0.10);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
+
+/* ================================
+   GARIS ATAS & BAWAH
+   ================================ */
+.home a:hover::before,
+.home a:hover::after,
+.Pendidikan a:hover::before,
+.Pendidikan a:hover::after,
+.ubl-lanjutan a:hover::before,
+.ubl-lanjutan a:hover::after,
+.info a:hover::before,
+.info a:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #d10000;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.home a:hover::before,
+.Pendidikan a:hover::before,
+.ubl-lanjutan a:hover::before,
+.info a:hover::before {
+    top: -6px;
+    animation: lineTopLeftFade 0.7s ease forwards;
+}
+
+.home a:hover::after,
+.Pendidikan a:hover::after,
+.ubl-lanjutan a:hover::after,
+.info a:hover::after {
+    bottom: -6px;
+    animation: lineBottomRightFade 0.7s ease forwards;
+}
+
+@keyframes lineTopLeftFade {
+    0% {
+        transform: translateX(30%);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+}
+
+@keyframes lineBottomRightFade {
+    0% {
+        transform: translateX(-30%);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+}
+
 
 .info a img {
     width: 150px;
@@ -546,6 +622,19 @@ h2 {
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.line-accent {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        to right,
+        #d10000 0%,
+        #d10000 15%,
+        #d1d5db 15%,
+        #d1d5db 100%
+    );
+    margin-bottom: 20px;
 }
 
 .berita-mobile {

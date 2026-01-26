@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
 
       /* 🔗 LINK */
-      const link = `berita.ubl.html?${kategoriSlug}|${slug}`;
+      const link = `berita.bsi.html?${kategoriSlug}|${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =
@@ -76,10 +76,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="berita-microweb">
             <p class="judul">${judul}</p>
 
+            <p class="kategori">${category}</p>
             <div class="info-microweb">
               <p class="editor">Oleh ${editor}</p>
               <p class="tanggal">${tanggal}</p>
-              <p class="kategori">${category}</p>
             </div>
 
             <p class="deskripsi">${deskripsi}</p>

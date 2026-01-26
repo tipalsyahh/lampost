@@ -1,5 +1,5 @@
 .container-microweb {
-    padding: 10px calc(5%);
+    padding: 10px calc(13%);
     display: flex;
     gap: 5px;
     align-items: flex-start;
@@ -176,18 +176,89 @@
     padding: 10px;
 }
 
+/* ================================
+   HOVER EFFECT : LIFT + SHADOW
+   ================================ */
 .home a:hover,
 .Pendidikan a:hover,
 .ubl-lanjutan a:hover {
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.53),
-        0 8px 20px rgba(0, 0, 0, 0.52);
-    border-radius: 10px;
-    transition: box-shadow 0.3s ease;
     position: relative;
-    z-index: 100;
+    z-index: 10;
+    transform: translateY(-3px);
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.12),
+        0 8px 20px rgba(0,0,0,0.10);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
+/* ================================
+   GARIS ATAS & BAWAH
+   ================================ */
+.home a:hover::before,
+.home a:hover::after,
+.Pendidikan a:hover::before,
+.Pendidikan a:hover::after,
+.ubl-lanjutan a:hover::before,
+.ubl-lanjutan a:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #d10000;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* ---------- GARIS ATAS ---------- */
+.home a:hover::before,
+.Pendidikan a:hover::before,
+.ubl-lanjutan a:hover::before {
+    top: -6px;
+    animation: lineTopLeftFade 0.7s ease forwards;
+}
+
+/* ---------- GARIS BAWAH ---------- */
+.home a:hover::after,
+.Pendidikan a:hover::after,
+.ubl-lanjutan a:hover::after {
+    bottom: -6px;
+    animation: lineBottomRightFade 0.7s ease forwards;
+}
+
+/* ================================
+   ANIMASI (MUNCUL → GERAK → HILANG)
+   ================================ */
+@keyframes lineTopLeftFade {
+    0% {
+        transform: translateX(30%);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+}
+
+@keyframes lineBottomRightFade {
+    0% {
+        transform: translateX(-30%);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+}
 
 .judul {
     color: #000;
@@ -226,7 +297,7 @@
 }
 
 .bener {
-    padding: 10px calc(10%);
+    padding: 10px calc(13%);
     margin-top: 10px;
 }
 

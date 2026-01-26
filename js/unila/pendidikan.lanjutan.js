@@ -77,9 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       a.innerHTML = `
         <div class="berita-unila">
           <p class="judul-unila-lanjutan">${judul}</p>
-          <a class="kategori" href="${linkKategori}">
-            ${kategori.name}
-          </a>
+          <p class="kategori">${kategori.name}</p>
           <div class="info-microweb">
             <p class="editor-kkn">By ${editor}</p>
             <p class="tanggal">${tanggal}</p>

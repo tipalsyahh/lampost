@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container || !loadMoreBtn) return;
 
   let page = 1;
-  const perPage = 10;
+  const perPage = 4;
   let isLoading = false;
 
   async function loadPosts() {
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
           post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
 
         /* 🔗 LINK */
-        const link = `berita.ubl.html?${kategoriSlug}|${slug}`;
+        const link = `berita.bsi.html?${kategoriSlug}|${slug}`;
 
         /* 🖼️ GAMBAR */
         const gambar =
@@ -74,12 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
               alt="${judul}"
               class="img-ubl"
               loading="lazy">
-            <div class="berita-microweb">
+              <div class="berita-microweb">
               <p class="judul-ubl">${judul}</p>
+              <p class="kategori">${kategori}</p>
               <div class="info-microweb">
                 <p class="editor">By ${editor}</p>
                 <p class="tanggal">${tanggal}</p>
-                <p class="kategori">${kategori}</p>
               </div>
             </div>
           </a>
