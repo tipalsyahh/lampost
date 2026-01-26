@@ -12,6 +12,28 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* animasi dasar */
+.animate-item {
+    opacity: 0;
+    animation: slideUpSlow 2.8s ease-out forwards;
+}
+
+@keyframes slideUpSlow {
+    0% {
+        opacity: 0;
+        transform: translateY(80px);
+    }
+
+    60% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 .navbar-main {
     background-color: #fff;
@@ -518,7 +540,7 @@ h2 {
 }
 
 .load-more {
-    margin: 20px auto;
+    margin-top: 15px;
     height: 30px;
     width: 250px;
     border: 1px solid #e5e7eb;
