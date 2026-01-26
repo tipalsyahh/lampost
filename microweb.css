@@ -173,6 +173,7 @@
     display: flex;
     gap: 10px;
     text-decoration: none;
+    padding: 10px;
 }
 
 .home a:hover,
@@ -181,12 +182,10 @@
     box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.53),
         0 8px 20px rgba(0, 0, 0, 0.52);
-    padding: 10px;
     border-radius: 10px;
     transition: box-shadow 0.3s ease;
     position: relative;
     z-index: 100;
-    margin: 10px 0;
 }
 
 
