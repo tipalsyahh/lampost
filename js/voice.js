@@ -8,7 +8,18 @@ function playVoice() {
   const beritaEl = document.getElementById("berita");
   if (!beritaEl) return;
 
-  const textBerita = beritaEl.innerText;
+  // Ambil semua teks dari #berita kecuali yang ada class "home"
+  const nodes = Array.from(beritaEl.childNodes);
+  let textBerita = '';
+  nodes.forEach(node => {
+    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('home')) {
+      return; // abaikan elemen dengan class 'home'
+    }
+    textBerita += node.innerText || node.textContent || '';
+  });
+
+  if (!textBerita.trim()) return; // jika kosong, stop
+
   utterance = new SpeechSynthesisUtterance(textBerita);
   utterance.lang = "id-ID";
 
@@ -34,8 +45,7 @@ function stopVoice() {
 /* 🔥 WAJIB: DOMContentLoaded */
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("voiceToggle");
-
-  if (!btn) return; // ⛔ JIKA TIDAK ADA, STOP DI SINI
+  if (!btn) return;
 
   stopVoice();
 

@@ -175,12 +175,6 @@ body {
     display: none;
 }
 
-.container {
-    padding: 10px calc(15%);
-    display: flex;
-    gap: 5px;
-}
-
 .berita {
     padding: 10px;
 }
@@ -487,7 +481,7 @@ body {
 }
 
 .footer-container {
-    max-width: 900px;
+    max-width: 1200px;
     margin: auto;
     padding: 30px 20px;
     display: flex;
@@ -498,7 +492,7 @@ body {
 }
 
 .footer-left img {
-    height: calc(100vh * 0.10);
+    height: calc(100vh * 0.15);
 }
 
 .footer-center {
@@ -520,7 +514,7 @@ body {
     border-top: 1px solid #1e293b;
     padding: 20px;
     text-align: center;
-    max-width: 900px;
+    max-width: 1200px;
     margin: auto;
 }
 
@@ -621,7 +615,9 @@ body {
     color: #000;
 }
 
-h2 {
+.container-microweb h2,
+.container-beranda h2,
+.lampung h2 {
     font-weight: 900;
     background: radial-gradient(
         circle at 109.67% 60.52%,

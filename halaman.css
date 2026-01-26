@@ -1,4 +1,20 @@
-.judul-berita {
+.container {
+    padding: 10px calc(10%);
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.berita {
+    width: 70%;
+}
+
+.berita a {
+    text-decoration: none;
+    color: #DC0000;
+}
+
+.judul-berita{
     color: #333;
 }
 
@@ -35,6 +51,12 @@
 .editor {
     font-size: 12px;
     color: #45b4f5;
+}
+
+.iklan-parent {
+    width: 30%;
+    position: sticky;
+    top: 10px;
 }
 
 @media (max-width: 768px) {

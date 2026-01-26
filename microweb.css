@@ -496,4 +496,14 @@
     .judul-unila {
         margin: 10px 0 10px 0;
     }
+
+    .deskripsi {
+        display: none;
+    }
+}
+
+@media (max-width: 847px) {
+    .logo ul {
+        display: none;
+    }
 }
