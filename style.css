@@ -239,7 +239,7 @@ body {
 
 .iklan {
     padding: 20px;
-    width: 30%;
+    width: 50%;
     position: sticky;
     top: 10px;
 }
@@ -354,6 +354,14 @@ body {
     padding: 10px 0;
     gap: 10px;
     text-decoration: none;
+}
+
+.info a:hover {
+    box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.527),
+    0 8px 20px rgba(0, 0, 0, 0.521);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .info a img {
@@ -520,7 +528,25 @@ body {
 }
 
 h2 {
-    font-weight: 800;
+    font-weight: 900;
+    background: radial-gradient(
+        circle at 109.67% 60.52%,
+        #aa7900 0%,
+        #b06f00 8.33%,
+        #b56300 16.67%,
+        #b95503 25%,
+        #bb450b 33.33%,
+        #bc2f13 41.67%,
+        #bb071a 50%,
+        #b90021 58.33%,
+        #b6002a 66.67%,
+        #b20033 75%,
+        #ad003e 83.33%,
+        #a6004a 91.67%,
+        #9d0058 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .berita-mobile {

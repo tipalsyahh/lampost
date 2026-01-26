@@ -10,7 +10,7 @@
 }
 
 .berita-left {
-    width: 30%;
+    width: 50%;
     padding: 10px;
     position: sticky;
     top: 10px;
@@ -223,9 +223,12 @@
 
     .card-image-wrapper {
         width: 90%;
-        box-shadow: 0 8px 24px rgb(0 0 0 / 63%);
+        box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.527),
+            0 8px 20px rgba(0, 0, 0, 0.521);
         margin-left: auto;
         margin-right: auto;
+        border-radius: 10px;
     }
 
 }
