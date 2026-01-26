@@ -1,12 +1,11 @@
 .container-beranda {
-    padding: 10px calc(7%);
+    padding: 10px calc(10%);
     display: flex;
     gap: 5px;
     align-items: flex-start;
 }
 
 .berita-beranda {
-    width: 50%;
     padding: 10px;
 }
 
@@ -52,12 +51,13 @@
     color: #000;
     text-decoration: none;
     display: flex;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 5px;
 }
 
 .hukum a p,
 .opini a p,
 .teknologi a p {
-    border-bottom: 1px solid #e5e7eb;
     margin-bottom: 8px;
 }
 

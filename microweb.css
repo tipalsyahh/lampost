@@ -229,7 +229,7 @@
 }
 
 .footer-microweb {
-    max-width: 900px;
+    max-width: 1200px;
     margin: auto;
     padding: 30px 20px;
     display: flex;
@@ -245,6 +245,14 @@
 .footer-left {
     text-align: justify;
     width: 50%;
+}
+
+.footer-bottom {
+    border-top: 1px solid #1e293b;
+    padding: 20px;
+    text-align: center;
+    max-width: 1200px;
+    margin: auto;
 }
 
 .item-microweb {
@@ -301,6 +309,11 @@
     color: #000;
     text-decoration: none;
     display: flex;
+     border-bottom: 1px solid #e5e7eb;
+}
+
+.akademik a p {
+    padding: 5px;
 }
 
 .img-terbaru-teknokrat {

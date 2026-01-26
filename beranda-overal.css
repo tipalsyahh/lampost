@@ -1,0 +1,12 @@
+@media (max-width: 1237px) {
+    .berita-left{
+        display: none;
+    }
+}
+
+
+@media (max-width: 860px) {
+    .logo ul {
+        display: none;
+    }
+}

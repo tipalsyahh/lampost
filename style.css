@@ -524,9 +524,37 @@ h2 {
     border: 1px solid #e5e7eb;
     background-color: transparent;
     cursor: pointer;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    color: #6b7280;
+    font-size: 14px;
 }
+
+/* garis kiri & kanan di luar border */
+.load-more::before,
+.load-more::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 100px;
+    height: 1px;
+    background-color: #e5e7eb;
+}
+
+/* garis kiri */
+.load-more::before {
+    right: 100%;
+    margin-right: 10px;
+}
+
+/* garis kanan */
+.load-more::after {
+    left: 100%;
+    margin-left: 10px;
+}
+
 
 @media (max-width: 768px) {
     .container {
