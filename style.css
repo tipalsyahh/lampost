@@ -603,7 +603,6 @@ body {
 .kategori {
     font-size: 12px;
     color: #DC0000;
-    margin: 0;
 }
 
 .tanggal {
@@ -613,7 +612,8 @@ body {
 
 .container-microweb h2,
 .container-beranda h2,
-.lampung h2 {
+.lampung h2,
+.gaya-hidup h2 {
     font-weight: 900;
     background: radial-gradient(
         circle at 109.67% 60.52%,
@@ -702,11 +702,24 @@ body {
     margin-left: 10px;
 }
 
+.gaya-hidup {
+    padding: 10px calc(10%);
+    margin-bottom: 25px;
+}
+
 
 @media (max-width: 768px) {
 
     .navbar-main {
         padding: 14px 15px;
+    }
+
+    .img-unila {
+        height: 150px;
+    }
+
+    .gaya-hidup {
+        padding: 10px;
     }
 
     .berita-mobile {
