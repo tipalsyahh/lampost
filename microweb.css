@@ -345,6 +345,7 @@
 .judul-terbaru {
     font-size: 15px;
     color: #000;
+    margin: 0 0 10px 0;
 }
 
 .gambar-berita {
@@ -391,9 +392,10 @@
 }
 
 .img-terbaru-teknokrat {
-    width: 50%;
-    object-fit: contain;
-    height: 150px;
+    width: 100px;
+    height: 100px;
+    display: block;
+    object-fit: cover;
 }
 
 .home-forum-guru a {
