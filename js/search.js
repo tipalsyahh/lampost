@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('search-results');
     if (!container) return;
 
-    const query = decodeURIComponent(new URLSearchParams(window.location.search).get('q') || '').trim();
+    const query = decodeURIComponent(
+        new URLSearchParams(window.location.search).get('q') || ''
+    ).trim();
     const queryLower = query.toLowerCase();
 
     if (!query) {
@@ -21,19 +23,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Ambil 50 post saja agar cepat dan ringan
+        // ❗ TIDAK DIUBAH
         const api = `https://lampost.co/wp-json/wp/v2/posts?search=${encodeURIComponent(query)}&_embed&per_page=50`;
         const res = await fetch(api);
         if (!res.ok) throw new Error('Gagal ambil data pencarian');
 
         const posts = await res.json();
 
-        // Filter tambahan
+        // ❗ LOGIKA FILTER TETAP
         const filteredPosts = posts.filter(post => {
             const judul = post.title.rendered.toLowerCase();
-            const deskripsiRaw = post.excerpt?.rendered || post.content?.rendered || '';
-            const deskripsi = deskripsiRaw.replace(/(<([^>]+)>)/gi, '').toLowerCase();
-            return judul.includes(queryLower) || deskripsi.includes(queryLower);
+            const deskripsiRaw =
+                post.excerpt?.rendered || post.content?.rendered || '';
+            const deskripsi = deskripsiRaw
+                .replace(/(<([^>]+)>)/gi, '')
+                .toLowerCase();
+
+            return (
+                judul.includes(queryLower) ||
+                deskripsi.includes(queryLower)
+            );
         });
 
         if (!filteredPosts.length) {
@@ -42,36 +51,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         container.innerHTML = filteredPosts.map(post => {
-            const kategori = post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita';
-            const link = `halaman.html?${kategori}%7C${post.slug}`;
-            const gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg';
-            const judul = post.title.rendered;
-            const editor = post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
+            const kategori =
+                post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita';
 
-            // ✅ TANGGAL ANGKA (1/3/2026)
+            const link = `halaman.html?${kategori}%7C${post.slug}`;
+
+            const gambar =
+                post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+                'image/default.jpg';
+
+            const judul = post.title.rendered;
+
+            const editor =
+                post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
+
+            // ✅ SATU-SATUNYA YANG DIUBAH (FORMAT TANGGAL)
             const d = new Date(post.date);
             const tanggal = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
 
-            const deskripsiRaw = post.excerpt?.rendered || post.content?.rendered || '';
-            const deskripsi = deskripsiRaw
-                .replace(/(<([^>]+)>)/gi, '')
-                .trim()
-                .substring(0, 150) + '...';
+            const deskripsiRaw =
+                post.excerpt?.rendered || post.content?.rendered || '';
+
+            const deskripsi =
+                deskripsiRaw
+                    .replace(/(<([^>]+)>)/gi, '')
+                    .trim()
+                    .substring(0, 150) + '...';
 
             return `
-        <a href="${link}" class="item-info">
-          <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
-          <div class="berita-microweb">
-            <p class="judul">${judul}</p>
-            <p class="kategori">${kategori}</p>
-            <div class="info-microweb">
-              <p class="editor">By ${editor}</p>
-              <p class="tanggal">${tanggal}</p>
-            </div>
-            <p class="deskripsi">${deskripsi}</p>
-          </div>
-        </a>
-      `;
+                <a href="${link}" class="item-info">
+                    <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+                    <div class="berita-microweb">
+                        <p class="judul">${judul}</p>
+                        <p class="kategori">${kategori}</p>
+                        <div class="info-microweb">
+                            <p class="editor">By ${editor}</p>
+                            <p class="tanggal">${tanggal}</p>
+                        </div>
+                        <p class="deskripsi">${deskripsi}</p>
+                    </div>
+                </a>
+            `;
         }).join('');
 
     } catch (err) {
