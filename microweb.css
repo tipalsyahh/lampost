@@ -92,7 +92,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    /* jarak antar item */
 }
 
 .berita-ubl>* {
@@ -176,9 +175,6 @@
     padding: 10px;
 }
 
-/* ================================
-   HOVER EFFECT : LIFT + SHADOW
-   ================================ */
 .home a:hover,
 .Pendidikan a:hover,
 .ubl-lanjutan a:hover {
@@ -193,9 +189,6 @@
         box-shadow 0.25s ease;
 }
 
-/* ================================
-   GARIS ATAS & BAWAH
-   ================================ */
 .home a:hover::before,
 .home a:hover::after,
 .Pendidikan a:hover::before,
@@ -213,7 +206,6 @@
     opacity: 0;
 }
 
-/* ---------- GARIS ATAS ---------- */
 .home a:hover::before,
 .Pendidikan a:hover::before,
 .ubl-lanjutan a:hover::before {
@@ -221,7 +213,6 @@
     animation: lineTopLeftFade 0.7s ease forwards;
 }
 
-/* ---------- GARIS BAWAH ---------- */
 .home a:hover::after,
 .Pendidikan a:hover::after,
 .ubl-lanjutan a:hover::after {
@@ -229,9 +220,6 @@
     animation: lineBottomRightFade 0.7s ease forwards;
 }
 
-/* ================================
-   ANIMASI (MUNCUL → GERAK → HILANG)
-   ================================ */
 @keyframes lineTopLeftFade {
     0% {
         transform: translateX(30%);
@@ -419,6 +407,10 @@
     width: 300px;
     height: 250px;
     object-fit: cover;
+}
+
+#microweb-img {
+    height: calc(100vh * 0.10);
 }
 
 @media (max-width: 768px) {

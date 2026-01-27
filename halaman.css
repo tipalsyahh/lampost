@@ -14,7 +14,7 @@
     color: #DC0000;
 }
 
-.judul-berita{
+.judul-berita {
     color: #333;
 }
 
@@ -60,7 +60,15 @@
 }
 
 @media (max-width: 768px) {
+    .container {
+        display: block;
+        padding: 10px;
+    }
+
     .berita {
         border: none;
+        padding: 0;
+        width: 100%;
     }
+
 }

@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.home');
   const loadMoreBtn = document.getElementById('loadMore');
-
   if (!container) return;
 
   const PER_PAGE = 10;
@@ -9,21 +8,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   let isLoading = false;
   let hasMore = true;
 
-  // Ambil kategori dari URL
+  // Ambil kategori & slug berita dari URL
   const query = decodeURIComponent(window.location.search.replace('?', ''));
-  const kategoriSlugFromURL = query.split('|')[0];
-  if (!kategoriSlugFromURL) return;
+  const kategoriSlug = query.split('|')[0];
+  const currentSlug = query.split('|')[1] || null;
+  if (!kategoriSlug) return;
 
-  // Ambil ID kategori WP
   let kategoriId = null;
+  let kategoriNama = kategoriSlug;
+
+  // Ambil kategori by slug
   try {
-    const catRes = await fetch('https://lampost.co/wp-json/wp/v2/categories');
+    const catRes = await fetch(
+      `https://lampost.co/wp-json/wp/v2/categories?slug=${kategoriSlug}`
+    );
     const catData = await catRes.json();
-    const kategoriObj = catData.find(cat => cat.slug.toLowerCase() === kategoriSlugFromURL.toLowerCase());
-    if (!kategoriObj) return;
-    kategoriId = kategoriObj.id;
-  } catch (err) {
-    console.error('Gagal ambil kategori:', err);
+    if (!catData.length) return;
+
+    kategoriId = catData[0].id;
+    kategoriNama = catData[0].name;
+  } catch {
     return;
   }
 
@@ -32,10 +36,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     isLoading = true;
 
     try {
-      const api = `https://lampost.co/wp-json/wp/v2/posts?categories=${kategoriId}&per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
+      const api = `
+        https://lampost.co/wp-json/wp/v2/posts
+        ?categories=${kategoriId}
+        &per_page=${PER_PAGE}
+        &page=${page}
+        &orderby=date
+        &order=desc
+        &_embed
+      `.replace(/\s+/g, '');
+
       const res = await fetch(api);
       if (!res.ok) {
-        if (res.status === 400) hasMore = false;
+        if (res.status === 400 || res.status === 404) hasMore = false;
         return;
       }
 
@@ -46,40 +59,42 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       let output = '';
+      let adaYangDitampilkan = false;
 
       posts.forEach(post => {
-        const judul = post.title.rendered;
-        const kategori = post._embedded?.['wp:term']?.[0]?.[0]?.name || kategoriSlugFromURL;
-        const slug = post.slug; // simpan slug untuk redirect
-        const link = `halaman.html?${kategoriSlugFromURL}`; // tampilkan kategori saja
+        if (currentSlug && post.slug === currentSlug) return;
+        adaYangDitampilkan = true;
 
-        let deskripsi = post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
+        const judul = post.title.rendered;
+        const slug = post.slug;
+
+        let deskripsi = post.excerpt?.rendered
+          ?.replace(/<[^>]+>/g, '')
+          .trim() || '';
         if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
-        const gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/ai.jpg';
+        const gambar =
+          post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+          'image/ai.jpg';
 
         const d = new Date(post.date);
-        const tanggal = `${String(d.getDate()).padStart(2,'0')}/` +
-                         `${String(d.getMonth()+1).padStart(2,'0')}/` +
-                         `${d.getFullYear()}`;
+        const tanggal =
+          `${String(d.getDate()).padStart(2, '0')}/` +
+          `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+          `${d.getFullYear()}`;
 
+        // ✅ EDITOR: HANYA 1 NAMA
         const editors = post._embedded?.['wp:term']?.[2] || [];
-        let editorText = '';
-        if (!editors.length) editorText = 'by Redaksi';
-        else if (editors.length === 1) editorText = `by ${editors[0].name}`;
-        else if (editors.length === 2) editorText = `by ${editors[0].name} and ${editors[1].name}`;
-        else {
-          const allButLast = editors.slice(0,-1).map(e => e.name).join(', ');
-          const last = editors[editors.length-1].name;
-          editorText = `by ${allButLast}, and ${last}`;
-        }
+        const editorText = editors.length
+          ? `by ${editors[0].name}`
+          : 'by Redaksi';
 
         output += `
-          <a href="${link}" class="item-info" data-slug="${slug}">
-            <img src="${gambar}" alt="${judul}" class="img-forum-guru" loading="lazy">
+          <a href="halaman.html?${kategoriSlug}|${slug}" class="item-info">
+            <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
             <div class="berita-microweb">
               <p class="judul">${judul}</p>
-              <p class="kategori">${kategori}</p>
+              <p class="kategori">${kategoriNama}</p>
               <div class="info-microweb">
                 <p class="editor">${editorText}</p>
                 <p class="tanggal">${tanggal}</p>
@@ -90,21 +105,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
       });
 
+      if (!adaYangDitampilkan) {
+        page++;
+        isLoading = false;
+        loadPosts();
+        return;
+      }
+
       container.insertAdjacentHTML('beforeend', output);
-
-      // Tambahkan event listener untuk redirect ke slug
-      container.querySelectorAll('a.item-info').forEach(a => {
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          const slug = a.dataset.slug;
-          const kategori = kategoriSlugFromURL;
-          window.location.href = `halaman.html?${kategori}|${slug}`;
-        });
-      });
-
       page++;
-    } catch (err) {
-      console.error('Gagal load post:', err);
     } finally {
       isLoading = false;
     }

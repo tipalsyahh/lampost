@@ -175,10 +175,6 @@ body {
     display: none;
 }
 
-.berita {
-    padding: 10px;
-}
-
 .card-berita {
     display: flex;
     justify-content: space-between;
@@ -708,10 +704,6 @@ body {
 
 
 @media (max-width: 768px) {
-    .container {
-        display: block;
-        padding: 10px;
-    }
 
     .navbar-main {
         padding: 14px 15px;
@@ -719,12 +711,6 @@ body {
 
     .berita-mobile {
         display: block;
-    }
-
-    .berita {
-        padding: 0;
-        width: 100%;
-        border: none;
     }
 
     .card {

@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const berita = document.getElementById('berita');
   if (!berita) return;
 
-  // 🔥 Ambil kategori & slug judul dari URL
-  const query = window.location.search.replace('?', '');
+  // 🔥 Ambil kategori & slug dari URL
+  const query = decodeURIComponent(window.location.search.replace('?', ''));
   const [kategoriSlug, slug] = query.split('|');
 
   if (!slug) {
@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     /* ========================
        📝 JUDUL
     ======================== */
-    document.querySelector('.judul-berita').innerHTML =
-      post.title.rendered;
+    const judul = document.querySelector('.judul-berita');
+    if (judul) judul.innerHTML = post.title.rendered;
 
     /* ========================
        📰 ISI BERITA
@@ -37,10 +37,72 @@ document.addEventListener('DOMContentLoaded', async () => {
     isi.innerHTML = post.content.rendered;
 
     /* ========================
-       🖼️ PAKSA IMG RESPONSIVE
+       🧹 HAPUS <p>&nbsp;</p> & PARAGRAF KOSONG
+    ======================== */
+    isi.querySelectorAll('p').forEach(p => {
+      const bersih = p.innerHTML
+        .replace(/&nbsp;/gi, '')
+        .replace(/\s+/g, '')
+        .trim();
+      if (!bersih) p.remove();
+    });
+
+    /* ========================
+       🔁 REDIRECT LINK INTERNAL
+       (SLUG DIJAMIN ADA)
+    ======================== */
+    isi.querySelectorAll('a[href]').forEach(link => {
+      let href = link.getAttribute('href');
+      if (!href) return;
+
+      if (
+        href.startsWith('#') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:')
+      ) return;
+
+      try {
+        const url = href.startsWith('http')
+          ? new URL(href)
+          : new URL(href, 'https://lampost.co');
+
+        if (!url.hostname.includes('lampost.co')) return;
+
+        // 🔎 SEARCH
+        const search = url.searchParams.get('s');
+        if (search) {
+          link.href = `search.html?q=${encodeURIComponent(search)}`;
+          link.target = '_self';
+          return;
+        }
+
+        const parts = url.pathname.split('/').filter(Boolean);
+
+        // ✅ SLUG PALING AKHIR (PALING AMAN)
+        const slugBerita = parts.at(-1);
+
+        if (slugBerita) {
+          link.href = `berita.banklampung.html?${kategoriSlug}|${slugBerita}`;
+          link.target = '_self';
+        } else {
+          link.href = 'index.html';
+          link.target = '_self';
+        }
+
+      } catch {
+        link.href = 'index.html';
+        link.target = '_self';
+      }
+    });
+
+    /* ========================
+       🖼️ IMG RESPONSIVE
     ======================== */
     isi.querySelectorAll('img').forEach(img => {
+      img.removeAttribute('width');
+      img.removeAttribute('height');
       img.style.maxWidth = '100%';
+      img.style.width = '100%';
       img.style.height = 'auto';
       img.style.display = 'block';
     });
@@ -51,26 +113,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     const gambar = document.querySelector('.gambar-berita');
     if (gambar) {
       gambar.src =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/default.jpg';
+        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+        'image/default.jpg';
 
       gambar.style.maxWidth = '100%';
+      gambar.style.width = '100%';
       gambar.style.height = 'auto';
     }
 
     /* ========================
        📅 TANGGAL
     ======================== */
-    document.getElementById('tanggal').innerText =
-      new Date(post.date).toLocaleDateString('id-ID', {
+    const tanggal = document.getElementById('tanggal');
+    if (tanggal) {
+      tanggal.innerText = new Date(post.date).toLocaleDateString('id-ID', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
         year: 'numeric'
       });
+    }
 
     /* ========================
-       ✍️ EDITOR (DIPERBAIKI)
+       ✍️ EDITOR (TETAP ASLI)
     ======================== */
     const editor = document.getElementById('editor');
     if (editor) {
@@ -84,12 +149,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     ======================== */
     const kategoriEl = document.getElementById('kategori');
     if (kategoriEl) {
-      const kategoriNama =
+      kategoriEl.innerText =
         post._embedded?.['wp:term']?.[0]?.[0]?.name ||
         kategoriSlug ||
         'Berita';
-
-      kategoriEl.innerText = kategoriNama;
     }
 
   } catch (err) {

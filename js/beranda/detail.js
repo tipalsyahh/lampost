@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const berita = document.getElementById('berita');
   if (!berita) return;
 
-  // 🔥 Ambil kategori & slug judul dari URL (AMAN)
+  // =============================
+  // Ambil kategori & slug dari URL
+  // =============================
   const query = decodeURIComponent(window.location.search.replace('?', ''));
   const [kategoriSlug, slug] = query.split('|');
 
@@ -35,19 +37,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     isi.innerHTML = post.content.rendered;
 
     /* ========================
-       🔁 REDIRECT LINK INTERNAL LAMPOST
-       (ARTIKEL & SEARCH)
+       🧹 HAPUS <p>&nbsp;</p> & PARAGRAF KOSONG
+    ======================== */
+    isi.querySelectorAll('p').forEach(p => {
+      const text = p.innerHTML
+        .replace(/&nbsp;/g, '')
+        .replace(/\s+/g, '')
+        .trim();
+      if (!text) p.remove();
+    });
+
+    /* ========================
+       🔁 REDIRECT SEMUA LINK INTERNAL LAMPOST
     ======================== */
     isi.querySelectorAll('a[href]').forEach(link => {
-      const href = link.getAttribute('href');
+      let href = link.getAttribute('href');
       if (!href) return;
 
+      if (
+        href.startsWith('#') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:')
+      ) return;
+
       try {
-        const url = new URL(href);
+        const url = href.startsWith('http')
+          ? new URL(href)
+          : new URL(href, 'https://lampost.co');
 
         if (!url.hostname.includes('lampost.co')) return;
 
-        // 🔎 SEARCH ?s=
+        // 🔎 SEARCH
         const search = url.searchParams.get('s');
         if (search) {
           link.href = `search.html?q=${encodeURIComponent(search)}`;
@@ -55,22 +75,27 @@ document.addEventListener('DOMContentLoaded', async () => {
           return;
         }
 
-        // 📰 ARTIKEL /kategori/slug/
         const parts = url.pathname.split('/').filter(Boolean);
+
+        // 📰 ARTIKEL
         if (parts.length >= 2) {
-          const kategori = parts[0];
-          const slugLink = parts[1];
-          link.href = `halaman.html?${kategori}%7C${slugLink}`;
+          link.href = `halaman.html?${parts[0]}|${parts[1]}`;
           link.target = '_self';
+          return;
         }
 
-      } catch (e) {
-        // abaikan mailto:, tel:, dll
+        // 🏠 SELAIN ITU → INDEX
+        link.href = 'index.html';
+        link.target = '_self';
+
+      } catch {
+        link.href = 'index.html';
+        link.target = '_self';
       }
     });
 
     /* ========================
-       🖼️ AMANKAN IMG (GLOBAL)
+       🖼️ AMANKAN IMG
     ======================== */
     isi.querySelectorAll('img').forEach(img => {
       img.removeAttribute('width');
@@ -82,27 +107,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       img.style.objectFit = 'contain';
     });
 
-    /* ========================
-       🖼️ AMANKAN FIGURE WP
-    ======================== */
     isi.querySelectorAll('figure').forEach(figure => {
       figure.style.maxWidth = '100%';
       figure.style.width = '100%';
       figure.style.margin = '1rem auto';
-      figure.style.boxSizing = 'border-box';
 
       const img = figure.querySelector('img');
       if (img) {
         img.removeAttribute('width');
         img.removeAttribute('height');
-        img.style.maxWidth = '100%';
         img.style.width = '100%';
         img.style.height = 'auto';
-        img.style.display = 'block';
       }
     });
 
-    // Netralisir align WP
     isi.querySelectorAll('.alignleft, .alignright').forEach(el => {
       el.style.float = 'none';
       el.style.margin = '1rem auto';
@@ -120,7 +138,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       gambar.style.maxWidth = '100%';
       gambar.style.width = '100%';
       gambar.style.height = 'auto';
-      gambar.style.objectFit = 'contain';
     }
 
     /* ========================
@@ -136,37 +153,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
-const editorEl = document.getElementById('editor');
-if (editorEl) {
-  const editors = post._embedded?.['wp:term']?.[2] || [];
+    /* ========================
+       ✍️ EDITOR (ASLI, TIDAK DIUBAH)
+    ======================== */
+    const editorEl = document.getElementById('editor');
+    if (editorEl) {
+      const editors = post._embedded?.['wp:term']?.[2] || [];
 
-  // buat teks editor
-  let editorText = '';
-  if (!editors.length) {
-    editorText = 'by Redaksi';
-  } else if (editors.length === 1) {
-    editorText = `by ${editors[0].name}`;
-  } else if (editors.length === 2) {
-    editorText = `by ${editors[0].name} and ${editors[1].name}`;
-  } else {
-    const allButLast = editors.slice(0, -1).map(e => e.name).join(', ');
-    const last = editors[editors.length - 1].name;
-    editorText = `by ${allButLast}, and ${last}`;
-  }
-
-  // update editor
-  editorEl.innerText = editorText;
-
-  // hapus "Oleh" hanya di teks sebelum <strong>, tanpa merusak tombol
-  const parentMeta = editorEl.parentElement;
-  if (parentMeta) {
-    Array.from(parentMeta.childNodes).forEach(node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        node.nodeValue = node.nodeValue.replace(/^\s*Oleh\s*/i, '');
+      let editorText = '';
+      if (!editors.length) editorText = 'by Redaksi';
+      else if (editors.length === 1) editorText = `by ${editors[0].name}`;
+      else if (editors.length === 2)
+        editorText = `by ${editors[0].name} and ${editors[1].name}`;
+      else {
+        const allButLast = editors.slice(0, -1).map(e => e.name).join(', ');
+        const last = editors[editors.length - 1].name;
+        editorText = `by ${allButLast}, and ${last}`;
       }
-    });
-  }
-}
+
+      editorEl.innerText = editorText;
+
+      const parentMeta = editorEl.parentElement;
+      if (parentMeta) {
+        Array.from(parentMeta.childNodes).forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            node.nodeValue = node.nodeValue.replace(/^\s*Oleh\s*/i, '');
+          }
+        });
+      }
+    }
 
     /* ========================
        🏷️ KATEGORI
