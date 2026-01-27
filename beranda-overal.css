@@ -1,69 +1,72 @@
-
-
 .prestasi-terbaru {
-    display: flex;
-    gap: 5px;
-    border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  gap: 5px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .prestasi-terbaru a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .img-unila {
-    width: 100%;
-    object-fit: cover;
-    height: 300px;
+  width: 100%;
+  object-fit: cover;
+  height: 300px;
 }
 
 .judul-unila {
-    margin: 0;
-    font-size: 16px;
-    color: #000;
-    font-weight: bold;
+  margin: 0;
+  font-size: 16px;
+  color: #000;
+  font-weight: bold;
 }
 
 .deskripsi-unila-lanjutan {
-    color: #797979;
-    font-size: 14px;
-    margin-top: 0;
+  color: #797979;
+  font-size: 14px;
+  margin-top: 0;
 }
 
 .prestasi-lanjutan {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .prestasi-lanjutan>* {
-    width: calc(50% - 8px);
+  width: calc(50% - 8px);
 }
 
 .prestasi-lanjutan a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .info-microweb {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .editor,
 .editor-kkn {
-    font-size: 12px;
-    color: #45b4f5;
+  font-size: 12px;
+  color: #45b4f5;
 }
 
 .tanggal {
-    color: #797979;
-    margin: 0;
+  color: #797979;
+  margin: 0;
 }
 
 .judul-unila-lanjutan {
-    font-size: 14px;
-    color: #000;
-    font-weight: bold;
+  font-size: 14px;
+  color: #000;
+  font-weight: bold;
+}
+
+.slider {
+  padding: 10px calc(10%);
+  margin-bottom: 15px;
 }
 
 .hero-slider {
@@ -82,11 +85,14 @@
 
 .hero-image-box {
   position: relative;
+  height: 400px;
+  /* height sekarang di parent */
 }
 
 .hero-image {
   width: 100%;
-  height: 500px;
+  height: 100%;
+  /* mengikuti height parent */
   object-fit: cover;
   display: block;
 }
@@ -96,7 +102,7 @@
   position: absolute;
   inset: 0;
   padding: 16px;
-  background: linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,.1));
+  background: linear-gradient(to top, rgba(0, 0, 0, .75), rgba(0, 0, 0, .1));
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -106,6 +112,11 @@
 .hero-category {
   font-size: 12px;
   text-transform: uppercase;
+  background-color: #DC0000;
+  width: 100px;
+  padding: 5px;
+   color: #fff;
+  text-align: center;
 }
 
 .hero-title {
@@ -135,7 +146,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(255,255,255,.5);
+  background: rgba(255, 255, 255, .5);
   cursor: pointer;
 }
 
@@ -144,18 +155,52 @@
 }
 
 
+
 @media (max-width: 1237px) {
-    .berita-left {
-        display: none;
-    }
+  .berita-left {
+    display: none;
+  }
 }
 
 
 @media (max-width: 847px) {
-    .logo ul {
-        display: none;
-    }
+  .logo ul {
+    display: none;
+  }
 
 }
 
-@media (max-width: 768px) {}
+@media (max-width: 768px) {
+  .slider {
+    padding: 10px;
+    margin-top: 15px;
+  }
+  
+  .hero-slider {
+    border-radius: 10px;
+    box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.527),
+    0 8px 20px rgba(0, 0, 0, 0.521);
+  }
+  
+  .hero-image-box {
+    height: 220px;
+  }
+
+  .hero-title {
+    font-size: 12px;
+  }
+
+  .hero-overlay {
+    justify-content: center;
+  }
+
+  .hero-category {
+    font-size: 10px;
+  }
+
+  .hero-meta,
+  .hero-meta-time {
+    font-size: 10px;
+  }
+}

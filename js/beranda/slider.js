@@ -27,8 +27,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const link = `halaman.html?${kategoriSlug}|${post.slug}`;
 
+      // Ambil editor sama seperti skrip olahraga
       const editor =
-        post._embedded?.author?.[0]?.name || 'Redaksi';
+        post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
 
       const gambar =
         post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
