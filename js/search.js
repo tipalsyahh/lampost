@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const posts = await res.json();
 
-        // Filter tambahan: cek judul atau deskripsi mengandung kata kunci
+        // Filter tambahan
         const filteredPosts = posts.filter(post => {
             const judul = post.title.rendered.toLowerCase();
             const deskripsiRaw = post.excerpt?.rendered || post.content?.rendered || '';
@@ -47,11 +47,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const gambar = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'image/default.jpg';
             const judul = post.title.rendered;
             const editor = post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
-            const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
-                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-            });
+
+            // ✅ TANGGAL ANGKA (1/3/2026)
+            const d = new Date(post.date);
+            const tanggal = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+
             const deskripsiRaw = post.excerpt?.rendered || post.content?.rendered || '';
-            const deskripsi = deskripsiRaw.replace(/(<([^>]+)>)/gi, '').trim().substring(0, 150) + '...';
+            const deskripsi = deskripsiRaw
+                .replace(/(<([^>]+)>)/gi, '')
+                .trim()
+                .substring(0, 150) + '...';
 
             return `
         <a href="${link}" class="item-info">
