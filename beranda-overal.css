@@ -110,13 +110,11 @@
 }
 
 .hero-category {
-  font-size: 12px;
-  text-transform: uppercase;
   background-color: #DC0000;
-  width: 100px;
-  padding: 5px;
-   color: #fff;
-  text-align: center;
+  padding: 5px 10px;
+  color: #fff;
+  width: fit-content;
+  font-size: 12px;
 }
 
 .hero-title {
@@ -188,19 +186,11 @@
   }
 
   .hero-title {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .hero-overlay {
     justify-content: center;
   }
 
-  .hero-category {
-    font-size: 10px;
-  }
-
-  .hero-meta,
-  .hero-meta-time {
-    font-size: 10px;
-  }
 }
