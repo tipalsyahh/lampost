@@ -10,15 +10,77 @@ document.addEventListener('DOMContentLoaded', () => {
   let isLoading = false;
   let hasMore = true;
 
+  // ❌ embed dibuang
   const API_BASE =
-    'https://lampost.co/wp-json/wp/v2/posts?orderby=date&order=desc&_embed';
+    'https://lampost.co/wp-json/wp/v2/posts?orderby=date&order=desc';
 
-  // ===============================
-  // FORMAT TANGGAL (21/1/2026)
-  // ===============================
+  const catCache = {};
+  const mediaCache = {};
+  const editorCache = {};
+
   function formatTanggal(dateString) {
     const d = new Date(dateString);
     return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+  }
+
+  // ===============================
+  // KATEGORI
+  // ===============================
+  async function getCategory(catId) {
+    if (!catId) return { name: 'Berita', slug: 'berita' };
+    if (catCache[catId]) return catCache[catId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/categories/${catId}`
+    );
+    const data = await res.json();
+
+    return (catCache[catId] = {
+      name: data.name,
+      slug: data.slug
+    });
+  }
+
+  // ===============================
+  // GAMBAR
+  // ===============================
+  async function getMedia(mediaId) {
+    if (!mediaId) return 'image/default.jpg';
+    if (mediaCache[mediaId]) return mediaCache[mediaId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+    );
+    const data = await res.json();
+
+    return (mediaCache[mediaId] =
+      data.media_details?.sizes?.medium?.source_url ||
+      data.source_url ||
+      'image/default.jpg'
+    );
+  }
+
+  // ===============================
+  // ✍️ EDITOR (CARA LAMA — WORKING)
+  // ===============================
+  async function getEditor(post) {
+    let editor = 'Redaksi';
+
+    const termLink = post._links?.['wp:term']?.[2]?.href;
+    if (!termLink) return editor;
+
+    if (editorCache[termLink]) return editorCache[termLink];
+
+    try {
+      const res = await fetch(termLink);
+      if (res.ok) {
+        const data = await res.json();
+        editor = data?.[0]?.name || editor;
+        editorCache[termLink] = editor;
+      }
+    } catch (_) {}
+
+    return editor;
   }
 
   // ===============================
@@ -31,58 +93,47 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===============================
   // LOAD POSTS
   // ===============================
-  function loadPosts() {
-    if (isLoading || !hasMore) return;
-    if (page > MAX_PAGE) {
-      hasMore = false;
-      return;
-    }
-
+  async function loadPosts() {
+    if (isLoading || !hasMore || page > MAX_PAGE) return;
     isLoading = true;
 
-    fetch(`${API_BASE}&per_page=${PER_PAGE}&page=${page}`)
-      .then(res => res.ok ? res.json() : [])
-      .then(posts => {
+    try {
+      const res = await fetch(
+        `${API_BASE}&per_page=${PER_PAGE}&page=${page}`
+      );
+      if (!res.ok) return;
 
-        if (page === 1) posts.shift();
-        if (!posts.length) {
-          hasMore = false;
-          return;
-        }
+      let posts = await res.json();
+      if (page === 1) posts.shift();
+      if (!posts.length) {
+        hasMore = false;
+        return;
+      }
 
-        let html = '';
+      const htmlArr = [];
 
-        posts.forEach(post => {
+      await Promise.all(
+        posts.map(async post => {
 
-          /* 📝 JUDUL */
           const judul = post.title.rendered;
-
-          /* 🏷️ KATEGORI */
-          const kategori =
-            post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Berita';
-
-          /* 🏷️ KATEGORI SLUG */
-          const kategoriSlug =
-            post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
-
-          /* 🔗 LINK */
-          const link = `halaman.html?${kategoriSlug}|${post.slug}`;
-
-          /* 📅 TANGGAL */
           const tanggal = formatTanggal(post.date);
 
-          /* ✍️ EDITOR */
-          const editor =
-            post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
+          const { name: kategori, slug: kategoriSlug } =
+            await getCategory(post.categories?.[0]);
 
-          /* 🖼️ GAMBAR */
-          const gambar =
-            post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-            'image/default.jpg';
+          const gambar = await getMedia(post.featured_media);
+          const editor = await getEditor(post);
 
-          html += `
+          const link = `halaman.html?${kategoriSlug}|${post.slug}`;
+
+          htmlArr.push(`
             <a href="${link}" class="item-berita">
-              <img src="${gambar}" loading="lazy" alt="${judul}">
+              <img
+                src="${gambar}"
+                alt="${judul}"
+                loading="lazy"
+                decoding="async">
+
               <div class="info-berita">
                 <p class="judul">${judul}</p>
 
@@ -94,15 +145,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="kategori">${kategori}</p>
               </div>
             </a>
-          `;
-        });
+          `);
+        })
+      );
 
-        sentinel.insertAdjacentHTML('beforebegin', html);
+      sentinel.insertAdjacentHTML('beforebegin', htmlArr.join(''));
+      page++;
 
-        page++;
-        isLoading = false;
-      })
-      .catch(() => isLoading = false);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      isLoading = false;
+    }
   }
 
   // ===============================
@@ -116,10 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   observer.observe(sentinel);
-
-  // ===============================
-  // INIT
-  // ===============================
   loadPosts();
 
 });

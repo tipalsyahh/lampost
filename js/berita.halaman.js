@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
+
   const container = document.querySelector('.home');
   const loadMoreBtn = document.getElementById('loadMore');
   if (!container) return;
@@ -8,8 +9,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   let isLoading = false;
   let hasMore = true;
 
-  // Ambil kategori & slug berita dari URL
-  const query = decodeURIComponent(window.location.search.replace('?', ''));
+  /* ===============================
+     CACHE
+  =============================== */
+  const mediaCache = {};
+  const editorCache = {};
+
+  /* ===============================
+     AMBIL QUERY URL
+  =============================== */
+  const query = decodeURIComponent(
+    window.location.search.replace('?', '')
+  );
   const kategoriSlug = query.split('|')[0];
   const currentSlug = query.split('|')[1] || null;
   if (!kategoriSlug) return;
@@ -17,7 +28,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   let kategoriId = null;
   let kategoriNama = kategoriSlug;
 
-  // Ambil kategori by slug
+  /* ===============================
+     AMBIL KATEGORI DARI SLUG
+  =============================== */
   try {
     const catRes = await fetch(
       `https://lampost.co/wp-json/wp/v2/categories?slug=${kategoriSlug}`
@@ -31,20 +44,62 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
+  /* ===============================
+     AMBIL GAMBAR
+  =============================== */
+  async function getMedia(mediaId) {
+    if (!mediaId) return 'image/ai.jpg';
+    if (mediaCache[mediaId]) return mediaCache[mediaId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+    );
+    const data = await res.json();
+
+    return (mediaCache[mediaId] =
+      data.media_details?.sizes?.medium?.source_url ||
+      data.source_url ||
+      'image/ai.jpg'
+    );
+  }
+
+  /* ===============================
+     ✍️ EDITOR (SAMA SEPERTI SCRIPT ACUAN)
+  =============================== */
+  async function getEditor(post) {
+    let editor = 'Redaksi';
+
+    const termLink = post._links?.['wp:term']?.[2]?.href;
+    if (!termLink) return editor;
+
+    if (editorCache[termLink]) return editorCache[termLink];
+
+    try {
+      const res = await fetch(termLink);
+      if (res.ok) {
+        const data = await res.json();
+        editor = data?.[0]?.name || editor;
+        editorCache[termLink] = editor;
+      }
+    } catch (_) {}
+
+    return editor;
+  }
+
+  /* ===============================
+     LOAD POSTS
+  =============================== */
   async function loadPosts() {
     if (isLoading || !hasMore) return;
     isLoading = true;
 
     try {
-      const api = `
-        https://lampost.co/wp-json/wp/v2/posts
-        ?categories=${kategoriId}
-        &per_page=${PER_PAGE}
-        &page=${page}
-        &orderby=date
-        &order=desc
-        &_embed
-      `.replace(/\s+/g, '');
+      const api =
+        'https://lampost.co/wp-json/wp/v2/posts' +
+        `?categories=${kategoriId}` +
+        `&per_page=${PER_PAGE}` +
+        `&page=${page}` +
+        `&orderby=date&order=desc`;
 
       const res = await fetch(api);
       if (!res.ok) {
@@ -61,49 +116,49 @@ document.addEventListener('DOMContentLoaded', async () => {
       let output = '';
       let adaYangDitampilkan = false;
 
-      posts.forEach(post => {
-        if (currentSlug && post.slug === currentSlug) return;
-        adaYangDitampilkan = true;
+      await Promise.all(
+        posts.map(async post => {
+          if (currentSlug && post.slug === currentSlug) return;
 
-        const judul = post.title.rendered;
-        const slug = post.slug;
+          adaYangDitampilkan = true;
 
-        let deskripsi = post.excerpt?.rendered
-          ?.replace(/<[^>]+>/g, '')
-          .trim() || '';
-        if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
+          const judul = post.title.rendered;
+          const slug = post.slug;
 
-        const gambar =
-          post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-          'image/ai.jpg';
+          let deskripsi =
+            post.excerpt?.rendered
+              ?.replace(/<[^>]+>/g, '')
+              ?.trim() || '';
 
-        const d = new Date(post.date);
-        const tanggal =
-          `${String(d.getDate()).padStart(2, '0')}/` +
-          `${String(d.getMonth() + 1).padStart(2, '0')}/` +
-          `${d.getFullYear()}`;
+          if (deskripsi.length > 150) {
+            deskripsi = deskripsi.slice(0, 150) + '...';
+          }
 
-        // ✅ EDITOR: HANYA 1 NAMA
-        const editors = post._embedded?.['wp:term']?.[2] || [];
-        const editorText = editors.length
-          ? `by ${editors[0].name}`
-          : 'by Redaksi';
+          const gambar = await getMedia(post.featured_media);
+          const editor = await getEditor(post);
 
-        output += `
-          <a href="halaman.html?${kategoriSlug}|${slug}" class="item-info">
-            <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
-            <div class="berita-microweb">
-              <p class="judul">${judul}</p>
-              <p class="kategori">${kategoriNama}</p>
-              <div class="info-microweb">
-                <p class="editor">${editorText}</p>
-                <p class="tanggal">${tanggal}</p>
+          const d = new Date(post.date);
+          const tanggal =
+            `${String(d.getDate()).padStart(2, '0')}/` +
+            `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+            `${d.getFullYear()}`;
+
+          output += `
+            <a href="halaman.html?${kategoriSlug}|${slug}" class="item-info">
+              <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+              <div class="berita-microweb">
+                <p class="judul">${judul}</p>
+                <p class="kategori">${kategoriNama}</p>
+                <div class="info-microweb">
+                  <p class="editor">By ${editor}</p>
+                  <p class="tanggal">${tanggal}</p>
+                </div>
+                <p class="deskripsi">${deskripsi}</p>
               </div>
-              <p class="deskripsi">${deskripsi}</p>
-            </div>
-          </a>
-        `;
-      });
+            </a>
+          `;
+        })
+      );
 
       if (!adaYangDitampilkan) {
         page++;
@@ -114,11 +169,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       container.insertAdjacentHTML('beforeend', output);
       page++;
+
     } finally {
       isLoading = false;
     }
   }
 
   loadPosts();
-  if (loadMoreBtn) loadMoreBtn.addEventListener('click', loadPosts);
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', loadPosts);
+  }
+
 });

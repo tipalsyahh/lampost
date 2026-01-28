@@ -3,6 +3,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.opini');
   if (!container) return;
 
+  const catCache = {};
+
+  async function getCategorySlug(catId) {
+    if (!catId) return 'berita';
+    if (catCache[catId]) return catCache[catId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/categories/${catId}`
+    );
+    if (!res.ok) return 'berita';
+
+    const data = await res.json();
+    return (catCache[catId] = data.slug || 'berita');
+  }
+
   try {
     // ===============================
     // 1️⃣ AMBIL ID KATEGORI OPINI
@@ -24,27 +39,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const categoryId = catData[0].id;
 
     // ===============================
-    // 2️⃣ AMBIL BERITA OPINI
+    // 2️⃣ AMBIL BERITA OPINI (TANPA EMBED)
     // ===============================
     const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=5&orderby=date&order=desc&_embed`
+      `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=5&orderby=date&order=desc`
     );
     if (!res.ok) throw new Error('Gagal ambil berita');
 
     const posts = await res.json();
-
     let html = '';
 
-    posts.forEach(post => {
+    for (const post of posts) {
 
       /* 📝 JUDUL */
       const judul = post.title.rendered;
 
       /* 🏷️ KATEGORI SLUG */
-      const kategoriSlug =
-        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
+      const kategoriSlug = await getCategorySlug(post.categories?.[0]);
 
-      /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+      /* 🔗 LINK */
       const link = `halaman.html?${kategoriSlug}|${post.slug}`;
 
       html += `
@@ -53,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <p>${judul}</p>
         </a>
       `;
-    });
+    }
 
     // ===============================
     // 3️⃣ SISIPKAN KE DOM

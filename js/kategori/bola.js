@@ -1,55 +1,140 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.querySelector('.home');
   const loadMoreBtn = document.getElementById('loadMore');
   if (!container || !loadMoreBtn) return;
 
-  const PER_PAGE = 10;
+  const PER_PAGE = 6;
+  const MAX_PAGE = 6;
+
   let page = 1;
   let isLoading = false;
   let hasMore = true;
   let kategoriId = null;
 
   /* ===============================
-     1️⃣ AMBIL ID KATEGORI OPINI
+     CACHE
   =============================== */
-  try {
-    const catRes = await fetch(
-      'https://lampost.co/wp-json/wp/v2/categories?slug=bola'
+  const catCache = {};
+  const mediaCache = {};
+  const editorCache = {};
+
+  /* ===============================
+     FORMAT TANGGAL
+  =============================== */
+  const formatTanggal = dateString => {
+    const d = new Date(dateString);
+    return `${String(d.getDate()).padStart(2, '0')}/` +
+           `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+           `${d.getFullYear()}`;
+  };
+
+  /* ===============================
+     AMBIL ID KATEGORI OPINI
+  =============================== */
+  (async () => {
+    try {
+      const res = await fetch(
+        'https://lampost.co/wp-json/wp/v2/categories?slug=bola'
+      );
+      if (!res.ok) throw new Error('Kategori gagal');
+
+      const data = await res.json();
+      if (!data.length) throw new Error('Kategori tidak ditemukan');
+
+      kategoriId = data[0].id;
+      loadPosts();
+
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = '<p>Kategori opini tidak tersedia</p>';
+    }
+  })();
+
+  /* ===============================
+     AMBIL KATEGORI
+  =============================== */
+  async function getCategory(catId) {
+    if (!catId) return { name: 'Opini', slug: 'opini' };
+    if (catCache[catId]) return catCache[catId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/categories/${catId}`
     );
-    if (!catRes.ok) throw new Error('Gagal ambil kategori');
+    const data = await res.json();
 
-    const catData = await catRes.json();
-    if (!catData.length) throw new Error('Kategori opini tidak ditemukan');
-
-    kategoriId = catData[0].id;
-
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = '<p>Kategori opini tidak tersedia</p>';
-    return;
+    return (catCache[catId] = {
+      name: data.name,
+      slug: data.slug
+    });
   }
 
   /* ===============================
-     2️⃣ LOAD POST OPINI
+     AMBIL GAMBAR
   =============================== */
-  async function loadPosts() {
-    if (isLoading || !hasMore) return;
-    isLoading = true;
+  async function getMedia(mediaId) {
+    if (!mediaId) return 'image/ai.jpg';
+    if (mediaCache[mediaId]) return mediaCache[mediaId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+    );
+    const data = await res.json();
+
+    return (mediaCache[mediaId] =
+      data.media_details?.sizes?.medium?.source_url ||
+      data.source_url ||
+      'image/ai.jpg'
+    );
+  }
+
+  /* ===============================
+     ✍️ AMBIL EDITOR (SAMA PENAMPILAN)
+  =============================== */
+  async function getEditor(post) {
+    let editor = 'Redaksi';
+
+    const termLink = post._links?.['wp:term']?.[2]?.href;
+    if (!termLink) return editor;
+
+    if (editorCache[termLink]) return editorCache[termLink];
 
     try {
-      const api =
-        'https://lampost.co/wp-json/wp/v2/posts' +
-        `?categories=${kategoriId}&per_page=${PER_PAGE}&page=${page}&orderby=date&order=desc&_embed`;
+      const res = await fetch(termLink);
+      if (res.ok) {
+        const data = await res.json();
+        editor = data?.[0]?.name || editor;
+        editorCache[termLink] = editor;
+      }
+    } catch (_) {}
 
-      const res = await fetch(api);
+    return editor;
+  }
+
+  /* ===============================
+     LOAD POSTS
+  =============================== */
+  async function loadPosts() {
+    if (isLoading || !hasMore || page > MAX_PAGE) {
+      loadMoreBtn.style.display = 'none';
+      return;
+    }
+
+    isLoading = true;
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.textContent = 'Loading...';
+
+    try {
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/posts` +
+        `?categories=${kategoriId}&per_page=${PER_PAGE}&page=${page}` +
+        `&orderby=date&order=desc`
+      );
+
       if (!res.ok) {
-        if (res.status === 400) {
-          hasMore = false;
-          loadMoreBtn.style.display = 'none';
-          return;
-        }
-        throw new Error('API gagal');
+        hasMore = false;
+        loadMoreBtn.style.display = 'none';
+        return;
       }
 
       const posts = await res.json();
@@ -59,78 +144,63 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      let output = '';
+      const htmlArr = [];
 
-      posts.forEach(post => {
+      await Promise.all(
+        posts.map(async post => {
 
-        const judul = post.title.rendered;
-        const slug = post.slug;
+          const judul = post.title.rendered;
+          const slug = post.slug;
+          const tanggal = formatTanggal(post.date);
 
-        /* 🏷️ KATEGORI */
-        const kategori =
-          post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Opini';
+          const catId = post.categories?.[0];
+          const { name: kategori, slug: kategoriSlug } =
+            await getCategory(catId);
 
-        const kategoriSlug =
-          post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'opini';
+          const gambar = await getMedia(post.featured_media);
+          const editor = await getEditor(post);
 
-        /* 🔗 LINK */
-        const link = `../../halaman.html?${kategoriSlug}|${slug}`;
+          let deskripsi =
+            post.excerpt?.rendered
+              ?.replace(/<[^>]+>/g, '')
+              ?.trim() || '';
 
-        let deskripsi =
-          post.excerpt?.rendered
-            ?.replace(/<[^>]+>/g, '')
-            ?.trim() || '';
+          if (deskripsi.length > 150) {
+            deskripsi = deskripsi.slice(0, 150) + '...';
+          }
 
-        if (deskripsi.length > 150) {
-          deskripsi = deskripsi.slice(0, 150) + '...';
-        }
+          const link = `../halaman.html?${kategoriSlug}|${slug}`;
 
-        /* 🖼️ GAMBAR */
-        const gambar =
-          post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-          'image/ai.jpg';
-
-        /* 📅 TANGGAL */
-        const d = new Date(post.date);
-        const tanggal =
-          `${String(d.getDate()).padStart(2, '0')}/` +
-          `${String(d.getMonth() + 1).padStart(2, '0')}/` +
-          `${d.getFullYear()}`;
-
-        /* ✍️ EDITOR (SAMA SEPERTI SCRIPT OLAHRAGA) */
-        const editor =
-          post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
-
-        output += `
-          <a href="${link}" class="item-info">
-            <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
-            <div class="berita-microweb">
-              <p class="judul">${judul}</p>
-              <p class="kategori">${kategori}</p>
-              <div class="info-microweb">
-                <p class="editor">By ${editor}</p>
-                <p class="tanggal">${tanggal}</p>
+          htmlArr.push(`
+            <a href="${link}" class="item-info">
+              <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+              <div class="berita-microweb">
+                <p class="judul">${judul}</p>
+                <p class="kategori">${kategori}</p>
+                <div class="info-microweb">
+                  <p class="editor">By ${editor}</p>
+                  <p class="tanggal">${tanggal}</p>
+                </div>
+                <p class="deskripsi">${deskripsi}</p>
               </div>
-              <p class="deskripsi">${deskripsi}</p>
-            </div>
-          </a>
-        `;
-      });
+            </a>
+          `);
 
-      container.insertAdjacentHTML('beforeend', output);
+        })
+      );
+
+      container.insertAdjacentHTML('beforeend', htmlArr.join(''));
       page++;
 
     } catch (err) {
       console.error(err);
     } finally {
       isLoading = false;
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = 'Load More';
     }
   }
 
-  /* LOAD AWAL */
-  loadPosts();
-
-  /* LOAD MORE */
   loadMoreBtn.addEventListener('click', loadPosts);
 
 });

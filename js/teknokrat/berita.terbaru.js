@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (i === 0) {
         output += `
           <a href="${link}" class="item-info">
-            <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+            <img src="${gambar}" alt="${judul}" class="img-microweb-terbaru" loading="lazy">
             <div class="berita-detail">
               <p class="judul">${judul}</p>
               <p class="kategori">${kategori}</p>

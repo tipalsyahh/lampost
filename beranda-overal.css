@@ -65,7 +65,7 @@
 }
 
 .slider {
-  padding: 10px calc(10%);
+  padding: 10px calc(20%);
   margin-bottom: 15px;
 }
 
@@ -85,7 +85,7 @@
 
 .hero-image-box {
   position: relative;
-  height: 400px;
+  height: 500px;
   /* height sekarang di parent */
 }
 
