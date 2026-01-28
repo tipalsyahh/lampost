@@ -123,11 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <img src="${gambar}" alt="${judul}" loading="lazy" decoding="async">
             <div class="info-berita">
               <p class="judul">${judul}</p>
+              <p class="kategori">${kategori}</p>
               <div class="detail-info">
                 <p class="editor">By ${editor}</p>
                 <p class="tanggal">${tanggal}</p>
               </div>
-              <p class="kategori">${kategori}</p>
             </div>
           </a>
         `);

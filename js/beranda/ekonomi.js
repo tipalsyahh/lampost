@@ -3,104 +3,163 @@ document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.ekonomi');
   if (!container) return;
 
-  // ===============================
-  // 1️⃣ AMBIL ID KATEGORI EKONOMI
-  // ===============================
-  const kategoriIDs = [];
+  const PER_PAGE = 5;
 
-  try {
-    const catRes = await fetch(
-      'https://lampost.co/wp-json/wp/v2/categories?slug=ekonomi-dan-bisnis'
+  /* ===============================
+     API BASE (TANPA _embed)
+  =============================== */
+  const API_BASE =
+    'https://lampost.co/wp-json/wp/v2/posts?orderby=date&order=desc';
+
+  const catCache = {};
+  const mediaCache = {};
+  const termCache = {};
+
+  /* ===============================
+     FORMAT TANGGAL
+  =============================== */
+  const formatTanggal = dateString => {
+    const d = new Date(dateString);
+    return d.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  /* ===============================
+     AMBIL KATEGORI
+  =============================== */
+  async function getCategory(catId) {
+    if (!catId) return { name: 'Berita', slug: 'berita' };
+    if (catCache[catId]) return catCache[catId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/categories/${catId}`
     );
-    if (catRes.ok) {
-      const catData = await catRes.json();
-      if (catData[0]?.id) kategoriIDs.push(catData[0].id);
-    }
-  } catch (e) {
-    console.error('Gagal ambil kategori', e);
+    const data = await res.json();
+
+    return (catCache[catId] = {
+      name: data.name,
+      slug: data.slug
+    });
   }
 
-  if (!kategoriIDs.length) {
+  /* ===============================
+     AMBIL GAMBAR
+  =============================== */
+  async function getMedia(mediaId) {
+    if (!mediaId) return 'image/default.jpg';
+    if (mediaCache[mediaId]) return mediaCache[mediaId];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+    );
+    const data = await res.json();
+
+    return (mediaCache[mediaId] =
+      data.media_details?.sizes?.medium?.source_url ||
+      data.source_url ||
+      'image/default.jpg'
+    );
+  }
+
+  /* ===============================
+     AMBIL EDITOR (DARI wp:term)
+  =============================== */
+  async function getEditor(post) {
+    let editor = 'Redaksi';
+
+    const termLink = post._links?.['wp:term']?.[2]?.href;
+    if (!termLink) return editor;
+
+    if (termCache[termLink]) return termCache[termLink];
+
+    try {
+      const res = await fetch(termLink);
+      if (res.ok) {
+        const data = await res.json();
+        editor = data?.[0]?.name || editor;
+        termCache[termLink] = editor;
+      }
+    } catch (_) {}
+
+    return editor;
+  }
+
+  /* ===============================
+     AMBIL ID KATEGORI EKONOMI
+  =============================== */
+  let ekonomiID = null;
+
+  try {
+    const res = await fetch(
+      'https://lampost.co/wp-json/wp/v2/categories?slug=ekonomi-dan-bisnis'
+    );
+    const data = await res.json();
+    if (data[0]) ekonomiID = data[0].id;
+  } catch (err) {
     container.innerHTML = 'Kategori tidak ditemukan';
     return;
   }
 
-  // ===============================
-  // 2️⃣ AMBIL POST EKONOMI
-  // ===============================
-  const API_URL = `
-    https://lampost.co/wp-json/wp/v2/posts
-    ?categories=${kategoriIDs.join(',')}
-    &per_page=5
-    &orderby=date
-    &order=desc
-    &_embed
-  `.replace(/\s+/g, '');
+  if (!ekonomiID) {
+    container.innerHTML = 'Kategori tidak ditemukan';
+    return;
+  }
 
+  /* ===============================
+     LOAD POST EKONOMI
+  =============================== */
   try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error('Gagal mengambil data');
+    const res = await fetch(
+      `${API_BASE}&categories=${ekonomiID}&per_page=${PER_PAGE}`
+    );
+    if (!res.ok) throw new Error();
 
     const posts = await res.json();
-    let html = '';
+    const htmlArr = [];
 
-    posts.forEach(post => {
+    const promises = posts.map(async post => {
 
-      /* 📝 JUDUL */
       const judul = post.title.rendered;
+      const tanggal = formatTanggal(post.date);
 
-      /* 🏷️ KATEGORI SLUG */
-      const kategoriSlug =
-        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
+      const catId = post.categories?.[0];
+      const { name: kategori, slug: kategoriSlug } =
+        await getCategory(catId);
 
-      /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
+      const gambar = await getMedia(post.featured_media);
+      const editor = await getEditor(post);
+
+      const deskripsi =
+        post.excerpt?.rendered
+          ?.replace(/(<([^>]+)>)/gi, '')
+          ?.slice(0, 120) + '...';
+
       const link = `halaman.html?${kategoriSlug}|${post.slug}`;
 
-      /* ✍️ EDITOR */
-      const editor =
-        post._embedded?.['wp:term']?.[2]?.[0]?.name ||
-        'Redaksi';
-
-      /* 🏷️ KATEGORI (UNTUK TAMPILAN) */
-      const kategori =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name ||
-        'Berita';
-
-      /* 🖼️ GAMBAR */
-      const gambar =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-        'image/default.jpg';
-
-      /* 📅 TANGGAL */
-      const tanggal = new Date(post.date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-      });
-
-      html += `
-        <a href="${link}" class="card-link">
-          <div class="card-image-wrapper">
-            <img src="${gambar}" alt="${judul}" class="card-image" loading="lazy">
-            <div class="card-text-overlay">
-              <span class="card-text">${judul}</span>
-
-              <div class="card-meta">
-                <span class="card-editor">By ${editor}</span>
-                <span class="card-date">${tanggal}</span>
-                <span class="card-category">${kategori}</span>
+      htmlArr.push(`
+        <a href="${link}" class="item-info">
+            <img src="${gambar}" alt="${judul}" class="img-microweb-terbaru" loading="lazy">
+            <div class="berita-detail">
+              <p class="judul-ekonomi">${judul}</p>
+              <p class="kategori">${kategori}</p>
+              <div class="info-microweb">
+                <p class="editor">Oleh ${editor}</p>
+                <p class="tanggal">${tanggal}</p>
               </div>
-
+              <p class="deskripsi">${deskripsi}</p>
             </div>
-          </div>
-        </a>
-      `;
+          </a>
+      `);
     });
 
-    container.innerHTML = html;
+    await Promise.all(promises);
+    container.innerHTML = htmlArr.join('');
 
   } catch (err) {
-    console.error('Gagal load list berita:', err);
+    console.error(err);
     container.innerHTML = 'Gagal memuat berita';
   }
 
