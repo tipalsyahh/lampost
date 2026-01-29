@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Ambil kategori & slug dari URL
   // =============================
   const query = decodeURIComponent(window.location.search.replace('?', ''));
-  const [kategoriSlug, slug] = query.split('|');
+  const [kategoriSlug, slug] = query.split('/'); // ⬅️ DIUBAH DARI |
 
   if (!slug) {
     berita.innerHTML = '<p>Berita tidak ditemukan</p>';
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 📰 ARTIKEL
         if (parts.length >= 2) {
-          link.href = `halaman.html?${parts[0]}|${parts[1]}`;
+          link.href = `halaman.html?${parts[0]}/${parts[1]}`; // ⬅️ DIUBAH DARI |
           link.target = '_self';
           return;
         }

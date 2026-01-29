@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const kategoriSlug =
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
 
-      const link = `halaman.html?${kategoriSlug}|${post.slug}`;
+      const link = `halaman.html?${kategoriSlug}/${post.slug}`; // ⬅️ DIUBAH DARI |
 
       // Ambil editor sama seperti skrip olahraga
       const editor =

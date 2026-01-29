@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  const container = document.querySelector('.info');
+  const container = document.querySelector('.populer-mobile');
   if (!container) return;
 
   const PER_PAGE = 10;
@@ -18,9 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const mediaCache = {};
   const editorCache = {};
 
+  let allowedCategoryIds = []; // 🔥 hanya olahraga & hiburan
+
   function formatTanggal(dateString) {
     const d = new Date(dateString);
     return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+  }
+
+  // ===============================
+  // AMBIL ID KATEGORI (OLAHRAGA & HIBURAN)
+  // ===============================
+  async function loadAllowedCategories() {
+    const slugs = ['olahraga', 'hiburan'];
+
+    const res = await fetch(
+      `https://lampost.co/wp-json/wp/v2/categories?slug=${slugs.join(',')}`
+    );
+    if (!res.ok) return;
+
+    const data = await res.json();
+    allowedCategoryIds = data.map(c => c.id);
   }
 
   // ===============================
@@ -61,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================
-  // ✍️ EDITOR (CARA LAMA — WORKING)
+  // ✍️ EDITOR (TETAP CARA LAMA)
   // ===============================
   async function getEditor(post) {
     let editor = 'Redaksi';
@@ -99,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch(
-        `${API_BASE}&per_page=${PER_PAGE}&page=${page}`
+        `${API_BASE}&categories=${allowedCategoryIds.join(',')}&per_page=${PER_PAGE}&page=${page}`
       );
       if (!res.ok) return;
 
@@ -167,7 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
     { rootMargin: '300px' }
   );
 
-  observer.observe(sentinel);
-  loadPosts();
+  // ===============================
+  // INIT
+  // ===============================
+  (async () => {
+    await loadAllowedCategories();
+    observer.observe(sentinel);
+    loadPosts();
+  })();
 
 });

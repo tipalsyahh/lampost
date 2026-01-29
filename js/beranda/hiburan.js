@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const kategoriSlug = await getCategorySlug(post.categories?.[0]);
 
       /* 🔗 LINK */
-      const link = `halaman.html?${kategoriSlug}|${post.slug}`;
+      const link = `halaman.html?${kategoriSlug}/${post.slug}`;
 
       /* 📅 TANGGAL */
       const tanggal = new Date(post.date).toLocaleDateString('id-ID', {

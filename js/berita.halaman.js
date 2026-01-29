@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const query = decodeURIComponent(
     window.location.search.replace('?', '')
   );
-  const kategoriSlug = query.split('|')[0];
-  const currentSlug = query.split('|')[1] || null;
+  const kategoriSlug = query.split('/')[0];   // ⬅️ DIUBAH DARI |
+  const currentSlug = query.split('/')[1] || null; // ⬅️ DIUBAH DARI |
   if (!kategoriSlug) return;
 
   let kategoriId = null;
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             `${d.getFullYear()}`;
 
           output += `
-            <a href="halaman.html?${kategoriSlug}|${slug}" class="item-info">
+            <a href="halaman.html?${kategoriSlug}/${slug}" class="item-info">
               <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
               <div class="berita-microweb">
                 <p class="judul">${judul}</p>

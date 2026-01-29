@@ -8,7 +8,9 @@ window.addEventListener("load", () => {
         .container,
         .info,
         .bener,
-        .container-microweb
+        .container-microweb,
+        .gaya-hidup,
+        .populer-mobile
     `);
 
     items.forEach((item, index) => {

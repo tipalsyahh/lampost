@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
 
       /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
-      const link = `halaman.html?${kategoriSlug}|${post.slug}`;
+      const link = `halaman.html?${kategoriSlug}/${post.slug}`;
 
       html += `
         <a href="${link}" class="item-hukum">

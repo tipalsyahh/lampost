@@ -8,17 +8,23 @@ function playVoice() {
   const beritaEl = document.getElementById("berita");
   if (!beritaEl) return;
 
-  // Ambil semua teks dari #berita kecuali yang ada class "home"
+  // Ambil semua teks dari #berita
+  // KECUALI yang punya class "home" ATAU "load-more"
   const nodes = Array.from(beritaEl.childNodes);
   let textBerita = '';
+
   nodes.forEach(node => {
-    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('home')) {
-      return; // abaikan elemen dengan class 'home'
+    if (
+      node.nodeType === Node.ELEMENT_NODE &&
+      (node.classList.contains('home') || node.classList.contains('load-more'))
+    ) {
+      return; // abaikan elemen home & load-more
     }
+
     textBerita += node.innerText || node.textContent || '';
   });
 
-  if (!textBerita.trim()) return; // jika kosong, stop
+  if (!textBerita.trim()) return;
 
   utterance = new SpeechSynthesisUtterance(textBerita);
   utterance.lang = "id-ID";

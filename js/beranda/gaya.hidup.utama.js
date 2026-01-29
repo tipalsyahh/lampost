@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('.prestasi-terbaru');
   if (!container) return;
 
+  const TERM_CACHE = {};
+  const MEDIA_CACHE = {};
+
   try {
     // ===============================
     // 1️⃣ AMBIL ID KATEGORI NASIONAL
@@ -22,55 +25,95 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const categoryId = catData[0].id;
+    const kategoriNama = catData[0].name || 'Nasional';
+    const kategoriSlug = catData[0].slug || 'nasional';
 
     // ===============================
-    // 2️⃣ AMBIL BERITA
+    // 2️⃣ AMBIL POST (TANPA _embed)
     // ===============================
     const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=2&orderby=date&order=desc&_embed`
+      `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=2&orderby=date&order=desc`
     );
     if (!res.ok) throw new Error('Gagal ambil berita');
 
     const posts = await res.json();
+    if (!posts.length) return;
 
-    let html = '';
+    const htmlArr = [];
 
-    posts.forEach(post => {
+    for (const post of posts) {
 
       /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      /* 🏷️ KATEGORI */
-      const kategoriNama =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Nasional';
-
-      const kategoriSlug =
-        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
-
       /* 🔗 LINK */
-      const link = `halaman.html?${kategoriSlug}|${post.slug}`;
+      const link = `halaman.html?${kategoriSlug}/${post.slug}`;
 
-      /* 📅 TANGGAL (ANGKA) */
+      /* 📅 TANGGAL */
       const d = new Date(post.date);
-      const tanggal = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+      const tanggal =
+        `${String(d.getDate()).padStart(2, '0')}/` +
+        `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+        `${d.getFullYear()}`;
 
-      /* ✍️ EDITOR */
-      const editor =
-        post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
+      // ===============================
+      // ✍️ EDITOR (TANPA EMBED)
+      // ===============================
+      let editor = 'Redaksi';
+      const termLink = post._links?.['wp:term']?.[2]?.href;
 
-      /* 🖼️ GAMBAR */
-      const gambar =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-        'image/ai.jpg';
+      if (termLink) {
+        if (TERM_CACHE[termLink]) {
+          editor = TERM_CACHE[termLink];
+        } else {
+          try {
+            const termRes = await fetch(termLink);
+            if (termRes.ok) {
+              const termData = await termRes.json();
+              editor = termData?.[0]?.name || editor;
+              TERM_CACHE[termLink] = editor;
+            }
+          } catch (_) {}
+        }
+      }
+
+      // ===============================
+      // 🖼️ GAMBAR (TANPA EMBED)
+      // ===============================
+      let gambar = 'image/ai.jpg';
+
+      if (post.featured_media) {
+        if (MEDIA_CACHE[post.featured_media]) {
+          gambar = MEDIA_CACHE[post.featured_media];
+        } else {
+          try {
+            const mediaRes = await fetch(
+              `https://lampost.co/wp-json/wp/v2/media/${post.featured_media}`
+            );
+            if (mediaRes.ok) {
+              const media = await mediaRes.json();
+              gambar =
+                media.media_details?.sizes?.medium?.source_url ||
+                media.source_url ||
+                gambar;
+
+              MEDIA_CACHE[post.featured_media] = gambar;
+            }
+          } catch (_) {}
+        }
+      }
 
       /* 🧾 DESKRIPSI */
-      const deskripsi =
+      let deskripsi =
         (post.excerpt?.rendered || '')
-          .replace(/(<([^>]+)>)/gi, '')
-          .trim()
-          .substring(0, 150) + '...';
+          .replace(/<[^>]+>/g, '')
+          .trim();
 
-      html += `
+      if (deskripsi.length > 150) {
+        deskripsi = deskripsi.slice(0, 150) + '...';
+      }
+
+      htmlArr.push(`
         <a href="${link}" class="item-info">
           <img src="${gambar}" class="img-unila" loading="lazy" alt="${judul}">
           <div class="berita-unila">
@@ -85,13 +128,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p class="deskripsi-unila-lanjutan">${deskripsi}</p>
           </div>
         </a>
-      `;
-    });
+      `);
+    }
 
     // ===============================
-    // 3️⃣ SISIPKAN KE DOM
+    // 3️⃣ MASUKKAN KE DOM
     // ===============================
-    container.insertAdjacentHTML('beforeend', html);
+    container.insertAdjacentHTML('beforeend', htmlArr.join(''));
 
   } catch (err) {
     console.error(err);

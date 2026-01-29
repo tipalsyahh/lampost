@@ -356,7 +356,8 @@ body {
     padding: 20px 10px;
 }
 
-.info a {
+.info a,
+.populer-mobile a {
     display: flex;
     padding: 10px;
     gap: 10px;
@@ -369,7 +370,8 @@ body {
 .home a:hover,
 .Pendidikan a:hover,
 .ubl-lanjutan a:hover,
-.info a:hover {
+.info a:hover,
+.populer-mobile a:hover {
     position: relative;
     z-index: 10;
     transform: translateY(-3px);
@@ -391,7 +393,9 @@ body {
 .ubl-lanjutan a:hover::before,
 .ubl-lanjutan a:hover::after,
 .info a:hover::before,
-.info a:hover::after {
+.info a:hover::after,
+.populer-mobile a:hover::before,
+.populer-mobile a:hover::after {
     content: "";
     position: absolute;
     left: 0;
@@ -406,7 +410,8 @@ body {
 .home a:hover::before,
 .Pendidikan a:hover::before,
 .ubl-lanjutan a:hover::before,
-.info a:hover::before {
+.info a:hover::before,
+.populer-mobile a:hover::before {
     top: -6px;
     animation: lineTopLeftFade 0.7s ease forwards;
 }
@@ -414,7 +419,8 @@ body {
 .home a:hover::after,
 .Pendidikan a:hover::after,
 .ubl-lanjutan a:hover::after,
-.info a:hover::after {
+.info a:hover::after,
+.populer-mobile a:hover::after {
     bottom: -6px;
     animation: lineBottomRightFade 0.7s ease forwards;
 }
@@ -613,7 +619,8 @@ body {
 .container-microweb h2,
 .container-beranda h2,
 .lampung h2,
-.gaya-hidup h2 {
+.gaya-hidup h2,
+.populer-mobile h2 {
     font-weight: 900;
     background: radial-gradient(
         circle at 109.67% 60.52%,
@@ -786,7 +793,8 @@ body {
         padding: 0;
     }
 
-    .info a img {
+    .info a img,
+    .populer-mobile a img {
         width: 150px;
         height: 150px;
         object-fit: contain;

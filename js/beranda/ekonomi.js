@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           ?.replace(/(<([^>]+)>)/gi, '')
           ?.slice(0, 120) + '...';
 
-      const link = `halaman.html?${kategoriSlug}|${post.slug}`;
+      const link = `halaman.html?${kategoriSlug}/${post.slug}`;
 
       htmlArr.push(`
         <a href="${link}" class="item-info">
