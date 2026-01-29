@@ -11,7 +11,8 @@ window.addEventListener("load", () => {
         .container-microweb,
         .gaya-hidup,
         .populer-mobile,
-        .hero-slider
+        .hero-slider,
+        .news
     `);
 
     items.forEach((item, index) => {

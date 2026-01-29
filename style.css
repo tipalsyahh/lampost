@@ -245,8 +245,8 @@ body {
 }
 
 .iklan {
-    padding: 20px;
-    width: 50%;
+    padding: 10px;
+    flex: 1;
     position: sticky;
     top: 10px;
 }
@@ -335,21 +335,41 @@ body {
 
 
 .search-sidebar {
-    padding: 15px 25px;
-    border-bottom: 1px solid #e5e7eb;
-    border-top: 1px solid #e5e7eb;
+  padding: 15px 25px;
+  border-bottom: 1px solid #e5e7eb;
+  border-top: 1px solid #e5e7eb;
+
+  /* 🔥 WAJIB agar margin-left:auto berfungsi */
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.search-input {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid #555555;
-    outline: none;
-    font-size: 14px;
+.input-menu {
+  border: 1px solid #555555;
+  width: 100%;
+  display: flex;
+}
+
+#btn-sidebar-search {
+  margin-left: auto;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#input-sidebar {
+  padding: 10px 15px;
+  outline: none;
+  font-size: 14px;
+  border: none;
+  flex: 1;
 }
 
 .search-input:focus {
-    border-color: #555555;
+  border-color: #555555;
 }
 
 .info {

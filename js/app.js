@@ -64,7 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { selector: '.humaniora', src: 'js/beranda/humaniora.js' },
       { selector: '.opini', src: 'js/beranda/opini.js' },
       { selector: '.prestasi-terbaru', src: 'js/beranda/gaya.hidup.utama.js' },
-      { selector: '.prestasi-lanjutan', src: 'js/beranda/gaya.hidup.lanjutan.js' }
+      { selector: '.prestasi-lanjutan', src: 'js/beranda/gaya.hidup.lanjutan.js' },
+      { selector: '.tickerText', src: 'js/beranda/treding.js' }
     ];
 
     scripts.forEach(item => {

@@ -94,8 +94,14 @@
         <center>
             <h2>MENU</h2>
         </center>
-        <div class="search-sidebar">
-            <input type="search" class="search-input" placeholder="Cari Artikel Disini" aria-label="Search">
+        <div class="search-sidebar" id="searchSidebar">
+            <div class="input-menu">
+                <input type="search" class="search-input" placeholder="Cari Artikel Disini.." aria-label="Search"
+                    id="input-sidebar">
+                <button type="button" class="search-btn" aria-label="Search" id="btn-sidebar-search">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
         </div>
         <div class="sidebar-isi">
             <ul>
@@ -111,9 +117,7 @@
     </div>
     <section class="hero-slider fade-in">
         <div class="hero-track fade-in">
-
             <article class="hero-left fade-in"></article>
-
             <div class="hero-right fade-in">
                 <div class="hero-right-bottom fade-in">
                     <article class="hero-box bottom-1"></article>
@@ -123,17 +127,12 @@
                     <article class="hero-box top-2"></article>
                 </div>
             </div>
-
         </div>
     </section>
 
     <div class="slider-mobile">
         <div class="hero-flex">
-
-            <!-- ATAS -->
             <div class="hero-main" id="hero-main"></div>
-
-            <!-- BAWAH -->
             <div class="hero-sub">
                 <div class="hero-item" id="hero-sub-1"></div>
                 <div class="hero-item" id="hero-sub-2"></div>
@@ -141,7 +140,23 @@
 
         </div>
     </div>
+    <div class="news fade-in">
+        <div class="news-ticker">
+            <span class="ticker-label">TRENDING NOW</span>
+            <div class="ticker-content">
+                <a href="#" class="ticker-text" id="tickerText">
+                    Memuat berita...
+                </a>
+            </div>
+        </div>
+        <div class="search-beranda" id="searchBeranda">
+            <input type="text" class="search-input" placeholder="Cari Artikel Disini.." />
+            <button type="button" class="search-btn">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
 
+    </div>
     <div class="iklan-gambar fade-in">
         <a href="#">
             <img src="image/ads_showcase.jpg" alt="img" class="gambar">
@@ -181,7 +196,7 @@
         <div class="iklan fade-in">
             <h2>E-PAPER</h2>
             <div class="line-accent"></div>
-            <div class="tagar">
+            <div class="tagar fade-in">
                 <a href="harian.html">
                     <img src="image/EPAPER-LAMPUNG-POST-2024-01-01.webp" alt="img" class="epaper-image">
                 </a>
@@ -277,6 +292,8 @@
     <script src="js/beranda/teknologi.js"></script>
     <script src="js/beranda/berita.bawah.js"></script>
     <script src="js/beranda/slider.mobile.js"></script>
+    <script src="js/beranda/treding.js"></script>
+    <script src="js/beranda/search-beranda.js"></script>
 
 </body>
 

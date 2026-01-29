@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  /* 🔥 TAMPILKAN LOADING (TAMBAHAN SAJA) */
+  container.innerHTML = '<p>Sedang mencari berita...</p>';
+
   /* ================= CACHE ================= */
   const catCache = {};
   const mediaCache = {};
@@ -114,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const gambar = await getMedia(post.featured_media);
     const editor = await getEditor(post);
 
-    // ✅ URL SLUG PAKAI "/"
     el.href = `halaman.html?${slug}/${post.slug}`;
     el.querySelector('.kategori').textContent = kategori;
     el.querySelector('.editor').textContent = `By ${editor}`;
@@ -138,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const posts2 = res2.ok ? await res2.json() : [];
       const posts = [...posts1, ...posts2];
 
-      /* ❗ FILTER TETAP */
       const filtered = posts.filter(post => {
         const title = post.title.rendered.toLowerCase();
         const raw =

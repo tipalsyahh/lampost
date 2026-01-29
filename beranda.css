@@ -1,12 +1,13 @@
 .container-beranda {
     padding: 10px calc(15%);
     display: flex;
-    gap: 5px;
+    gap: 10px;
     align-items: flex-start;
 }
 
 .berita-beranda {
     padding: 10px;
+    width: 70%;
 }
 
 .berita-left {
