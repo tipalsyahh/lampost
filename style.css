@@ -795,9 +795,9 @@ body {
 
     .info a img,
     .populer-mobile a img {
-        width: 150px;
-        height: 150px;
-        object-fit: contain;
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
     }
 
     .judul {
