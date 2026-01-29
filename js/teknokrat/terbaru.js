@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'teknokrat';
 
       /* 🔗 LINK DETAIL (KATEGORI DULU, BARU JUDUL) */
-      const link = `berita.teknokrat.html?${categorySlug}|${slug}`;
+      const link = `berita.teknokrat.html?${categorySlug}/${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =

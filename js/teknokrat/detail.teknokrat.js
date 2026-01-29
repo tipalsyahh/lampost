@@ -3,9 +3,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const berita = document.getElementById('berita');
   if (!berita) return;
 
-  // 🔥 Ambil kategori & slug judul dari URL
-  const query = decodeURIComponent(window.location.search.replace('?', ''));
-  const [kategoriSlug, slug] = query.split('|');
+  // 🔥 Ambil kategori & slug judul dari URL (PAKAI /)
+  const query = decodeURIComponent(
+    window.location.search.replace('?', '')
+  );
+
+  const partsUrl = query.split('/');
+  const kategoriSlug = partsUrl[0];
+  const slug = partsUrl[1];
 
   if (!slug) {
     berita.innerHTML = '<p>Berita tidak ditemukan</p>';
@@ -37,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     isi.innerHTML = post.content.rendered;
 
     /* ========================
-       🧹 HAPUS <p>&nbsp;</p> & PARAGRAF KOSONG
+       🧹 HAPUS <p>&nbsp;</p>
     ======================== */
     isi.querySelectorAll('p').forEach(p => {
       const bersih = p.innerHTML
@@ -79,7 +84,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const slugBerita = parts.at(-1);
 
         if (slugBerita) {
-          link.href = `berita.teknokrat.html?${kategoriSlug}|${slugBerita}`;
+          // 🔥 PAKAI / (BUKAN |)
+          link.href = `berita.teknokrat.html?${kategoriSlug}/${slugBerita}`;
           link.target = '_self';
         } else {
           link.href = 'index.html';
@@ -93,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     /* ========================
-       🖼️ PAKSA IMG RESPONSIVE
+       🖼️ IMG RESPONSIVE
     ======================== */
     isi.querySelectorAll('img').forEach(img => {
       img.removeAttribute('width');

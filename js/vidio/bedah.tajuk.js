@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const kategoriSlug =
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'bedah-tajuk';
 
-      const link = `detail.bedah-tajuk.html?${kategoriSlug}|${slug}`;
+      const link = `detail.bedah-tajuk.html?${kategoriSlug}/${slug}`;
 
       /* =========================
          📅 TANGGAL → ANGKA (DD/MM/YYYY)

@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     detailContent.textContent = random.content;
 
     detailAction.innerHTML = `
-      <a href="${isRSS ? random.link : `koran.html?${random.kategori}|${random.slug}`}"
+      <a href="${isRSS ? random.link : `koran.html?${random.kategori}/${random.slug}`}"
          class="detail-btn">
         Baca Selengkapnya
       </a>

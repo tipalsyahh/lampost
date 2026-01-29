@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const res = await fetch(
-      'https://lampost.co/microweb/teknokrat/wp-json/wp/v2/posts?per_page=5&orderby=date&order=desc&_embed'
+      'https://lampost.co/microweb/stiab/wp-json/wp/v2/posts?per_page=5&orderby=date&order=desc&_embed'
     );
     if (!res.ok) throw new Error('Gagal ambil data');
 
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
 
       /* 🔗 LINK */
-      const link = `berita.teknokrat.html?${kategoriSlug}/${post.slug}`;
+      const link = `berita.stiab.html?${kategoriSlug}/${post.slug}`;
 
       /* ✍️ EDITOR — DISAMAKAN DENGAN SCRIPT HOME */
       const editor =

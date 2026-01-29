@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'stiab';
 
         /* 🔗 LINK */
-        const link = `berita.stiab.html?${kategoriSlug}|${slug}`;
+        const link = `berita.stiab.html?${kategoriSlug}/${slug}`;
 
         /* 📰 DESKRIPSI */
         let deskripsi =

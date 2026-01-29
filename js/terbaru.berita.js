@@ -3,12 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('.terbaru');
   if (!container) return;
 
+  // ⚡ TANPA EMBED (RINGAN)
   const API =
     'https://lampost.co/wp-json/wp/v2/posts' +
-    '?per_page=6&orderby=date&order=desc&_embed';
+    '?per_page=6&orderby=date&order=desc';
 
   /* ================= CACHE ================= */
   const catCache = {};
+  const mediaCache = {};
 
   const formatTanggal = dateString =>
     new Date(dateString).toLocaleDateString('id-ID', {
@@ -17,16 +19,56 @@ document.addEventListener('DOMContentLoaded', () => {
       year: 'numeric'
     });
 
-  function getCategory(post) {
-    const cat =
-      post._embedded?.['wp:term']?.[0]?.[0];
+  // ===============================
+  // KATEGORI (ASYNC CEPAT)
+  // ===============================
+  async function getCategory(catId) {
+    if (!catId) return { name: 'Teknokrat', slug: 'teknokrat' };
+    if (catCache[catId]) return catCache[catId];
 
-    return {
-      name: cat?.name || 'Teknokrat',
-      slug: cat?.slug || 'teknokrat'
-    };
+    try {
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/categories/${catId}`
+      );
+      if (!res.ok) throw 0;
+
+      const data = await res.json();
+      return (catCache[catId] = {
+        name: data.name,
+        slug: data.slug
+      });
+    } catch {
+      return { name: 'Teknokrat', slug: 'teknokrat' };
+    }
   }
 
+  // ===============================
+  // GAMBAR (ASYNC CEPAT)
+  // ===============================
+  async function getMedia(mediaId) {
+    if (!mediaId) return 'image/ai.jpg';
+    if (mediaCache[mediaId]) return mediaCache[mediaId];
+
+    try {
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+      );
+      if (!res.ok) throw 0;
+
+      const data = await res.json();
+      return (mediaCache[mediaId] =
+        data.media_details?.sizes?.medium?.source_url ||
+        data.source_url ||
+        'image/ai.jpg'
+      );
+    } catch {
+      return 'image/ai.jpg';
+    }
+  }
+
+  // ===============================
+  // LOAD POSTS
+  // ===============================
   async function loadPosts() {
     try {
       const res = await fetch(API);
@@ -40,23 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const judul = post.title.rendered;
         const slug = post.slug;
         const tanggal = formatTanggal(post.date);
-
         const id = `terbaru-${post.id}`;
 
-        // 🔥 AMBIL CEPAT (EMBED → TIDAK BLOCKING)
-        const gambar =
-          post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-          'image/ai.jpg';
-
-        // 🔥 TAMPILKAN LANGSUNG
+        // ⚡ LINK SEMENTARA (AMAN)
         htmlArr.push(`
           <a href="#" class="item-microweb" id="${id}">
             <img
-              src="${gambar}"
+              src="image/ai.jpg"
               alt="${judul}"
               class="img-terbaru-teknokrat"
-              loading="lazy"
-              decoding="async"
             >
             <div class="berita-microweb">
               <p class="judul-terbaru">${judul}</p>
@@ -67,15 +101,19 @@ document.addEventListener('DOMContentLoaded', () => {
           </a>
         `);
 
-        // ⏳ LINK & KATEGORI (MENYUSUL, NON-BLOCKING)
+        // 🔁 UPDATE LINK + GAMBAR (NON BLOCKING)
         (async () => {
-          const { name, slug: categorySlug } =
-            getCategory(post);
+          const { slug: categorySlug } =
+            await getCategory(post.categories?.[0]);
+
+          const gambar =
+            await getMedia(post.featured_media);
 
           const el = document.getElementById(id);
           if (!el) return;
 
           el.href = `halaman.html?${categorySlug}/${slug}`;
+          el.querySelector('img').src = gambar;
         })();
 
       });
@@ -89,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 🚀 LOAD LANGSUNG
   loadPosts();
 
 });

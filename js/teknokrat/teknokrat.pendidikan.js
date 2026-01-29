@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'pendidikan';
 
       /* 🔗 LINK DETAIL */
-      const link = `berita.teknokrat.html?${categorySlug}|${slug}`;
+      const link = `berita.teknokrat.html?${categorySlug}/${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =

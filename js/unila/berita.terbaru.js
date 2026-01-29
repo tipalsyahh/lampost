@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const api =
-      'https://lampost.co/microweb/teknokrat/wp-json/wp/v2/posts' +
+      'https://lampost.co/microweb/universitaslampung/wp-json/wp/v2/posts' +
       `?per_page=${PER_PAGE}&orderby=date&order=desc&_embed`;
 
     const res = await fetch(api);
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const kategoriSlug =
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'teknokrat';
 
-      const link = `berita.teknokrat.html?${kategoriSlug}/${slug}`;
+      const link = `berita.unila.html?${kategoriSlug}/${slug}`;
 
       let deskripsi =
         post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';

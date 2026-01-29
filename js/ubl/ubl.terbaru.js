@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
 
       /* 🔗 LINK */
-      const link = `berita.ubl.html?${kategoriSlug}|${slug}`;
+      const link = `berita.ubl.html?${kategoriSlug}/${slug}`;
 
       /* 📰 DESKRIPSI */
       let deskripsi =

@@ -21,15 +21,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const query = decodeURIComponent(
     window.location.search.replace('?', '')
   );
-  const kategoriSlug = query.split('/')[0];   // ⬅️ DIUBAH DARI |
-  const currentSlug = query.split('/')[1] || null; // ⬅️ DIUBAH DARI |
+  const [kategoriSlug, currentSlug] = query.split('/');
   if (!kategoriSlug) return;
 
   let kategoriId = null;
   let kategoriNama = kategoriSlug;
 
   /* ===============================
-     AMBIL KATEGORI DARI SLUG
+     AMBIL KATEGORI
   =============================== */
   try {
     const catRes = await fetch(
@@ -45,26 +44,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   /* ===============================
-     AMBIL GAMBAR
+     GAMBAR
   =============================== */
   async function getMedia(mediaId) {
     if (!mediaId) return 'image/ai.jpg';
     if (mediaCache[mediaId]) return mediaCache[mediaId];
 
-    const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
-    );
-    const data = await res.json();
+    try {
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+      );
+      if (!res.ok) throw 0;
 
-    return (mediaCache[mediaId] =
-      data.media_details?.sizes?.medium?.source_url ||
-      data.source_url ||
-      'image/ai.jpg'
-    );
+      const data = await res.json();
+      return (mediaCache[mediaId] =
+        data.media_details?.sizes?.medium?.source_url ||
+        data.source_url ||
+        'image/ai.jpg'
+      );
+    } catch {
+      return 'image/ai.jpg';
+    }
   }
 
   /* ===============================
-     ✍️ EDITOR (SAMA SEPERTI SCRIPT ACUAN)
+     EDITOR
   =============================== */
   async function getEditor(post) {
     let editor = 'Redaksi';
@@ -81,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         editor = data?.[0]?.name || editor;
         editorCache[termLink] = editor;
       }
-    } catch (_) {}
+    } catch {}
 
     return editor;
   }
@@ -102,72 +106,86 @@ document.addEventListener('DOMContentLoaded', async () => {
         `&orderby=date&order=desc`;
 
       const res = await fetch(api);
+
+      // 🔥 FIX ERROR 400
       if (!res.ok) {
-        if (res.status === 400 || res.status === 404) hasMore = false;
+        hasMore = false;
+        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
         return;
       }
 
       const posts = await res.json();
       if (!posts.length) {
         hasMore = false;
+        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
         return;
       }
 
       let output = '';
-      let adaYangDitampilkan = false;
 
-      await Promise.all(
-        posts.map(async post => {
-          if (currentSlug && post.slug === currentSlug) return;
+      posts.forEach(post => {
+        if (currentSlug && post.slug === currentSlug) return;
 
-          adaYangDitampilkan = true;
+        const id = `post-${post.id}`;
+        const judul = post.title.rendered;
+        const slug = post.slug;
 
-          const judul = post.title.rendered;
-          const slug = post.slug;
+        let deskripsi =
+          post.excerpt?.rendered
+            ?.replace(/<[^>]+>/g, '')
+            ?.trim() || '';
 
-          let deskripsi =
-            post.excerpt?.rendered
-              ?.replace(/<[^>]+>/g, '')
-              ?.trim() || '';
+        if (deskripsi.length > 150)
+          deskripsi = deskripsi.slice(0, 150) + '...';
 
-          if (deskripsi.length > 150) {
-            deskripsi = deskripsi.slice(0, 150) + '...';
-          }
+        const d = new Date(post.date);
+        const tanggal =
+          `${String(d.getDate()).padStart(2, '0')}/` +
+          `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+          `${d.getFullYear()}`;
 
-          const gambar = await getMedia(post.featured_media);
-          const editor = await getEditor(post);
-
-          const d = new Date(post.date);
-          const tanggal =
-            `${String(d.getDate()).padStart(2, '0')}/` +
-            `${String(d.getMonth() + 1).padStart(2, '0')}/` +
-            `${d.getFullYear()}`;
-
-          output += `
-            <a href="halaman.html?${kategoriSlug}/${slug}" class="item-info">
-              <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
-              <div class="berita-microweb">
-                <p class="judul">${judul}</p>
-                <p class="kategori">${kategoriNama}</p>
-                <div class="info-microweb">
-                  <p class="editor">By ${editor}</p>
-                  <p class="tanggal">${tanggal}</p>
-                </div>
-                <p class="deskripsi">${deskripsi}</p>
+        // ✅ GAMBAR LANGSUNG ADA
+        output += `
+          <a href="halaman.html?${kategoriSlug}/${slug}"
+             class="item-info"
+             id="${id}">
+            <img
+              src="image/ai.jpg"
+              data-media="${post.featured_media}"
+              class="img-microweb"
+              loading="lazy">
+            <div class="berita-microweb">
+              <p class="judul">${judul}</p>
+              <p class="kategori">${kategoriNama}</p>
+              <div class="info-microweb">
+                <p class="editor">By Redaksi</p>
+                <p class="tanggal">${tanggal}</p>
               </div>
-            </a>
-          `;
-        })
-      );
-
-      if (!adaYangDitampilkan) {
-        page++;
-        isLoading = false;
-        loadPosts();
-        return;
-      }
+              <p class="deskripsi">${deskripsi}</p>
+            </div>
+          </a>
+        `;
+      });
 
       container.insertAdjacentHTML('beforeend', output);
+
+      // 🔁 UPDATE GAMBAR + EDITOR SETELAH RENDER
+      posts.forEach(post => {
+        const el = document.getElementById(`post-${post.id}`);
+        if (!el) return;
+
+        const img = el.querySelector('.img-microweb');
+        const editorEl = el.querySelector('.editor');
+
+        getMedia(post.featured_media).then(src => {
+          img.src = src;
+        });
+
+        getEditor(post).then(name => {
+          editorEl.textContent = 'By ' + name;
+        });
+      });
+
       page++;
 
     } finally {

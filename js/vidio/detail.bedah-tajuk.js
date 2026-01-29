@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!berita) return;
 
   const query = window.location.search.substring(1);
-  const [kategoriSlug, slug] = query.split('|');
+  const [kategoriSlug, slug] = query.split('/');
 
   if (!slug) {
     berita.innerHTML = '<p>Berita tidak ditemukan</p>';

@@ -48,6 +48,10 @@
     text-decoration: none;
 }
 
+.berita-ubl-utama {
+    width: 50%;
+}
+
 .prestasi-lanjutan {
     display: flex;
     flex-wrap: wrap;
@@ -101,8 +105,7 @@
 
 .img-ubl {
     width: 120px;
-    height: 100px;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .judul-ubl {
@@ -156,7 +159,7 @@
 .berita-ubl a {
     display: flex;
     padding: 10px 0;
-    gap: 15px;
+    gap: 5px;
     text-decoration: none;
 }
 
@@ -335,9 +338,8 @@
 
 .item-microweb {
     display: flex;
-    padding: 20px 0;
+    padding: 10px 0;
     text-decoration: none;
-    border-bottom: 1px solid #e5e7eb;
 }
 
 .img-terbaru {

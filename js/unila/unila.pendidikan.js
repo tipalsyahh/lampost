@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const slug = post.slug;
 
       /* 🔗 LINK */
-      const linkBerita = `berita.unila.html?berita-terkini|${slug}`;
+      const linkBerita = `berita.unila.html?berita-terkini/${slug}`;
       const linkKategori = `kategori.unila.html?kategori=${kategori.slug}`;
 
       /* 📰 DESKRIPSI */

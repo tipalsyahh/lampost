@@ -1,12 +1,18 @@
 .container {
-    padding: 10px calc(10%);
+    padding: 10px calc(13%);
     display: flex;
-    gap: 20px;
+    gap: 10px;
     align-items: flex-start;
 }
 
 .berita {
-    width: 70%;
+    width: 63%;
+}
+
+.iklan-halaman {
+    width: 37%;
+    position: sticky;
+    top: 10px;
 }
 
 .berita a {
@@ -68,6 +74,10 @@
     .berita {
         border: none;
         padding: 0;
+        width: 100%;
+    }
+
+    .iklan-halaman {
         width: 100%;
     }
 

@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'teknokrat';
 
         /* 🔗 LINK */
-        const link = `berita.banklampung.html?${kategoriSlug}|${slug}`;
+        const link = `berita.banklampung.html?${kategoriSlug}/${slug}`;
 
         let deskripsi =
           post.excerpt?.rendered

@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tanggal = `${day}/${month}/${year}`;
 
         const linkEl = document.createElement('a');
-        linkEl.href = `berita.unila.html?berita-terkini|${slug}`;
+        linkEl.href = `berita.unila.html?berita-terkini/${slug}`;
         linkEl.className = 'item-info';
 
         linkEl.innerHTML = `

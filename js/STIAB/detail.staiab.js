@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const slugBerita = parts.at(-1); // paling aman
 
         if (slugBerita) {
-          link.href = `berita.stiab.html?${kategoriSlug}|${slugBerita}`;
+          link.href = `berita.stiab.html?${kategoriSlug}/${slugBerita}`;
           link.target = '_self';
         } else {
           link.href = 'index.html';

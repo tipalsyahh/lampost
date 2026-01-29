@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroSub2 = document.getElementById('hero-sub-2');
   if (!heroMain || !heroSub1 || !heroSub2) return;
 
-  const categoryCache = {};
   const mediaCache = {};
-  const authorCache = {};
+  const categoryCache = {};
+  const editorCache = {};
 
   const formatTanggal = d =>
     new Date(d).toLocaleDateString('id-ID', {
@@ -17,32 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
   /* ===============================
-     FETCH CATEGORY (CACHED)
-  =============================== */
-  async function getCategory(catId) {
-    if (!catId) return { name: 'Berita', slug: 'berita' };
-    if (categoryCache[catId]) return categoryCache[catId];
-
-    const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/categories/${catId}?_fields=name,slug`
-    );
-    const data = await res.json();
-
-    return (categoryCache[catId] = {
-      name: data.name,
-      slug: data.slug
-    });
-  }
-
-  /* ===============================
-     FETCH MEDIA (CACHED)
+     MEDIA
   =============================== */
   async function getMedia(mediaId) {
     if (!mediaId) return 'image/ai.jpg';
     if (mediaCache[mediaId]) return mediaCache[mediaId];
 
     const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/media/${mediaId}?_fields=source_url,media_details`
+      `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
     );
     const data = await res.json();
 
@@ -54,25 +36,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===============================
-     FETCH AUTHOR (CACHED)
+     CATEGORY
   =============================== */
-  async function getAuthor(authorId) {
-    if (!authorId) return 'Redaksi';
-    if (authorCache[authorId]) return authorCache[authorId];
+  async function getCategory(catId) {
+    if (!catId) return { name: 'Berita', slug: 'berita' };
+    if (categoryCache[catId]) return categoryCache[catId];
 
     const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/users/${authorId}?_fields=name`
+      `https://lampost.co/wp-json/wp/v2/categories/${catId}`
     );
     const data = await res.json();
 
-    return (authorCache[authorId] = data.name || 'Redaksi');
+    return (categoryCache[catId] = {
+      name: data.name,
+      slug: data.slug
+    });
   }
 
   /* ===============================
-     RENDER CEPAT (PLACEHOLDER)
+     EDITOR (SESUIAI CONTOH)
+  =============================== */
+  async function getEditor(post) {
+    let editor = 'Redaksi';
+
+    const termLink = post._links?.['wp:term']?.[2]?.href;
+    if (!termLink) return editor;
+
+    if (editorCache[termLink]) return editorCache[termLink];
+
+    try {
+      const res = await fetch(termLink);
+      if (res.ok) {
+        const data = await res.json();
+        editor = data?.[0]?.name || editor;
+        editorCache[termLink] = editor;
+      }
+    } catch (_) {}
+
+    return editor;
+  }
+
+  /* ===============================
+     RENDER CEPAT
   =============================== */
   function renderFast(el, post, isMain = false) {
     const judul = post.title.rendered;
+    const tanggal = formatTanggal(post.date);
 
     el.innerHTML = `
       <img src="image/ai.jpg" alt="${judul}" loading="lazy">
@@ -83,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
           isMain
             ? `<div class="hero-meta">
                  <span class="hero-editor">By ...</span>
-                 <span class="hero-date">${formatTanggal(post.date)}</span>
+                 <span class="hero-date">${tanggal}</span>
                </div>`
             : ``
         }
@@ -92,15 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===============================
-     ENRICH DATA (ASYNC, CACHED)
+     ENRICH DATA (ASYNC)
   =============================== */
   async function enrich(el, post, isMain = false) {
     const img = await getMedia(post.featured_media);
     const { name, slug } =
       await getCategory(post.categories?.[0]);
-    const editor = isMain
-      ? await getAuthor(post.author)
-      : null;
 
     el.querySelector('img').src = img;
 
@@ -108,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     a.href = `halaman.html?${slug}/${post.slug}`;
 
     if (isMain) {
+      const editor = await getEditor(post);
       a.querySelector('.hero-category').textContent = name;
       a.querySelector('.hero-editor').textContent = `By ${editor}`;
     }
@@ -121,13 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(
         'https://lampost.co/wp-json/wp/v2/posts' +
         '?per_page=3&orderby=date&order=desc' +
-        '&_fields=id,slug,title,date,featured_media,categories,author'
+        '&_fields=id,slug,title,date,featured_media,categories,_links'
       );
       if (!res.ok) throw new Error();
 
       const posts = await res.json();
       if (posts.length < 3) return;
 
+      // 🔥 render cepat
       renderFast(heroMain, posts[0], true);
       renderFast(heroSub1, posts[1], false);
       renderFast(heroSub2, posts[2], false);
@@ -143,4 +151,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   init();
+
 });
