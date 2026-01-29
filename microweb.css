@@ -18,9 +18,9 @@
 
 
 .img-microweb {
-    width: 300px;
+    width: 50%;
     height: 250px;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .terbaru {
@@ -514,8 +514,8 @@
     }
 
     .img-microweb {
-        width: 150px;
-        height: 150px;
+        width: 130px;
+        height: 130px;
         object-fit: cover;
     }
 
@@ -587,7 +587,7 @@
         display: none;
     }
 
-    .slider {
+    .slider-microweb {
         padding: 10px;
         margin-top: 15px;
     }

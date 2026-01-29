@@ -10,7 +10,8 @@ window.addEventListener("load", () => {
         .bener,
         .container-microweb,
         .gaya-hidup,
-        .populer-mobile
+        .populer-mobile,
+        .hero-slider
     `);
 
     items.forEach((item, index) => {

@@ -109,19 +109,46 @@
             </ul>
         </div>
     </div>
-    <div class="slider">
-        <div class="hero-slider">
-        <div class="hero-track"></div>
-        <div class="hero-dots"></div>
+    <section class="hero-slider fade-in">
+        <div class="hero-track fade-in">
+
+            <article class="hero-left fade-in"></article>
+
+            <div class="hero-right fade-in">
+                <div class="hero-right-bottom fade-in">
+                    <article class="hero-box bottom-1"></article>
+                </div>
+                <div class="hero-right-top fade-in">
+                    <article class="hero-box top-1"></article>
+                    <article class="hero-box top-2"></article>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="slider-mobile">
+        <div class="hero-flex">
+
+            <!-- ATAS -->
+            <div class="hero-main" id="hero-main"></div>
+
+            <!-- BAWAH -->
+            <div class="hero-sub">
+                <div class="hero-item" id="hero-sub-1"></div>
+                <div class="hero-item" id="hero-sub-2"></div>
+            </div>
+
+        </div>
     </div>
-    </div>
-    <div class="iklan-gambar">
+
+    <div class="iklan-gambar fade-in">
         <a href="#">
             <img src="image/ads_showcase.jpg" alt="img" class="gambar">
         </a>
     </div>
-    <div class="container-beranda">
-        <div class="berita-left">
+    <div class="container-beranda fade-in">
+        <!-- <div class="berita-left">
             <div class="olahraga">
                 <h2>OLAHRAGA</h2>
                 <div class="line-accent"></div>
@@ -132,26 +159,26 @@
             <div class="hukum">
                 <h2>HUKUM</h2>
             </div>
-        </div>
+        </div> -->
         <div class="berita-beranda">
-            <h2 >BERITA TERKINI</h2>
+            <h2>BERITA TERKINI</h2>
             <div class="line-accent"></div>
-            <div class="berita-terbaru">
+            <div class="berita-terbaru fade-in">
 
             </div>
-            <div class="info">
+            <div class="info fade-in">
             </div>
             <center><button id="loadMore" class="load-more">LOAD MORE</button></center>
             <div class="berita-mobile">
                 <h2>EKONOMI DAN BISNIS</h2>
-                <div class="ekonomi">
+                <div class="ekonomi fade-in">
                 </div>
-                <div class="teknologi">
+                <div class="teknologi fade-in">
                     <h2>TEKNOLOGI</h2>
                 </div>
             </div>
         </div>
-        <div class="iklan">
+        <div class="iklan fade-in">
             <h2>E-PAPER</h2>
             <div class="line-accent"></div>
             <div class="tagar">
@@ -162,30 +189,30 @@
             <!-- <div class="epeper">
                 <h2>Koran Digital</h2>
             </div> -->
-            <div class="hiburan">
+            <div class="hiburan fade-in">
                 <h2>HIBURAN</h2>
             </div>
-            <div class="opini">
+            <div class="opini fade-in">
                 <h2>KOLOM</h2>
             </div>
         </div>
     </div>
-    <div class="gaya-hidup">
+    <div class="gaya-hidup fade-in">
         <h2>GAYA HIDUP</h2>
         <div class="line-accent"></div>
         <div class="prestasi">
-            <div class="prestasi-terbaru"></div>
-            <div class="prestasi-lanjutan"></div>
+            <div class="prestasi-terbaru fade-in"></div>
+            <div class="prestasi-lanjutan fade-in"></div>
         </div>
     </div>
-    <div class="lampung">
+    <div class="lampung fade-in">
         <h2>LAMPUNG</h2>
         <div class="line-accent"></div>
-        <div class="berita-terpopuler">
+        <div class="berita-terpopuler fade-in">
 
         </div>
     </div>
-    <div class="populer-mobile">
+    <div class="populer-mobile fade-in">
         <h2>OLAHRAGA & HIBURAN</h2>
         <div class="line-accent"></div>
     </div>
@@ -231,9 +258,11 @@
     </footer>
 
 
-    <script src="js/api.js"></script>
-    <script src="js/scrip.js"></script>
     <script src="js/navbar.js"></script>
+    <script src="js/scrip.js"></script>
+    <script src="js/app.js"></script>
+    <script src="keyfrem.js"></script>
+    <script src="js/api.js"></script>
     <script src="js/beranda/olahraga.js"></script>
     <script src="js/beranda/slider.js"></script>
     <script src="js/beranda/gaya.hidup.utama.js"></script>
@@ -247,8 +276,7 @@
     <script src="js/beranda/ekonomi.js"></script>
     <script src="js/beranda/teknologi.js"></script>
     <script src="js/beranda/berita.bawah.js"></script>
-    <script src="keyfrem.js"></script>
-
+    <script src="js/beranda/slider.mobile.js"></script>
 
 </body>
 

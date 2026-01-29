@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.querySelector('.berita-terpopuler');
   if (!container) return;
@@ -6,137 +6,133 @@ document.addEventListener('DOMContentLoaded', async () => {
   const TERM_CACHE = {};
   const MEDIA_CACHE = {};
 
-  try {
+  function waktuYangLalu(dateString) {
+    const sekarang = new Date();
+    const waktuPost = new Date(dateString);
+    const selisih = Math.floor((sekarang - waktuPost) / 1000);
 
-    // ===============================
-    // 1️⃣ AMBIL ID KATEGORI "lampung"
-    // ===============================
-    const catRes = await fetch(
-      'https://lampost.co/wp-json/wp/v2/categories?slug=lampung'
-    );
-    if (!catRes.ok) throw new Error('Gagal mengambil kategori');
+    if (selisih < 60) return `${selisih} detik yang lalu`;
+    const menit = Math.floor(selisih / 60);
+    if (menit < 60) return `${menit} menit yang lalu`;
+    const jam = Math.floor(menit / 60);
+    if (jam < 24) return `${jam} jam yang lalu`;
+    return `${Math.floor(jam / 24)} hari yang lalu`;
+  }
 
-    const catData = await catRes.json();
-    if (!catData.length) throw new Error('Kategori Lampung tidak ditemukan');
+  async function getEditor(post) {
+    let editor = 'Redaksi';
+    const termLink = post._links?.['wp:term']?.[2]?.href;
+    if (!termLink) return editor;
 
-    const kategoriId = catData[0].id;
-    const kategoriSlug = 'lampung';
+    if (TERM_CACHE[termLink]) return TERM_CACHE[termLink];
 
-    // ===============================
-    // 2️⃣ AMBIL POST (TANPA _embed)
-    // ===============================
-    const postRes = await fetch(
-      `https://lampost.co/wp-json/wp/v2/posts?per_page=6&categories=${kategoriId}&orderby=date&order=desc`
-    );
-    if (!postRes.ok) throw new Error('Gagal mengambil post');
-
-    const posts = await postRes.json();
-    if (!posts.length) return;
-
-    // ===============================
-    // 3️⃣ FUNGSI WAKTU RELATIF
-    // ===============================
-    function waktuYangLalu(dateString) {
-      const sekarang = new Date();
-      const waktuPost = new Date(dateString);
-      const selisih = Math.floor((sekarang - waktuPost) / 1000);
-
-      if (selisih < 60) return `${selisih} detik yang lalu`;
-      const menit = Math.floor(selisih / 60);
-      if (menit < 60) return `${menit} menit yang lalu`;
-      const jam = Math.floor(menit / 60);
-      if (jam < 24) return `${jam} jam yang lalu`;
-      const hari = Math.floor(jam / 24);
-      return `${hari} hari yang lalu`;
-    }
-
-    // ===============================
-    // 4️⃣ RENDER CARD
-    // ===============================
-    const htmlArr = [];
-
-    for (const post of posts) {
-
-      /* 📝 JUDUL */
-      const judul = post.title.rendered;
-
-      /* 🔗 LINK (GANTI | MENJADI /) */
-      const link = `halaman.html?${kategoriSlug}/${post.slug}`;
-
-      /* ⏱️ WAKTU */
-      const waktu = waktuYangLalu(post.date);
-
-      // ===============================
-      // ✍️ EDITOR (LOGIKA OLAHRAGA)
-      // ===============================
-      let editor = 'Redaksi';
-
-      const termLink = post._links?.['wp:term']?.[2]?.href;
-      if (termLink) {
-        if (TERM_CACHE[termLink]) {
-          editor = TERM_CACHE[termLink];
-        } else {
-          try {
-            const termRes = await fetch(termLink);
-            if (termRes.ok) {
-              const termData = await termRes.json();
-              editor = termData?.[0]?.name || editor;
-              TERM_CACHE[termLink] = editor;
-            }
-          } catch (_) {}
-        }
+    try {
+      const res = await fetch(termLink);
+      if (res.ok) {
+        const data = await res.json();
+        editor = data?.[0]?.name || editor;
+        TERM_CACHE[termLink] = editor;
       }
+    } catch (_) {}
 
-      // ===============================
-      // 🖼️ GAMBAR (LOGIKA OLAHRAGA)
-      // ===============================
-      let gambar = 'image/default.jpg';
+    return editor;
+  }
 
-      if (post.featured_media) {
-        if (MEDIA_CACHE[post.featured_media]) {
-          gambar = MEDIA_CACHE[post.featured_media];
-        } else {
-          try {
-            const mediaRes = await fetch(
-              `https://lampost.co/wp-json/wp/v2/media/${post.featured_media}`
-            );
-            if (mediaRes.ok) {
-              const media = await mediaRes.json();
-              gambar =
-                media.media_details?.sizes?.medium?.source_url ||
-                media.source_url ||
-                gambar;
+  async function getMedia(mediaId) {
+    if (!mediaId) return 'image/default.jpg';
+    if (MEDIA_CACHE[mediaId]) return MEDIA_CACHE[mediaId];
 
-              MEDIA_CACHE[post.featured_media] = gambar;
-            }
-          } catch (_) {}
-        }
+    try {
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+      );
+      if (res.ok) {
+        const media = await res.json();
+        MEDIA_CACHE[mediaId] =
+          media.media_details?.sizes?.medium?.source_url ||
+          media.source_url ||
+          'image/default.jpg';
       }
+    } catch (_) {}
 
-      htmlArr.push(`
-        <a href="${link}" class="card-link">
-          <div class="card-image-wrapper">
-            <img src="${gambar}" alt="${judul}" class="card-image" loading="lazy">
+    return MEDIA_CACHE[mediaId] || 'image/default.jpg';
+  }
 
-            <div class="card-text-overlay">
-              <span class="card-category">Lampung</span>
-              <span class="card-text">${judul}</span>
+  function renderFast(post, kategoriSlug) {
+    const judul = post.title.rendered;
+    const link = `halaman.html?${kategoriSlug}/${post.slug}`;
+    const waktu = waktuYangLalu(post.date);
+    const id = `lampung-${post.id}`;
 
-              <div class="card-meta">
-                <span class="editor">By ${editor}</span>
-                <span class="waktu">${waktu}</span>
-              </div>
+    // 🔥 tampil langsung
+    return `
+      <a href="${link}" class="card-link" id="${id}">
+        <div class="card-image-wrapper">
+          <img src="image/default.jpg" alt="${judul}" class="card-image" loading="lazy">
+
+          <div class="card-text-overlay">
+            <span class="card-category">Lampung</span>
+            <span class="card-text">${judul}</span>
+
+            <div class="card-meta">
+              <span class="editor">By ...</span>
+              <span class="waktu">${waktu}</span>
             </div>
           </div>
-        </a>
-      `);
-    }
-
-    container.innerHTML = htmlArr.join('');
-
-  } catch (err) {
-    console.error('Gagal load berita Lampung:', err);
-    container.innerHTML = 'Gagal memuat berita Lampung';
+        </div>
+      </a>
+    `;
   }
+
+  async function enrich(post) {
+    const id = `lampung-${post.id}`;
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const editor = await getEditor(post);
+    const gambar = await getMedia(post.featured_media);
+
+    el.querySelector('.editor').textContent = `By ${editor}`;
+    el.querySelector('img').src = gambar;
+  }
+
+  async function init() {
+    try {
+      // 1️⃣ ambil kategori lampung
+      const catRes = await fetch(
+        'https://lampost.co/wp-json/wp/v2/categories?slug=lampung'
+      );
+      if (!catRes.ok) throw new Error('Gagal ambil kategori');
+
+      const catData = await catRes.json();
+      if (!catData.length) throw new Error('Kategori tidak ditemukan');
+
+      const kategoriId = catData[0].id;
+      const kategoriSlug = 'lampung';
+
+      // 2️⃣ ambil post
+      const postRes = await fetch(
+        `https://lampost.co/wp-json/wp/v2/posts?per_page=6&categories=${kategoriId}&orderby=date&order=desc`
+      );
+      if (!postRes.ok) throw new Error('Gagal ambil post');
+
+      const posts = await postRes.json();
+      if (!posts.length) return;
+
+      // 3️⃣ render cepat
+      container.innerHTML = posts
+        .map(post => renderFast(post, kategoriSlug))
+        .join('');
+
+      // 4️⃣ data pelengkap menyusul (parallel)
+      posts.forEach(post => enrich(post));
+
+    } catch (err) {
+      console.error('Gagal load berita Lampung:', err);
+      container.innerHTML = 'Gagal memuat berita Lampung';
+    }
+  }
+
+  init();
 
 });

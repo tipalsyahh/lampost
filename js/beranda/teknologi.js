@@ -1,71 +1,64 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.querySelector('.teknologi');
   if (!container) return;
 
-  try {
-    // ===============================
-    // 1️⃣ AMBIL ID KATEGORI TEKNOLOGI
-    // ===============================
-    const catRes = await fetch(
-      'https://lampost.co/wp-json/wp/v2/categories?slug=teknologi'
-    );
-    if (!catRes.ok) throw new Error('Gagal ambil kategori');
+  function render(posts) {
+    return posts.map(post => {
 
-    const catData = await catRes.json();
-    if (!catData.length) {
-      container.insertAdjacentHTML(
-        'beforeend',
-        '<p>Kategori teknologi tidak ditemukan</p>'
-      );
-      return;
-    }
-
-    const categoryId = catData[0].id;
-
-    // ===============================
-    // 2️⃣ AMBIL BERITA TEKNOLOGI
-    // ===============================
-    const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=5&orderby=date&order=desc&_embed`
-    );
-    if (!res.ok) throw new Error('Gagal ambil berita');
-
-    const posts = await res.json();
-
-    let html = '';
-
-    posts.forEach(post => {
-
-      /* 📝 JUDUL */
       const judul = post.title.rendered;
 
-      /* 🏷️ KATEGORI SLUG */
       const kategoriSlug =
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'berita';
 
-      /* 🔗 LINK (KATEGORI DULU, BARU JUDUL) */
       const link = `halaman.html?${kategoriSlug}/${post.slug}`;
 
-      html += `
+      return `
         <a href="${link}" class="item-hukum">
           <p><i class="bi bi-caret-right-fill"></i></p>
           <p>${judul}</p>
         </a>
       `;
-    });
-
-    // ===============================
-    // 3️⃣ SISIPKAN KE DOM
-    // ===============================
-    container.insertAdjacentHTML('beforeend', html);
-
-  } catch (err) {
-    console.error(err);
-    container.insertAdjacentHTML(
-      'beforeend',
-      '<p>Gagal memuat berita teknologi</p>'
-    );
+    }).join('');
   }
+
+  // 🔥 non-blocking fetch
+  fetch('https://lampost.co/wp-json/wp/v2/categories?slug=teknologi')
+    .then(res => {
+      if (!res.ok) throw new Error('Gagal ambil kategori');
+      return res.json();
+    })
+    .then(catData => {
+      if (!catData.length) {
+        container.insertAdjacentHTML(
+          'beforeend',
+          '<p>Kategori teknologi tidak ditemukan</p>'
+        );
+        return Promise.reject();
+      }
+
+      const categoryId = catData[0].id;
+
+      return fetch(
+        `https://lampost.co/wp-json/wp/v2/posts?categories=${categoryId}&per_page=5&orderby=date&order=desc&_embed`
+      );
+    })
+    .then(res => {
+      if (!res || !res.ok) throw new Error('Gagal ambil berita');
+      return res.json();
+    })
+    .then(posts => {
+      if (!posts || !posts.length) return;
+      container.insertAdjacentHTML('beforeend', render(posts));
+    })
+    .catch(err => {
+      if (err) {
+        console.error(err);
+        container.insertAdjacentHTML(
+          'beforeend',
+          '<p>Gagal memuat berita teknologi</p>'
+        );
+      }
+    });
 
 });

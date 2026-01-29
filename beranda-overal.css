@@ -64,49 +64,100 @@
   font-weight: bold;
 }
 
-.slider {
-  padding: 10px calc(20%);
-  margin-bottom: 15px;
+.hero-slider {
+  padding: 10px calc(15%);
+  height: 400px;
+  overflow: hidden;
+  /* ⬅️ WAJIB */
+  box-sizing: border-box;
+  /* ⬅️ padding dihitung dalam height */
+  position: relative;
+  /* ⬅️ anchor untuk absolute child */
+  contain: layout paint;
+  /* ⬅️ cegah anak bocor */
 }
 
-.hero-slider {
-  position: relative;
-  overflow: hidden;
+#slider {
+  margin: 0;
 }
 
 .hero-track {
   display: flex;
-  transition: transform .6s ease-in-out;
-}
-
-.hero-slide {
-  min-width: 100%;
-}
-
-.hero-image-box {
-  position: relative;
-  height: 500px;
-  /* height sekarang di parent */
-}
-
-.hero-image {
-  width: 100%;
+  gap: 12px;
   height: 100%;
-  /* mengikuti height parent */
-  object-fit: cover;
-  display: block;
 }
 
-/* OVERLAY */
-.hero-overlay {
+/* ===== CARD ===== */
+.hero-left,
+.hero-box {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+  contain: layout paint;
+  /* ⬅️ PENGUNCI UTAMA */
+}
+
+.hero-right h2 {
+  font-size: 14px;
+}
+
+/* IMG */
+.hero-left img,
+.hero-box img {
   position: absolute;
   inset: 0;
-  padding: 16px;
-  background: linear-gradient(to top, rgba(0, 0, 0, .75), rgba(0, 0, 0, .1));
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+/* overlay */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 10px;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, .6), transparent);
+}
+
+/* kiri */
+.hero-left {
+  width: 45%;
+}
+
+/* kanan */
+.hero-right {
+  width: 55%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  color: #fff;
+  gap: 12px;
+  min-height: 0;
+}
+
+/* kanan atas */
+.hero-right-top {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+/* kanan bawah */
+.hero-right-bottom {
+  display: flex;
+  flex: 1;
+}
+
+/* card kanan */
+.hero-box {
+  flex: 1;
+}
+
+.hero-track a {
+  text-decoration: none;
 }
 
 .hero-category {
@@ -117,39 +168,10 @@
   font-size: 12px;
 }
 
-.hero-title {
-  font-size: 22px;
-  font-weight: bold;
-  margin: 6px 0;
-}
-
-.hero-meta {
-  font-size: 13px;
-  display: flex;
-  gap: 12px;
-}
-
-/* DOTS */
-.hero-dots {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 5;
-}
-
-.hero-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .5);
-  cursor: pointer;
-}
-
-.hero-dot.active {
-  background: #fff;
+.editor-slider,
+.tanggal-slider {
+  color: #fff;
+  font-size: 12px;
 }
 
 .ekonomi {
@@ -185,6 +207,21 @@
   color: #000;
 }
 
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slider-mobile {
+  display: none;
+}
+
 @media (max-width: 1237px) {
   .berita-left {
     display: none;
@@ -200,28 +237,123 @@
 }
 
 @media (max-width: 768px) {
-  .slider {
-    padding: 10px;
-    margin-top: 15px;
+  .berita-terbaru {
+    margin-bottom: 15px;
   }
 
   .hero-slider {
+    display: none;
+  }
+
+  .slider-mobile {
+    display: block;
+  }
+
+  .hero-flex {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ===============================
+   HERO MAIN (ATAS)
+=============================== */
+  .hero-main {
+    position: relative;
+    height: 360px;
+    overflow: hidden;
     border-radius: 10px;
-    box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.527),
-      0 8px 20px rgba(0, 0, 0, 0.521);
   }
 
-  .hero-image-box {
-    height: 220px;
+  .hero-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  .hero-title {
-    font-size: 14px;
+  /* ===============================
+   HERO SUB (BAWAH)
+=============================== */
+  .hero-sub {
+    display: flex;
+    gap: 12px;
   }
 
+  .hero-item {
+    flex: 1;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  .hero-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ===============================
+   OVERLAY UMUM
+=============================== */
   .hero-overlay {
-    justify-content: center;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+        rgba(0, 0, 0, .75),
+        rgba(0, 0, 0, .25));
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #fff;
+    text-decoration: none;
   }
 
+  /* ===============================
+   HERO MAIN CONTENT
+=============================== */
+  .hero-main .hero-category {
+    font-size: 11px;
+    opacity: .9;
+    margin-bottom: 4px;
+  }
+
+  .hero-main .hero-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0 0 6px;
+  }
+
+  .hero-main .hero-meta {
+    font-size: 11px;
+    opacity: .85;
+    display: flex;
+    gap: 8px;
+  }
+
+  /* ===============================
+   HERO SUB CONTENT
+=============================== */
+  .hero-item .hero-title {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .hero-item .hero-category,
+  .hero-item .hero-meta {
+    display: none;
+  }
+
+  /* Clamp judul */
+  .hero-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }

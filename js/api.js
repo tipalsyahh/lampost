@@ -11,13 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let isLoading = false;
   let hasMore = true;
 
-  // ❌ embed dibuang
   const API_POSTS =
     'https://lampost.co/wp-json/wp/v2/posts?orderby=date&order=desc';
 
   const catCache = {};
   const mediaCache = {};
-  const termCache = {}; // ⬅️ cache editor
+  const termCache = {};
 
   const formatTanggal = dateString => {
     const d = new Date(dateString);
@@ -55,9 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
-  // ===============================
-  // ✍️ EDITOR (SAMA PERSIS DENGAN SCRIPT SEBELUMNYA)
-  // ===============================
   async function getEditor(post) {
     let editor = 'Redaksi';
 
@@ -96,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let posts = await res.json();
       if (page === 1) posts.shift();
+
       if (!posts.length) {
         hasMore = false;
         loadMoreBtn.style.display = 'none';
@@ -108,29 +105,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const judul = post.title.rendered;
         const tanggal = formatTanggal(post.date);
-
-        const catId = post.categories?.[0];
-        const { name: kategori, slug: kategoriSlug } =
-          await getCategory(catId);
-
         const gambar = await getMedia(post.featured_media);
-        const editor = await getEditor(post); // ⬅️ editor dinamis
 
-        const link = `halaman.html?${kategoriSlug}/${post.slug}`;
+        const id = `post-${post.id}`;
+        const link = `halaman.html?berita/${post.slug}`;
 
+        // 🔥 TAMPILKAN LANGSUNG (TANPA MENUNGGU DATA LAIN)
         htmlArr.push(`
-          <a href="${link}" class="item-berita">
+          <a href="${link}" class="item-berita" id="${id}">
             <img src="${gambar}" alt="${judul}" loading="lazy" decoding="async">
             <div class="info-berita">
               <p class="judul">${judul}</p>
-              <p class="kategori">${kategori}</p>
+              <p class="kategori">...</p>
               <div class="detail-info">
-                <p class="editor">By ${editor}</p>
+                <p class="editor">By ...</p>
                 <p class="tanggal">${tanggal}</p>
               </div>
             </div>
           </a>
         `);
+
+        // ⏳ DATA PELENGKAP MENYUSUL (NON-BLOCKING)
+        (async () => {
+          const catId = post.categories?.[0];
+          const { name: kategori } = await getCategory(catId);
+          const editor = await getEditor(post);
+
+          const el = document.getElementById(id);
+          if (!el) return;
+
+          el.querySelector('.kategori').textContent = kategori;
+          el.querySelector('.editor').textContent = `By ${editor}`;
+        })();
+
       });
 
       await Promise.all(promises);
@@ -146,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // 🚀 LOAD LANGSUNG SAAT HALAMAN SIAP
   loadPosts();
   loadMoreBtn.addEventListener('click', loadPosts);
 
