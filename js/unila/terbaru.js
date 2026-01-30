@@ -84,10 +84,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="berita-unila">
           <p class="judul-unila">${judul}</p>
 
+          <p class="kategori">${kategori.name}</p>
           <div class="info-microweb">
             <p class="editor">By ${editor}</p>
             <p class="tanggal">${tanggal}</p>
-            <p class="kategori">${kategori.name}</p>
           </div>
         </div>
       `;

@@ -1,25 +1,27 @@
 .container-microweb {
-    padding: 10px calc(13%);
+    padding: 10px calc((100% - 1200px) / 2);
     display: flex;
     gap: 5px;
     align-items: flex-start;
 }
 
 .berita-microweb {
-    width: 70%;
+    width: 65%;
     padding: 10px;
+    overflow: hidden; /* ⬅️ kunci agar garis tidak keluar */
+
 }
 
 .iklan-parent {
-    width: 30%;
+    flex: 1;
     position: sticky;
-    top: 10px;
+    top: 0;
+    padding: 10px;
 }
 
 
 .img-microweb {
     width: 50%;
-    height: 250px;
     object-fit: cover;
 }
 
@@ -292,7 +294,7 @@
 }
 
 .bener {
-    padding: 10px calc(13%);
+    padding: 10px calc((100% - 1200px) / 2);
     margin-top: 10px;
 }
 
@@ -320,7 +322,7 @@
 }
 
 .logo-microweb {
-    width: calc(100vh * 0.35);
+    height: calc(100vh * 0.20);
 }
 
 .footer-left {
@@ -417,12 +419,8 @@
     object-fit: cover;
 }
 
-#microweb-img {
-    height: calc(100vh * 0.10);
-}
-
 .slider-microweb {
-    padding: 10px calc(13%);
+    padding: 10px calc((100% - 1200px) / 2);
     margin-bottom: 15px;
 }
 

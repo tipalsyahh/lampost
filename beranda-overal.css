@@ -65,14 +65,12 @@
 }
 
 .hero-slider {
-  padding: 10px calc(15%);
+  padding: 10px calc((100% - 1200px) / 2);
   overflow: hidden;
   box-sizing: border-box;
-  /* ⬅️ padding dihitung dalam height */
   position: relative;
-  /* ⬅️ anchor untuk absolute child */
   contain: layout paint;
-  /* ⬅️ cegah anak bocor */
+  height: calc(100vh * 0.50);
 }
 
 #slider {
@@ -221,7 +219,7 @@
 }
 
 .news {
-  padding: 10px calc(15%);
+  padding: 10px calc((100% - 1200px) / 2);
   margin-top: 10px;
   display: flex;
   align-items: center;
