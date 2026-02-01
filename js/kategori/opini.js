@@ -12,16 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let hasMore = true;
   let kategoriId = null;
 
-  /* ===============================
-     CACHE
-  =============================== */
   const catCache = {};
   const mediaCache = {};
   const editorCache = {};
 
-  /* ===============================
-     FORMAT TANGGAL
-  =============================== */
   const formatTanggal = dateString => {
     const d = new Date(dateString);
     return `${String(d.getDate()).padStart(2, '0')}/` +
@@ -29,31 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
            `${d.getFullYear()}`;
   };
 
-  /* ===============================
-     AMBIL ID KATEGORI OPINI
-  =============================== */
   (async () => {
     try {
       const res = await fetch(
         'https://lampost.co/wp-json/wp/v2/categories?slug=opini'
       );
-      if (!res.ok) throw new Error('Kategori gagal');
+      if (!res.ok) throw new Error();
 
       const data = await res.json();
-      if (!data.length) throw new Error('Kategori tidak ditemukan');
+      if (!data.length) throw new Error();
 
       kategoriId = data[0].id;
       loadPosts();
 
-    } catch (err) {
-      console.error(err);
+    } catch {
       container.innerHTML = '<p>Kategori opini tidak tersedia</p>';
     }
   })();
 
-  /* ===============================
-     AMBIL KATEGORI
-  =============================== */
   async function getCategory(catId) {
     if (!catId) return { name: 'Opini', slug: 'opini' };
     if (catCache[catId]) return catCache[catId];
@@ -69,9 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ===============================
-     AMBIL GAMBAR
-  =============================== */
   async function getMedia(mediaId) {
     if (!mediaId) return 'image/ai.jpg';
     if (mediaCache[mediaId]) return mediaCache[mediaId];
@@ -88,15 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
-  /* ===============================
-     ✍️ AMBIL EDITOR (SAMA PENAMPILAN)
-  =============================== */
   async function getEditor(post) {
     let editor = 'Redaksi';
-
     const termLink = post._links?.['wp:term']?.[2]?.href;
     if (!termLink) return editor;
-
     if (editorCache[termLink]) return editorCache[termLink];
 
     try {
@@ -106,14 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
         editor = data?.[0]?.name || editor;
         editorCache[termLink] = editor;
       }
-    } catch (_) {}
+    } catch {}
 
     return editor;
   }
 
-  /* ===============================
-     LOAD POSTS
-  =============================== */
   async function loadPosts() {
     if (isLoading || !hasMore || page > MAX_PAGE) {
       loadMoreBtn.style.display = 'none';
@@ -137,12 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const posts = await res.json();
+      let posts = await res.json();
       if (!posts.length) {
         hasMore = false;
         loadMoreBtn.style.display = 'none';
         return;
       }
+
+      posts = posts.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
 
       const htmlArr = [];
 

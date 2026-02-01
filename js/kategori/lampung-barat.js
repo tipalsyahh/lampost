@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   (async () => {
     try {
       const res = await fetch(
-        'https://lampost.co/wp-json/wp/v2/categories?slug=tajuk-lampung-post'
+        'https://lampost.co/wp-json/wp/v2/categories?slug=lampung-barat'
       );
       if (!res.ok) throw new Error();
 
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             deskripsi = deskripsi.slice(0, 150) + '...';
           }
 
-          const link = `../halaman.html?${kategoriSlug}/${slug}`;
+          const link = `../../halaman.html?${kategoriSlug}/${slug}`;
 
           htmlArr.push(`
             <a href="${link}" class="item-info">

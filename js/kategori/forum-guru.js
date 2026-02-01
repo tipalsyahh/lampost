@@ -10,29 +10,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   let hasMore = true;
   let kategoriId = null;
 
-  /* ===============================
-     1️⃣ AMBIL ID KATEGORI OPINI
-  =============================== */
   try {
     const catRes = await fetch(
       'https://lampost.co/wp-json/wp/v2/categories?slug=forum-guru'
     );
-    if (!catRes.ok) throw new Error('Gagal ambil kategori');
+    if (!catRes.ok) throw new Error();
 
     const catData = await catRes.json();
-    if (!catData.length) throw new Error('Kategori opini tidak ditemukan');
+    if (!catData.length) throw new Error();
 
     kategoriId = catData[0].id;
 
-  } catch (err) {
-    console.error(err);
+  } catch {
     container.innerHTML = '<p>Kategori opini tidak tersedia</p>';
     return;
   }
 
-  /* ===============================
-     2️⃣ LOAD POST OPINI
-  =============================== */
   async function loadPosts() {
     if (isLoading || !hasMore) return;
     isLoading = true;
@@ -49,15 +42,19 @@ document.addEventListener('DOMContentLoaded', async () => {
           loadMoreBtn.style.display = 'none';
           return;
         }
-        throw new Error('API gagal');
+        throw new Error();
       }
 
-      const posts = await res.json();
+      let posts = await res.json();
       if (!posts.length) {
         hasMore = false;
         loadMoreBtn.style.display = 'none';
         return;
       }
+
+      posts = posts.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
 
       let output = '';
 
@@ -66,14 +63,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const judul = post.title.rendered;
         const slug = post.slug;
 
-        /* 🏷️ KATEGORI */
         const kategori =
           post._embedded?.['wp:term']?.[0]?.[0]?.name || 'Opini';
 
         const kategoriSlug =
           post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'opini';
 
-        /* 🔗 LINK */
         const link = `../halaman.html?${kategoriSlug}/${slug}`;
 
         let deskripsi =
@@ -85,19 +80,16 @@ document.addEventListener('DOMContentLoaded', async () => {
           deskripsi = deskripsi.slice(0, 150) + '...';
         }
 
-        /* 🖼️ GAMBAR */
         const gambar =
           post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
           'image/ai.jpg';
 
-        /* 📅 TANGGAL */
         const d = new Date(post.date);
         const tanggal =
           `${String(d.getDate()).padStart(2, '0')}/` +
           `${String(d.getMonth() + 1).padStart(2, '0')}/` +
           `${d.getFullYear()}`;
 
-        /* ✍️ EDITOR (SAMA SEPERTI SCRIPT OLAHRAGA) */
         const editor =
           post._embedded?.['wp:term']?.[2]?.[0]?.name || 'Redaksi';
 
@@ -127,10 +119,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  /* LOAD AWAL */
   loadPosts();
-
-  /* LOAD MORE */
   loadMoreBtn.addEventListener('click', loadPosts);
 
 });

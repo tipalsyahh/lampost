@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="halaman.css">
+    <link rel="stylesheet" href="beranda-overal.css">
     <link rel="icon" href="image/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Lampost</title>
@@ -93,8 +94,14 @@
         <center>
             <h2>Menu</h2>
         </center>
-        <div class="search-sidebar">
-            <input type="search" class="search-input" placeholder="Cari Artikel Disini" aria-label="Search">
+        <div class="search-sidebar" id="searchSidebar">
+            <div class="input-menu">
+                <input type="search" class="search-input" placeholder="Cari Artikel Disini.." aria-label="Search"
+                    id="input-sidebar">
+                <button type="button" class="search-btn" aria-label="Search" id="btn-sidebar-search">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
         </div>
         <div class="sidebar-isi">
             <ul>
@@ -184,9 +191,8 @@
             <small>© 2026 Lampost.co - Media Group. All rights reserved.</small>
         </div>
     </footer>
-
-
     <script src="js/scrip.js"></script>
+    <script src="js/beranda/search-beranda.js"></script>
     <script src="js/berita-harian.js"></script>
     <script src="js/epaper/berita-left.js"></script>
     <script src="js/navbar.js"></script>

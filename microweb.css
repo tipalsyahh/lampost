@@ -325,13 +325,16 @@
     height: calc(100vh * 0.25);
 }
 
+.logo-bank-lampung {
+    height: calc(100vh * 0.10);
+}
+
 .footer-left {
     text-align: justify;
     width: 50%;
 }
 
 .footer-bottom {
-    border-top: 1px solid #1e293b;
     padding: 20px;
     text-align: center;
     max-width: 1200px;

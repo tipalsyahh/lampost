@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../beranda.css">
     <link rel="stylesheet" href="../microweb.css">
+    <link rel="stylesheet" href="../beranda-overal.css">
     <link rel="icon" href="../image/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Lampost</title>
@@ -94,8 +95,14 @@
         <center>
             <h2>MENU</h2>
         </center>
-        <div class="search-sidebar">
-            <input type="search" class="search-input" placeholder="Cari Artikel Disini" aria-label="Search">
+        <div class="search-sidebar" id="searchSidebar">
+            <div class="input-menu">
+                <input type="search" class="search-input" placeholder="Cari Artikel Disini.." aria-label="Search"
+                    id="input-sidebar">
+                <button type="button" class="search-btn" aria-label="Search" id="btn-sidebar-search">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
         </div>
         <div class="sidebar-isi">
             <ul>
@@ -185,6 +192,7 @@
         <script src="../js/kategori/otomotif.js"></script>
         <script src="../js/kategori/terbaru.js"></script>
         <script src="../js/beranda/detail.js"></script>
+        <script src="../js/kategori/search-kategori.js"></script>
         <script src="../js/scrip.js"></script>
         <script src="../js/navbar.js"></script>
         <script src="../keyfrem.js"></script>

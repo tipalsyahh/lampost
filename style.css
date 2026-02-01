@@ -518,19 +518,25 @@ body {
     padding: 0 20px;
 }
 
-/* semua kolom */
 .footer-left,
 .footer-center,
 .footer-right {
     flex: 1;
     padding: 30px 20px;
     box-sizing: border-box;
+}
+
+.footer-center,
+.footer-right {
     text-align: center;
 }
 
-/* border kiri & kanan */
 .footer-left {
     border-right: 1px solid #e5e7eb;
+}
+
+.footer-left img {
+    height: calc(100vh * 0.10);
 }
 
 .footer-right {
@@ -847,6 +853,15 @@ body {
 
     .footer-container {
         padding: 0;
+        border: none;
+    }
+
+    .footer-center {
+        border-top: 1px solid #1e293b;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid #1e293b;
     }
 
     .info a img,
@@ -856,7 +871,8 @@ body {
         object-fit: cover;
     }
 
-    .judul {
+    .judul,
+    .judul-terbaru {
         font-weight: normal;
         font-size: 12px;
     }
