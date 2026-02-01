@@ -84,4 +84,20 @@
         width: 100%;
     }
 
+    .card p {
+        font-size: 12px;
+    }
+
+    .detail-text h2 {
+        font-size: 15px;
+    }
+
+    .detail-text p {
+        font-size: 12px;
+    }
+
+    .berita a {
+        font-size: 12px;
+    }
+
 }
