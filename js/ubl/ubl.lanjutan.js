@@ -1,85 +1,75 @@
 document.addEventListener('DOMContentLoaded', async () => {
-
-  const container = document.querySelector('.ubl-lanjutan');
+  const container = document.querySelector('.prestasi-lanjutan');
   if (!container) return;
 
   try {
     /* ========================
-       🌐 REST API WORDPRESS
+       AMBIL POST TERBARU (TANPA KATEGORI)
     ======================== */
     const api =
       'https://lampost.co/microweb/ubl/wp-json/wp/v2/posts' +
-      '?per_page=6&offset=2&orderby=date&order=desc&_embed';
+      '?per_page=6&orderby=date&order=desc&_embed';
 
     const res = await fetch(api);
-    if (!res.ok) throw new Error('Gagal mengambil API');
+    if (!res.ok) throw new Error('Gagal mengambil post');
 
     const posts = await res.json();
-    let output = '';
+    if (!posts.length) {
+      container.innerHTML = '<p>Berita belum tersedia</p>';
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
 
     posts.forEach(post => {
-
       /* 📝 JUDUL */
       const judul = post.title.rendered;
-
-      /* 🔤 SLUG JUDUL */
       const slug = post.slug;
 
-      /* 🏷️ KATEGORI */
-      const kategori =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name || 'UBL';
+      /* 🔗 URL */
+      const linkBerita = `berita.ubl.html?berita-terkini/${slug}`;
 
-      /* 🏷️ SLUG KATEGORI */
-      const kategoriSlug =
-        post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'ubl';
+      /* 📰 DESKRIPSI */
+      let deskripsi =
+        post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
+      if (deskripsi.length > 150) deskripsi = deskripsi.slice(0, 150) + '...';
 
-      /* 🔗 LINK */
-      const link = `berita.ubl.html?${kategoriSlug}/${slug}`;
+      /* ✍️ EDITOR */
+      const editor =
+        post._embedded?.author?.[0]?.name || 'Redaksi';
 
-      /* 🖼️ GAMBAR */
-      const gambar =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url
-        || 'image/ai.jpg';
-
-      /* =========================
-         📅 TANGGAL → ANGKA
-         FORMAT: DD/MM/YYYY
-      ========================= */
+      /* 📅 TANGGAL */
       const d = new Date(post.date);
       const day = String(d.getDate()).padStart(2, '0');
       const month = String(d.getMonth() + 1).padStart(2, '0');
       const year = d.getFullYear();
       const tanggal = `${day}/${month}/${year}`;
 
-      /* ✍️ EDITOR */
-      const editor =
-        post._embedded?.author?.[0]?.name || 'Redaksi';
+      const a = document.createElement('a');
+      a.href = linkBerita;
+      a.className = 'item-info';
 
-      /* 🧱 OUTPUT */
-      output += `
-        <a href="${link}" class="item-info">
-          <img
-            src="${gambar}"
-            alt="${judul}"
-            class="img-ubl"
-            loading="lazy">
+      a.innerHTML = `
+        <div class="berita-unila">
+          <p class="judul-unila-lanjutan">${judul}</p>
 
-          <div class="berita-ubl-utama">
-            <p class="judul-ubl">${judul}</p>
-            <p class="editor">By ${editor}</p>
-              <p class="tanggal">${tanggal}</p>
+          <div class="info-microweb">
+            <p class="editor-kkn">By ${editor}</p>
+            <p class="tanggal">${tanggal}</p>
           </div>
-        </a>
+
+          <p class="deskripsi-unila-lanjutan">${deskripsi}</p>
+        </div>
       `;
+
+      fragment.appendChild(a);
     });
 
-    container.innerHTML =
-      output || '<p>Konten tidak tersedia</p>';
+    container.innerHTML = '';
+    container.appendChild(fragment);
 
   } catch (err) {
     console.error('API gagal dimuat:', err);
-    container.innerHTML =
-      '<p>Konten gagal dimuat</p>';
+    container.innerHTML = '<p>Konten gagal dimuat</p>';
   }
-
 });

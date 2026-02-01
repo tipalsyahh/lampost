@@ -10,15 +10,6 @@
     width: 70%;
 }
 
-.berita-left {
-    width: 50%;
-    padding: 10px;
-    position: sticky;
-    top: 10px;
-}
-
-.olahraga,
-.humaniora,
 .hiburan {
     margin-bottom: 15px;
     border-bottom: 1px solid #e5e7eb;
@@ -28,7 +19,6 @@
 .humaniora a,
 .hiburan a {
     text-decoration: none;
-    text-align: center;
     color: #000;
 }
 
@@ -191,6 +181,10 @@
 
 .populer-mobile {
     display: none;
+}
+
+.lampung-populer {
+    padding: 10px;
 }
 
 @media (max-width: 768px) {

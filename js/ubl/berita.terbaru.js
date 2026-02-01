@@ -4,16 +4,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!container) return;
 
   const PER_PAGE = 6; // dinaikkan agar setelah skip tetap dapat 5
-
+  
   /* =========================
      AMBIL SLUG BERITA AKTIF
+     dari URL ?kategori/slug
   ========================= */
   const query = location.search.replace('?', '');
   const slugAktif = query.split('/')[1] || '';
 
   try {
     const api =
-      'https://lampost.co/microweb/teknokrat/wp-json/wp/v2/posts' +
+      'https://lampost.co/microweb/ubl/wp-json/wp/v2/posts' +
       `?per_page=${PER_PAGE}&orderby=date&order=desc&_embed`;
 
     const res = await fetch(api);
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const kategoriSlug =
         post._embedded?.['wp:term']?.[0]?.[0]?.slug || 'teknokrat';
 
-      const link = `berita.teknokrat.html?${kategoriSlug}/${slug}`;
+      const link = `berita.ubl.html?${kategoriSlug}/${slug}`;
 
       let deskripsi =
         post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
@@ -82,12 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       else {
         output += `
           <a href="${link}" class="item-microweb">
-            <img
-              src="${gambar}"
-              alt="${judul}"
-              class="img-terbaru-detail"
-              loading="lazy">
-
+            <img src="${gambar}" alt="${judul}" class="img-terbaru-detail" loading="lazy">
             <div class="berita-detail">
               <p class="judul-terbaru">${judul}</p>
               <div class="info-microweb">
@@ -104,5 +100,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (err) {
     console.error(err);
   }
-
 });

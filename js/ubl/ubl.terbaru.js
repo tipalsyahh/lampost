@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-  const container = document.querySelector('.ubl-terbaru');
+  const container = document.querySelector('.terbaru');
   if (!container) return;
 
   try {
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ======================== */
     const api =
       'https://lampost.co/microweb/ubl/wp-json/wp/v2/posts' +
-      '?per_page=1&orderby=date&order=desc&_embed';
+      '?per_page=5&orderby=date&order=desc&_embed';
 
     const res = await fetch(api);
     if (!res.ok) throw new Error('Gagal mengambil API');

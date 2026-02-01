@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-  const container = document.querySelector('.olahraga');
+  const container = document.querySelector('.sport');
   if (!container) return;
 
   const TERM_CACHE = {};

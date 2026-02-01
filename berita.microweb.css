@@ -12,9 +12,9 @@
 
 /* SIDEBAR / IKLAN */
 .iklan-detail {
-  flex: 0 0 30%;
+  flex: 1;
   position: sticky;
-  top: 10px;
+  top: 0px;
 }
 
 .berita-detail {

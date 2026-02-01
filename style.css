@@ -137,14 +137,23 @@ body {
     position: absolute;
     top: 100%;
     left: 0;
+
     background-color: #fff;
     min-width: 270px;
     padding: 10px 0;
+    border: 1px solid #e5e7eb;
+
     display: none;
     flex-direction: column;
-    border: 1px solid #e5e7eb;
+
     z-index: 999;
+
+    /* 🔥 FIX iOS SAFARI */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
 }
+
 
 /* item submenu */
 .navbar-sub ul li .sub-menu li a {
@@ -501,33 +510,41 @@ body {
 }
 
 .footer-container {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #e5e7eb;
     max-width: 1200px;
     margin: auto;
+    padding: 0 20px;
+}
+
+/* semua kolom */
+.footer-left,
+.footer-center,
+.footer-right {
+    flex: 1;
     padding: 30px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-.footer-center {
+/* border kiri & kanan */
+.footer-left {
+    border-right: 1px solid #e5e7eb;
+}
+
+.footer-right {
+    border-left: 1px solid #e5e7eb;
     display: grid;
-    row-gap: 10px;
 }
 
-
-.footer-center a {
-    color: #e5e7eb;
+.footer-right a {
+    color: #fff;
     text-decoration: none;
 }
 
-.footer-center a:hover {
-    text-decoration: underline;
-}
-
+/* footer bottom */
 .footer-bottom {
-    border-top: 1px solid #1e293b;
     padding: 20px;
     text-align: center;
     max-width: 1200px;
@@ -634,7 +651,8 @@ body {
 .container-beranda h2,
 .lampung h2,
 .gaya-hidup h2,
-.populer-mobile h2 {
+.populer-mobile h2,
+.olahraga h2 {
     font-weight: 900;
     background: radial-gradient(circle at 109.67% 60.52%,
             #aa7900 0%,
@@ -719,11 +737,24 @@ body {
     margin-left: 10px;
 }
 
-.gaya-hidup {
+.berita-dua {
     padding: 10px calc((100% - 1200px) / 2);
-    margin-bottom: 25px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
 }
 
+.gaya-hidup {
+    width: 70%;
+    padding: 10px;
+    position: sticky;
+    top: 0;
+}
+
+.olahraga {
+    flex: 1;
+    padding: 10px;
+}
 
 @media (max-width: 768px) {
 
@@ -735,8 +766,18 @@ body {
         height: 150px;
     }
 
-    .gaya-hidup {
+    .berita-dua {
         padding: 10px;
+        display: block;
+    }
+
+    .gaya-hidup {
+        width: 100%;
+        padding: 0;
+    }
+
+    .olahraga {
+        display: none;
     }
 
     .berita-mobile {
@@ -765,8 +806,13 @@ body {
     }
 
     .langganan {
-        padding: 10px;
+        padding: 5px 10px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+
 
     .login {
         display: none;
@@ -795,7 +841,7 @@ body {
     }
 
     .footer-left,
-    .footer-center {
+    .footer-right {
         display: none;
     }
 
