@@ -156,6 +156,10 @@
   text-decoration: none;
 }
 
+.footer-left img {
+    height: calc(100vh * 0.10);
+}
+
 .hero-category {
   background-color: #DC0000;
   padding: 5px 10px;

@@ -538,10 +538,6 @@ body {
     border-right: 1px solid #e5e7eb;
 }
 
-.footer-left img {
-    height: calc(100vh * 0.10);
-}
-
 .footer-right {
     border-left: 1px solid #e5e7eb;
     display: grid;
@@ -763,6 +759,12 @@ body {
 .olahraga {
     flex: 1;
     padding: 10px;
+}
+
+.card-terbaru {
+    width: 100%;
+    object-fit: cover;
+    height: calc(100vh * 0.40);
 }
 
 @media (max-width: 768px) {

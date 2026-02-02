@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <a href="${link}" class="card-link">
         <div class="card-image-wrapper">
 
-          <img src="${gambar}" alt="${judul}" class="card-image" loading="lazy" decoding="async">
+          <img src="${gambar}" alt="${judul}" class="card-terbaru" loading="lazy" decoding="async">
 
           <div class="card-text-overlay">
             <span class="card-text">${judul}</span>
