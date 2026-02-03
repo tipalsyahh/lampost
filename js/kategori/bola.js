@@ -16,23 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const mediaCache = {};
   const editorCache = {};
 
-  const formatTanggal = dateString => {
-    const d = new Date(dateString);
-    return `${String(d.getDate()).padStart(2, '0')}/` +
-           `${String(d.getMonth() + 1).padStart(2, '0')}/` +
-           `${d.getFullYear()}`;
-  };
+  const formatTanggal = d =>
+    new Date(d).toLocaleDateString('id-ID');
 
+  /* Ambil ID kategori */
   (async () => {
     try {
       const res = await fetch(
         'https://lampost.co/wp-json/wp/v2/categories?slug=bola'
       );
-      if (!res.ok) throw new Error();
-
       const data = await res.json();
-      if (!data.length) throw new Error();
 
+      if (!data.length) throw new Error();
       kategoriId = data[0].id;
       loadPosts();
 
@@ -41,54 +36,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })();
 
-  async function getCategory(catId) {
-    if (!catId) return { name: 'Opini', slug: 'opini' };
-    if (catCache[catId]) return catCache[catId];
+  const getCategory = async id => {
+    if (!id) return { name: 'Opini', slug: 'opini' };
+    if (catCache[id]) return catCache[id];
 
     const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/categories/${catId}`
+      `https://lampost.co/wp-json/wp/v2/categories/${id}`
     );
     const data = await res.json();
 
-    return (catCache[catId] = {
+    return (catCache[id] = {
       name: data.name,
       slug: data.slug
     });
-  }
+  };
 
-  async function getMedia(mediaId) {
-    if (!mediaId) return 'image/ai.jpg';
-    if (mediaCache[mediaId]) return mediaCache[mediaId];
+  const getMedia = async id => {
+    if (!id) return 'image/ai.jpg';
+    if (mediaCache[id]) return mediaCache[id];
 
     const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+      `https://lampost.co/wp-json/wp/v2/media/${id}`
     );
     const data = await res.json();
 
-    return (mediaCache[mediaId] =
+    return (mediaCache[id] =
       data.media_details?.sizes?.medium?.source_url ||
       data.source_url ||
       'image/ai.jpg'
     );
-  }
+  };
 
-  async function getEditor(post) {
-    let editor = 'Redaksi';
-    const termLink = post._links?.['wp:term']?.[2]?.href;
-    if (!termLink) return editor;
-    if (editorCache[termLink]) return editorCache[termLink];
+  const getEditor = async post => {
+    const link = post._links?.['wp:term']?.[2]?.href;
+    if (!link) return 'Redaksi';
+    if (editorCache[link]) return editorCache[link];
 
     try {
-      const res = await fetch(termLink);
-      if (res.ok) {
-        const data = await res.json();
-        editor = data?.[0]?.name || editor;
-        editorCache[termLink] = editor;
-      }
-    } catch {}
-
-    return editor;
-  }
+      const res = await fetch(link);
+      const data = await res.json();
+      return (editorCache[link] =
+        data?.[0]?.name || 'Redaksi');
+    } catch {
+      return 'Redaksi';
+    }
+  };
 
   async function loadPosts() {
     if (isLoading || !hasMore || page > MAX_PAGE) {
@@ -103,39 +95,26 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(
         `https://lampost.co/wp-json/wp/v2/posts` +
-        `?categories=${kategoriId}&per_page=${PER_PAGE}&page=${page}` +
+        `?categories=${kategoriId}` +
+        `&per_page=${PER_PAGE}` +
+        `&page=${page}` +
         `&orderby=date&order=desc`
       );
 
-      if (!res.ok) {
-        hasMore = false;
-        loadMoreBtn.style.display = 'none';
-        return;
-      }
+      if (!res.ok) throw new Error();
 
-      let posts = await res.json();
-      if (!posts.length) {
-        hasMore = false;
-        loadMoreBtn.style.display = 'none';
-        return;
-      }
+      const posts = await res.json();
+      if (!posts.length) throw new Error();
 
-      posts = posts.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
-
-      const htmlArr = [];
-
-      await Promise.all(
+      const html = await Promise.all(
         posts.map(async post => {
 
           const judul = post.title.rendered;
           const slug = post.slug;
           const tanggal = formatTanggal(post.date);
 
-          const catId = post.categories?.[0];
           const { name: kategori, slug: kategoriSlug } =
-            await getCategory(catId);
+            await getCategory(post.categories?.[0]);
 
           const gambar = await getMedia(post.featured_media);
           const editor = await getEditor(post);
@@ -145,15 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
               ?.replace(/<[^>]+>/g, '')
               ?.trim() || '';
 
-          if (deskripsi.length > 150) {
+          if (deskripsi.length > 150)
             deskripsi = deskripsi.slice(0, 150) + '...';
-          }
 
-          const link = `../../halaman.html?${kategoriSlug}/${slug}`;
-
-          htmlArr.push(`
-            <a href="${link}" class="item-info">
-              <img src="${gambar}" alt="${judul}" class="img-microweb" loading="lazy">
+          return `
+            <a href="../../halaman.html?${kategoriSlug}/${slug}" class="item-info">
+              <img src="${gambar}" alt="${judul}" loading="lazy">
               <div class="berita-microweb">
                 <p class="judul">${judul}</p>
                 <p class="kategori">${kategori}</p>
@@ -164,16 +140,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="deskripsi">${deskripsi}</p>
               </div>
             </a>
-          `);
-
+          `;
         })
       );
 
-      container.insertAdjacentHTML('beforeend', htmlArr.join(''));
+      container.insertAdjacentHTML('beforeend', html.join(''));
       page++;
 
-    } catch (err) {
-      console.error(err);
+    } catch {
+      hasMore = false;
+      loadMoreBtn.style.display = 'none';
     } finally {
       isLoading = false;
       loadMoreBtn.disabled = false;

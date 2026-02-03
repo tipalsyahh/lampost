@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
   const title = document.querySelector('h2.search-title');
   const container = document.getElementById('search-results');
   if (!title || !container) return;
@@ -16,14 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  /* 🔥 TAMPILKAN LOADING (TAMBAHAN SAJA) */
   container.innerHTML = '<p>Sedang mencari berita...</p>';
+
+  /* ================= STATE ================= */
+  let page = 1;
+  let loading = false;
+  let finished = false;
+  let hasRendered = false;
+
+  const PER_PAGE = 10;
 
   /* ================= CACHE ================= */
   const catCache = {};
   const mediaCache = {};
   const editorCache = {};
 
+  /* ================= DATA ================= */
   async function getCategory(post) {
     const id = post.categories?.[post.categories.length - 1];
     if (!id) return { name: 'Berita', slug: 'berita' };
@@ -41,22 +48,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function getMedia(id) {
-    if (!id) return 'image/default.jpg';
+    if (!id || id === 0) return null;
     if (mediaCache[id]) return mediaCache[id];
 
     try {
       const res = await fetch(
         `https://lampost.co/wp-json/wp/v2/media/${id}`
       );
-      const data = await res.json();
+      if (!res.ok) return null;
 
-      mediaCache[id] =
+      const data = await res.json();
+      const img =
         data.media_details?.sizes?.medium?.source_url ||
         data.source_url ||
-        'image/default.jpg';
-    } catch {}
+        null;
 
-    return mediaCache[id] || 'image/default.jpg';
+      mediaCache[id] = img;
+      return img;
+    } catch {
+      return null;
+    }
   }
 
   async function getEditor(post) {
@@ -75,32 +86,25 @@ document.addEventListener('DOMContentLoaded', () => {
     return (editorCache[post.id] = editor);
   }
 
-  /* ================= RENDER CEPAT ================= */
-  function renderFast(post) {
+  /* ================= RENDER ================= */
+  function renderItem(post) {
     const judul = post.title.rendered;
     const tanggal = new Date(post.date).toLocaleDateString('id-ID');
     const id = `search-${post.id}`;
 
     const deskripsi =
-      (post.excerpt?.rendered ||
-       post.content?.rendered || '')
+      (post.excerpt?.rendered || post.content?.rendered || '')
         .replace(/(<([^>]+)>)/gi, '')
         .slice(0, 150) + '...';
 
     return `
       <a href="#" class="item-info" id="${id}">
-        <img
-          src="image/default.jpg"
-          alt="${judul}"
-          class="img-microweb"
-          loading="lazy"
-          onerror="this.src='image/default.jpg'"
-        >
+        <img class="img-microweb" loading="lazy">
         <div class="berita-microweb">
           <p class="judul">${judul}</p>
-          <p class="kategori">...</p>
+          <p class="kategori"></p>
           <div class="info-microweb">
-            <p class="editor">By ...</p>
+            <p class="editor"></p>
             <p class="tanggal">${tanggal}</p>
           </div>
           <p class="deskripsi">${deskripsi}</p>
@@ -113,32 +117,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(`search-${post.id}`);
     if (!el) return;
 
+    const imgEl = el.querySelector('img');
+    const img = await getMedia(post.featured_media);
+
+    if (img) imgEl.src = img;
+    else imgEl.remove(); // 🔥 hanya image yang dihapus
+
     const { name: kategori, slug } = await getCategory(post);
-    const gambar = await getMedia(post.featured_media);
     const editor = await getEditor(post);
 
     el.href = `halaman.html?${slug}/${post.slug}`;
     el.querySelector('.kategori').textContent = kategori;
     el.querySelector('.editor').textContent = `By ${editor}`;
-    el.querySelector('img').src = gambar;
   }
 
-  /* ================= SEARCH ================= */
-  async function init() {
+  /* ================= LOAD MORE ================= */
+  async function loadMore() {
+    if (loading || finished) return;
+    loading = true;
+
+    if (btn.isConnected) btn.textContent = 'Memuat...';
+
     try {
-      const base =
+      const res = await fetch(
         `https://lampost.co/wp-json/wp/v2/posts` +
         `?search=${encodeURIComponent(query)}` +
-        `&per_page=50`;
+        `&per_page=${PER_PAGE}&page=${page}`
+      );
 
-      const [res1, res2] = await Promise.all([
-        fetch(`${base}&page=1`),
-        fetch(`${base}&page=2`)
-      ]);
+      if (!res.ok) {
+        finished = true;
+        btn.remove();
+        return;
+      }
 
-      const posts1 = res1.ok ? await res1.json() : [];
-      const posts2 = res2.ok ? await res2.json() : [];
-      const posts = [...posts1, ...posts2];
+      const posts = await res.json();
+
+      if (!posts.length) {
+        finished = true;
+        btn.remove();
+        return;
+      }
 
       const filtered = posts.filter(post => {
         const title = post.title.rendered.toLowerCase();
@@ -148,29 +167,37 @@ document.addEventListener('DOMContentLoaded', () => {
         return title.includes(queryLower) || text.includes(queryLower);
       });
 
-      title.textContent =
-        `Search Result for '${query}' (${filtered.length} hasil)`;
+      if (!hasRendered) container.innerHTML = '';
 
-      if (!filtered.length) {
-        container.innerHTML =
-          `<p>Tidak ada hasil untuk <b>${query}</b></p>`;
-        return;
+      if (filtered.length) {
+        container.insertAdjacentHTML(
+          'beforeend',
+          filtered.map(renderItem).join('')
+        );
+
+        filtered.forEach(post => enrich(post));
+        hasRendered = true;
+
+        if (!btn.isConnected) container.after(btn);
       }
 
-      /* 🔥 render instan */
-      container.innerHTML =
-        filtered.map(renderFast).join('');
+      page++;
+      btn.textContent = 'Load More';
 
-      /* ⏳ lengkapi data */
-      filtered.forEach(post => enrich(post));
-
-    } catch (err) {
-      console.error(err);
-      container.innerHTML =
-        '<p>Gagal memuat hasil pencarian.</p>';
+    } catch (e) {
+      console.error(e);
+      btn.textContent = 'Gagal memuat';
     }
+
+    loading = false;
   }
 
-  init();
+  /* ================= BUTTON ================= */
+  const btn = document.createElement('button');
+  btn.className = 'load-more';
+  btn.textContent = 'Load More';
+  btn.addEventListener('click', loadMore);
 
+  /* ================= INIT ================= */
+  loadMore();
 });

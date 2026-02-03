@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const api = `https://lampost.co/wp-json/wp/v2/posts?slug=${slug}&_embed`;
+    const api =
+      `https://lampost.co/wp-json/wp/v2/posts` +
+      `?slug=${slug}&orderby=date&order=desc`;
+
     const res = await fetch(api);
     if (!res.ok) throw new Error('Gagal ambil berita');
 
@@ -21,9 +24,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const post = posts[0];
 
+    /* ===== Judul ===== */
     const judul = document.querySelector('.judul-berita');
     if (judul) judul.innerHTML = post.title.rendered;
 
+    /* ===== Isi ===== */
     const isi = document.querySelector('.isi-berita');
     isi.innerHTML = post.content.rendered;
 
@@ -35,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!text) p.remove();
     });
 
+    /* ===== Normalisasi Link ===== */
     isi.querySelectorAll('a[href]').forEach(link => {
       let href = link.getAttribute('href');
       if (!href) return;
@@ -60,12 +66,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const parts = url.pathname.split('/').filter(Boolean);
-
         if (parts.length >= 2) {
-          const slugBerita = parts[parts.length - 1];
-          const kategori = parts[parts.length - 2];
-
-          link.href = `halaman.html?${kategori}/${slugBerita}`;
+          link.href = `halaman.html?${parts.at(-2)}/${parts.at(-1)}`;
           link.target = '_self';
           return;
         }
@@ -79,28 +81,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
+    /* ===== Gambar di Konten ===== */
     isi.querySelectorAll('img').forEach(img => {
       img.removeAttribute('width');
       img.removeAttribute('height');
-      img.style.maxWidth = '100%';
       img.style.width = '100%';
       img.style.height = 'auto';
       img.style.display = 'block';
-      img.style.objectFit = 'contain';
     });
 
-    isi.querySelectorAll('figure').forEach(figure => {
-      figure.style.maxWidth = '100%';
-      figure.style.width = '100%';
-      figure.style.margin = '1rem auto';
-
-      const img = figure.querySelector('img');
-      if (img) {
-        img.removeAttribute('width');
-        img.removeAttribute('height');
-        img.style.width = '100%';
-        img.style.height = 'auto';
-      }
+    isi.querySelectorAll('figure').forEach(f => {
+      f.style.width = '100%';
+      f.style.margin = '1rem auto';
     });
 
     isi.querySelectorAll('.alignleft, .alignright').forEach(el => {
@@ -108,16 +100,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       el.style.margin = '1rem auto';
     });
 
+    /* ===== Featured Image (tanpa embed) ===== */
     const gambar = document.querySelector('.gambar-berita');
-    if (gambar) {
-      gambar.src =
-        post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-        'image/default.jpg';
-      gambar.style.maxWidth = '100%';
-      gambar.style.width = '100%';
-      gambar.style.height = 'auto';
+    if (gambar && post.featured_media) {
+      fetch(`https://lampost.co/wp-json/wp/v2/media/${post.featured_media}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(m => {
+          if (!m) return;
+          gambar.src = m.source_url;
+          gambar.style.width = '100%';
+          gambar.style.height = 'auto';
+        })
+        .catch(() => {
+          gambar.src = 'image/default.jpg';
+        });
     }
 
+    /* ===== Tanggal ===== */
     const tanggal = document.getElementById('tanggal');
     if (tanggal) {
       tanggal.innerText = new Date(post.date).toLocaleDateString('id-ID', {
@@ -128,39 +127,47 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
+    /* ===== Editor (tanpa embed) ===== */
     const editorEl = document.getElementById('editor');
     if (editorEl) {
-      const editors = post._embedded?.['wp:term']?.[2] || [];
+      const termLink = post._links?.['wp:term']?.[2]?.href;
 
-      let editorText = '';
-      if (!editors.length) editorText = 'by Redaksi';
-      else if (editors.length === 1) editorText = `by ${editors[0].name}`;
-      else if (editors.length === 2)
-        editorText = `by ${editors[0].name} and ${editors[1].name}`;
-      else {
-        const allButLast = editors.slice(0, -1).map(e => e.name).join(', ');
-        const last = editors[editors.length - 1].name;
-        editorText = `by ${allButLast}, and ${last}`;
-      }
-
-      editorEl.innerText = editorText;
-
-      const parentMeta = editorEl.parentElement;
-      if (parentMeta) {
-        Array.from(parentMeta.childNodes).forEach(node => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            node.nodeValue = node.nodeValue.replace(/^\s*Oleh\s*/i, '');
-          }
-        });
+      if (!termLink) {
+        editorEl.innerText = 'by Redaksi';
+      } else {
+        fetch(termLink)
+          .then(r => r.ok ? r.json() : [])
+          .then(editors => {
+            if (!editors.length) {
+              editorEl.innerText = 'by Redaksi';
+            } else if (editors.length === 1) {
+              editorEl.innerText = `by ${editors[0].name}`;
+            } else if (editors.length === 2) {
+              editorEl.innerText =
+                `by ${editors[0].name} and ${editors[1].name}`;
+            } else {
+              const last = editors.pop().name;
+              editorEl.innerText =
+                `by ${editors.map(e => e.name).join(', ')}, and ${last}`;
+            }
+          })
+          .catch(() => {
+            editorEl.innerText = 'by Redaksi';
+          });
       }
     }
 
+    /* ===== Kategori ===== */
     const kategoriEl = document.getElementById('kategori');
-    if (kategoriEl) {
-      kategoriEl.innerText =
-        post._embedded?.['wp:term']?.[0]?.[0]?.name ||
-        kategoriSlug ||
-        'Berita';
+    if (kategoriEl && post.categories?.[0]) {
+      fetch(`https://lampost.co/wp-json/wp/v2/categories/${post.categories[0]}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(cat => {
+          kategoriEl.innerText = cat?.name || kategoriSlug || 'Berita';
+        })
+        .catch(() => {
+          kategoriEl.innerText = kategoriSlug || 'Berita';
+        });
     }
 
   } catch (err) {
