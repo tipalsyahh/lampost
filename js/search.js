@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   container.innerHTML = '<p>Sedang mencari berita...</p>';
 
-  /* ================= STATE ================= */
   let page = 1;
   let loading = false;
   let finished = false;
@@ -25,20 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const PER_PAGE = 10;
 
-  /* ================= CACHE ================= */
   const catCache = {};
   const mediaCache = {};
   const editorCache = {};
 
-  /* ================= DATA ================= */
   async function getCategory(post) {
     const id = post.categories?.[post.categories.length - 1];
     if (!id) return { name: 'Berita', slug: 'berita' };
     if (catCache[id]) return catCache[id];
 
-    const res = await fetch(
-      `https://lampost.co/wp-json/wp/v2/categories/${id}`
-    );
+    const res = await fetch(`https://lampost.co/wp-json/wp/v2/categories/${id}`);
     const data = await res.json();
 
     return (catCache[id] = {
@@ -52,9 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mediaCache[id]) return mediaCache[id];
 
     try {
-      const res = await fetch(
-        `https://lampost.co/wp-json/wp/v2/media/${id}`
-      );
+      const res = await fetch(`https://lampost.co/wp-json/wp/v2/media/${id}`);
       if (!res.ok) return null;
 
       const data = await res.json();
@@ -86,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return (editorCache[post.id] = editor);
   }
 
-  /* ================= RENDER ================= */
   function renderItem(post) {
     const judul = post.title.rendered;
     const tanggal = new Date(post.date).toLocaleDateString('id-ID');
@@ -121,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const img = await getMedia(post.featured_media);
 
     if (img) imgEl.src = img;
-    else imgEl.remove(); // 🔥 hanya image yang dihapus
+    else imgEl.remove();
 
     const { name: kategori, slug } = await getCategory(post);
     const editor = await getEditor(post);
@@ -131,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     el.querySelector('.editor').textContent = `By ${editor}`;
   }
 
-  /* ================= LOAD MORE ================= */
   async function loadMore() {
     if (loading || finished) return;
     loading = true;
@@ -148,6 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) {
         finished = true;
         btn.remove();
+        if (!hasRendered) {
+          container.innerHTML = `<p>Berita dengan kata kunci "<strong>${query}</strong>" tidak ditemukan.</p>`;
+        }
         return;
       }
 
@@ -156,13 +150,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!posts.length) {
         finished = true;
         btn.remove();
+        if (!hasRendered) {
+          container.innerHTML = `<p>Berita dengan kata kunci "<strong>${query}</strong>" tidak ditemukan.</p>`;
+        }
         return;
       }
 
       const filtered = posts.filter(post => {
         const title = post.title.rendered.toLowerCase();
-        const raw =
-          post.excerpt?.rendered || post.content?.rendered || '';
+        const raw = post.excerpt?.rendered || post.content?.rendered || '';
         const text = raw.replace(/(<([^>]+)>)/gi, '').toLowerCase();
         return title.includes(queryLower) || text.includes(queryLower);
       });
@@ -183,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       page++;
       btn.textContent = 'Load More';
-
     } catch (e) {
       console.error(e);
       btn.textContent = 'Gagal memuat';
@@ -192,12 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loading = false;
   }
 
-  /* ================= BUTTON ================= */
   const btn = document.createElement('button');
   btn.className = 'load-more';
   btn.textContent = 'Load More';
   btn.addEventListener('click', loadMore);
 
-  /* ================= INIT ================= */
   loadMore();
 });

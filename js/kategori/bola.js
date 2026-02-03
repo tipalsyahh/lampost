@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           return `
             <a href="../../halaman.html?${kategoriSlug}/${slug}" class="item-info">
-              <img src="${gambar}" alt="${judul}" loading="lazy">
+              <img src="${gambar}" alt="${judul}" loading="lazy" class="img-microweb">
               <div class="berita-microweb">
                 <p class="judul">${judul}</p>
                 <p class="kategori">${kategori}</p>
