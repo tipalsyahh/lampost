@@ -894,7 +894,7 @@ body {
 
 }
 
-@media (max-width: 847px) {
+@media (max-width: 827px) {
     .navbar-sub {
         display: flex;
         justify-content: flex-start;
@@ -960,5 +960,30 @@ body {
         }
 
     }
+
+}
+
+@media (max-width: 847px) {
+  .logo ul {
+    display: none;
+  }
+
+  .login-mobile,
+  .menu-mobile {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #000;
+    font-size: 20px;
+    gap: 5px;
+  }
+
+  .login {
+    display: none;
+  }
+
+  .hero-slider {
+    height: calc(100vh * 0.40);
+  }
 
 }

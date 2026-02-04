@@ -8,7 +8,8 @@
 .berita-microweb {
     width: 65%;
     padding: 10px;
-    overflow: hidden; /* ⬅️ kunci agar garis tidak keluar */
+    overflow: hidden;
+    /* ⬅️ kunci agar garis tidak keluar */
 
 }
 
@@ -322,7 +323,8 @@
 }
 
 .logo-microweb {
-    height: calc(100vh * 0.25);
+    width: 80%;
+    box-sizing: border-box;
 }
 
 .logo-bank-lampung {
@@ -616,7 +618,14 @@
 }
 
 @media (max-width: 847px) {
-    .logo ul {
-        display: none;
+    .footer-left img {
+        width: 90%;
+        box-sizing: border-box;
+    }
+
+    .footer-left p {
+        font-size: 14px;
+    line-height: 1.2;
+    hyphens: auto;
     }
 }
