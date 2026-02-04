@@ -36,10 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const res = await fetch(`https://lampost.co/wp-json/wp/v2/categories/${id}`);
     const data = await res.json();
 
-    return (catCache[id] = {
-      name: data.name,
-      slug: data.slug
-    });
+    return (catCache[id] = { name: data.name, slug: data.slug });
   }
 
   async function getMedia(id) {
@@ -140,7 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
         finished = true;
         btn.remove();
         if (!hasRendered) {
-          container.innerHTML = `<p>Berita dengan kata kunci "<strong>${query}</strong>" tidak ditemukan.</p>`;
+          container.innerHTML =
+            `<p>Berita "<strong>${query}</strong>" tidak ditemukan.</p>`;
         }
         return;
       }
@@ -151,7 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
         finished = true;
         btn.remove();
         if (!hasRendered) {
-          container.innerHTML = `<p>Berita dengan kata kunci "<strong>${query}</strong>" tidak ditemukan.</p>`;
+          container.innerHTML =
+            `<p>Berita "<strong>${query}</strong>" tidak ditemukan.</p>`;
         }
         return;
       }
@@ -163,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return title.includes(queryLower) || text.includes(queryLower);
       });
 
-      if (!hasRendered) container.innerHTML = '';
+      if (!hasRendered && filtered.length) container.innerHTML = '';
 
       if (filtered.length) {
         container.insertAdjacentHTML(
@@ -175,12 +174,16 @@ document.addEventListener('DOMContentLoaded', () => {
         hasRendered = true;
 
         if (!btn.isConnected) container.after(btn);
+      } else if (!hasRendered && page === 1) {
+        finished = true;
+        btn.remove();
+        container.innerHTML =
+          `<p>Berita "<strong>${query}</strong>" tidak ditemukan.</p>`;
       }
 
       page++;
       btn.textContent = 'Load More';
-    } catch (e) {
-      console.error(e);
+    } catch {
       btn.textContent = 'Gagal memuat';
     }
 

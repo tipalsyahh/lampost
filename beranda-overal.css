@@ -83,7 +83,6 @@
   height: 100%;
 }
 
-/* ===== CARD ===== */
 .hero-left,
 .hero-box {
   position: relative;
@@ -92,7 +91,6 @@
   display: flex;
   align-items: flex-end;
   contain: layout paint;
-  /* ⬅️ PENGUNCI UTAMA */
 }
 
 .hero-right h2 {
@@ -111,14 +109,19 @@
   object-fit: cover;
 }
 
-/* overlay */
 .hero-content {
-  position: relative;
-  z-index: 2;
   padding: 10px;
   width: 100%;
-  background: linear-gradient(to top, rgba(0, 0, 0, .6), transparent);
+  box-sizing: border-box;
+  z-index: 100;
+  position: relative;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    transparent
+  );
 }
+
 
 /* kiri */
 .hero-left {
@@ -127,7 +130,7 @@
 
 /* kanan */
 .hero-right {
-  width: 55%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -172,6 +175,7 @@
 .tanggal-slider {
   color: #fff;
   font-size: 12px;
+  margin-top: 0;
 }
 
 .ekonomi {
@@ -233,7 +237,6 @@
 .news-ticker {
   display: flex;
   align-items: center;
-  padding: 10px;
   color: #fff;
   font-size: 13px;
   overflow: hidden;

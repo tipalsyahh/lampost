@@ -645,6 +645,7 @@ body {
 .kategori {
     font-size: 12px;
     color: #DC0000;
+    margin-bottom: 0;
 }
 
 .tanggal {
@@ -673,9 +674,13 @@ body {
             #ad003e 83.33%,
             #a6004a 91.67%,
             #9d0058 100%);
+
     -webkit-background-clip: text;
+    background-clip: text;
+
     -webkit-text-fill-color: transparent;
 }
+
 
 .line-accent {
     width: 100%;
@@ -764,7 +769,7 @@ body {
 .card-terbaru {
     width: 100%;
     object-fit: cover;
-    height: calc(100vh * 0.40);
+    height: calc(100vh * 0.50);
 }
 
 @media (max-width: 768px) {
@@ -943,12 +948,29 @@ body {
         }
     }
 
+    @supports (-webkit-touch-callout: none) {
+
+        .navbar-sub {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        .navbar-sub ul li .sub-menu {
+            position: absolute;
+        }
+
+    }
+
     #btn-sidebar-search {
         flex: 1;
     }
 
     #input-sidebar {
         font-size: 12px;
+    }
+
+    .card-terbaru {
+        height: calc(100vh * 0.30);
     }
 
 }

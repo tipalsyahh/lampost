@@ -39,7 +39,11 @@
 }
 
 .isi-berita {
-    text-align: justify;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .baca-selengkapnya {
@@ -93,10 +97,6 @@
     }
 
     .detail-text p {
-        font-size: 12px;
-    }
-
-    .berita a {
         font-size: 12px;
     }
 

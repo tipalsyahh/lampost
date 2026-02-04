@@ -62,45 +62,64 @@ document.addEventListener('DOMContentLoaded', () => {
         editor = data?.[0]?.name || editor;
         editorCache[termLink] = editor;
       }
-    } catch (_) {}
+    } catch (_) { }
 
     return editor;
   }
 
-  // ⚡ RENDER CEPAT (DATA PELENGKAP MENYUSUL)
+  function killBorder(el) {
+    el.style.width = '100%';
+    el.style.boxSizing = 'border-box';
+    el.style.outline = 'none';
+    el.style.border = 'none';
+    el.style.boxShadow = 'none';
+    el.style.webkitTapHighlightColor = 'transparent';
+  }
+
+
   function renderFast(el, post) {
     const judul = post.title.rendered;
     const tanggal = formatTanggal(post.date);
-    const link = `halaman.html?berita/${post.slug}`;
     const id = `hero-${post.id}`;
 
-    // 🔥 tampil dulu
     el.innerHTML = `
-      <img src="image/ai.jpg" alt="${judul}" loading="lazy">
-      <a href="${link}" class="hero-content" id="${id}">
-        <p class="hero-category">...</p>
-        <h2 class="card-text">${judul}</h2>
-        <div class="detail-info">
-          <p class="editor-slider">By ...</p>
-          <p class="tanggal-slider">${tanggal}</p>
+      <a class="hero-link" id="${id}">
+        <img src="image/ai.jpg" alt="" loading="lazy">
+        <div class="hero-content">
+          <p class="hero-category">...</p>
+          <h2 class="card-text">${judul}</h2>
+          <div class="detail-info">
+            <p class="editor-slider">By ...</p>
+            <p class="tanggal-slider">${tanggal}</p>
+          </div>
         </div>
       </a>
     `;
 
-    // ⏳ data menyusul (non-blocking)
+    const linkEl = el.querySelector('.hero-link');
+    killBorder(linkEl);
+
     (async () => {
-      const img = await getMedia(post.featured_media);
+      const imgUrl = await getMedia(post.featured_media);
       const { name: kategori, slug } =
         await getCategory(post.categories?.[0]);
       const editor = await getEditor(post);
 
-      const a = el.querySelector('.hero-content');
-      if (!a) return;
+      const imgEl = el.querySelector('img');
+      if (!linkEl || !imgEl) return;
 
-      el.querySelector('img').src = img;
-      a.href = `halaman.html?${slug}/${post.slug}`;
-      a.querySelector('.hero-category').textContent = kategori;
-      a.querySelector('.editor-slider').textContent = `By ${editor}`;
+      const preload = new Image();
+      preload.src = imgUrl;
+
+      preload.onload = () => {
+        imgEl.src = imgUrl;
+        imgEl.alt = judul;
+        linkEl.href = `halaman.html?${slug}/${post.slug}`;
+        killBorder(linkEl);
+      };
+
+      linkEl.querySelector('.hero-category').textContent = kategori;
+      linkEl.querySelector('.editor-slider').textContent = `By ${editor}`;
     })();
   }
 
@@ -114,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const posts = await res.json();
       if (posts.length < 4) return;
 
-      // 🚀 PARALLEL RENDER (TIDAK SALING MENUNGGU)
       renderFast(heroLeft, posts[0]);
       renderFast(top1, posts[1]);
       renderFast(top2, posts[2]);

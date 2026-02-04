@@ -1,70 +1,87 @@
 const synth = window.speechSynthesis;
 let utterance = null;
 let isPlaying = false;
+let isMuted = true;
 
-function playVoice() {
-  synth.cancel();
-
+function getText() {
   const beritaEl = document.getElementById("berita");
-  if (!beritaEl) return;
+  if (!beritaEl) return "";
 
-  // Ambil semua teks dari #berita
-  // KECUALI yang punya class "home" ATAU "load-more"
-  const nodes = Array.from(beritaEl.childNodes);
-  let textBerita = '';
-
-  nodes.forEach(node => {
+  let text = "";
+  Array.from(beritaEl.childNodes).forEach(node => {
     if (
       node.nodeType === Node.ELEMENT_NODE &&
-      (node.classList.contains('home') || node.classList.contains('load-more'))
-    ) {
-      return; // abaikan elemen home & load-more
-    }
+      (node.classList.contains("home") || node.classList.contains("load-more"))
+    ) return;
 
-    textBerita += node.innerText || node.textContent || '';
+    text += node.innerText || node.textContent || "";
   });
 
-  if (!textBerita.trim()) return;
+  return text.trim();
+}
 
-  utterance = new SpeechSynthesisUtterance(textBerita);
+function playVoice() {
+  if (isMuted) return;
+
+  const text = getText();
+  if (!text) return;
+
+  if (synth.speaking || synth.pending) synth.cancel();
+
+  utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "id-ID";
 
-  synth.speak(utterance);
-  isPlaying = true;
+  utterance.onend = () => {
+    isPlaying = false;
+  };
 
-  const btn = document.getElementById("voiceToggle");
-  if (btn) {
-    btn.innerHTML = '<i class="bi bi-volume-up"></i>';
-  }
+  utterance.onerror = () => {
+    isPlaying = false;
+  };
+
+  synth.speak(utterance);
+  if (synth.paused) synth.resume();
+
+  isPlaying = true;
 }
 
 function stopVoice() {
-  synth.cancel();
+  if (synth.speaking || synth.pending) synth.cancel();
   isPlaying = false;
-
-  const btn = document.getElementById("voiceToggle");
-  if (btn) {
-    btn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
-  }
 }
 
-/* 🔥 WAJIB: DOMContentLoaded */
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("voiceToggle");
   if (!btn) return;
 
+  isMuted = true;
   stopVoice();
 
+  if (btn) {
+    btn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
+  }
+
   btn.addEventListener("click", () => {
-    if (isPlaying) {
-      stopVoice();
-    } else {
+    if (isMuted) {
+      isMuted = false;
+      if (btn) {
+        btn.innerHTML = '<i class="bi bi-volume-up"></i>';
+      }
       playVoice();
+    } else {
+      isMuted = true;
+      if (btn) {
+        btn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
+      }
+      stopVoice();
     }
   });
+
+  if (!synth.getVoices().length) {
+    synth.onvoiceschanged = () => {};
+  }
 });
 
-/* keamanan tambahan */
 window.addEventListener("beforeunload", () => synth.cancel());
 
 document.addEventListener("visibilitychange", () => {
