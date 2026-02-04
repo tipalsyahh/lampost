@@ -829,21 +829,6 @@ body {
         justify-content: center;
     }
 
-
-    .login {
-        display: none;
-    }
-
-    .login-mobile,
-    .menu-mobile {
-        display: block;
-        padding: 10px;
-        text-decoration: none;
-        color: #000;
-        font-size: 20px;
-        gap: 5px;
-    }
-
     .info {
         padding: 0;
     }
@@ -895,6 +880,21 @@ body {
         padding: 10px;
     }
 
+    #btn-sidebar-search {
+        flex: 1;
+    }
+
+    #input-sidebar {
+        font-size: 12px;
+    }
+
+    .card-terbaru {
+        height: calc(100vh * 0.30);
+    }
+
+}
+
+@media (max-width: 847px) {
     .navbar-sub {
         display: flex;
         justify-content: flex-start;
@@ -959,18 +959,6 @@ body {
             position: absolute;
         }
 
-    }
-
-    #btn-sidebar-search {
-        flex: 1;
-    }
-
-    #input-sidebar {
-        font-size: 12px;
-    }
-
-    .card-terbaru {
-        height: calc(100vh * 0.30);
     }
 
 }
