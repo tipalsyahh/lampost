@@ -980,8 +980,4 @@ body {
         display: none;
     }
 
-    .hero-slider {
-        height: calc(100vh * 0.40);
-    }
-
 }

@@ -453,3 +453,10 @@
     display: none;
   }
 }
+
+@media (max-width: 847px) {
+    .hero-slider {
+        height: calc(100vh * 0.40);
+    }
+
+}
