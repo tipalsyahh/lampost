@@ -1,20 +1,23 @@
 .container {
-  padding: 10px calc((100% - 1200px) / 2);
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
+    padding: 10px calc((100% - 1200px) / 2);
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
 }
 
 /* KONTEN UTAMA */
 .berita {
-  flex: 0 0 70%; /* grow | shrink | basis */
+    width: 63%;
+    overflow: hidden;
+    padding: 10px;
 }
 
 /* SIDEBAR / IKLAN */
 .iklan-detail {
-  flex: 1;
-  position: sticky;
-  top: 0px;
+    flex: 1;
+    position: sticky;
+    top: 0px;
+    padding: 10px;
 }
 
 .berita-detail {

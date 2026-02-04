@@ -512,6 +512,21 @@
     background: #fff;
 }
 
+.footer-left img {
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.footer-left p {
+    font-size: 14px;
+    line-height: 1.2;
+    hyphens: auto;
+}
+
+.footer-right h3 {
+    font-size: 14px;
+}
+
 @media (max-width: 768px) {
     .container-microweb {
         padding: 10px;
@@ -614,18 +629,5 @@
 
     .hero-overlay {
         justify-content: center;
-    }
-}
-
-@media (max-width: 847px) {
-    .footer-left img {
-        width: 90%;
-        box-sizing: border-box;
-    }
-
-    .footer-left p {
-        font-size: 14px;
-    line-height: 1.2;
-    hyphens: auto;
     }
 }
