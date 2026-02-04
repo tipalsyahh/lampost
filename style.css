@@ -910,7 +910,7 @@ body {
 
     .navbar-sub ul {
         display: flex;
-        gap: 16px;
+        gap: 22px;
         margin: 0;
         padding: 0;
         list-style: none;
