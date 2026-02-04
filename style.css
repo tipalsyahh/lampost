@@ -892,74 +892,72 @@ body {
         height: calc(100vh * 0.30);
     }
 
+    .navbar-sub {
+  display: flex;
+  justify-content: flex-start;
+  padding: 12px 16px;
+  gap: 16px;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
-@media (max-width: 827px) {
-    .navbar-sub {
-        display: flex;
-        justify-content: flex-start;
-        padding: 12px 16px;
-        gap: 16px;
+.navbar-sub::-webkit-scrollbar {
+  display: none;
+}
 
-        white-space: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
+.navbar-sub ul {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
+.navbar-sub ul li {
+  position: relative;
+}
 
-    .navbar-sub::-webkit-scrollbar {
-        display: none;
-    }
+.navbar-sub ul li .sub-menu {
+  position: fixed;
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  padding: 10px 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  z-index: 99999;
+}
 
-    .navbar-sub ul {
-        display: flex;
-        gap: 16px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
+.navbar-sub ul li:focus-within > .sub-menu {
+  display: flex;
+}
 
-    .navbar-sub ul li {
-        position: relative;
-    }
+@media (hover: hover) {
+  .navbar-sub ul li:hover > .sub-menu {
+    display: flex;
+  }
+}
 
-    .navbar-sub ul li .sub-menu {
-        position: fixed;
-        display: none;
-        flex-direction: column;
+.navbar-sub ul li.active > .sub-menu {
+  display: flex;
+}
 
-        min-width: 180px;
-        padding: 10px 0;
+@supports (-webkit-touch-callout: none) {
+  .navbar-sub {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        z-index: 9999;
-    }
+  .navbar-sub ul li .sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+}
 
-    .navbar-sub ul li:focus-within>.sub-menu {
-        display: flex;
-    }
-
-    @media (hover: hover) {
-        .navbar-sub ul li:hover>.sub-menu {
-            display: flex;
-        }
-    }
-
-    @supports (-webkit-touch-callout: none) {
-
-        .navbar-sub {
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-        }
-
-        .navbar-sub ul li .sub-menu {
-            position: absolute;
-        }
-
-    }
 
 }
 
