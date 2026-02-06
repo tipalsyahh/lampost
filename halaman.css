@@ -105,19 +105,26 @@
 }
 
 .ai-tags {
-    margin: 10px 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.ai-tags span {
-    background: #DC0000;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
+.ai-tags a {
+    color: #DC0000;
+    font-size: 15px;
     cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
+
+
 
 @media (max-width: 768px) {
     .container {

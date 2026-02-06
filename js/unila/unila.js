@@ -53,11 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const editor =
           post._embedded?.author?.[0]?.name || 'Redaksi';
-
-        /* =========================
-           📅 TANGGAL → ANGKA
-           FORMAT: DD/MM/YYYY
-        ========================= */
         const d = new Date(post.date);
         const day = String(d.getDate()).padStart(2, '0');
         const month = String(d.getMonth() + 1).padStart(2, '0');
