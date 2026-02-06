@@ -28,8 +28,10 @@
 }
 
 .gambar-berita {
-    width: 100%;
-    height: auto;
+    max-width: none !important;
+    height: calc(100vh * 0.60) !important;
+    display: block;
+    margin: auto;
 }
 
 .terbaru {
