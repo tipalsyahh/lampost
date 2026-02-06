@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const API =
     'https://lampost.co/wp-json/wp/v2/posts' +
-    '?orderby=date&order=desc&per_page=5' +
+    '?orderby=date&order=desc&per_page=15' +
     '&_fields=title,slug,categories';
 
   const catCache = {};

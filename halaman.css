@@ -104,6 +104,21 @@
     top: 10px;
 }
 
+.ai-tags {
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.ai-tags span {
+    background: #DC0000;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     .container {
         display: block;

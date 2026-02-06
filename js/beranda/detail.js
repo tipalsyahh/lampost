@@ -1,178 +1,179 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-  const berita = document.getElementById('berita');
-  if (!berita) return;
+const berita = document.getElementById('berita');
+if (!berita) return;
 
-  const query = decodeURIComponent(window.location.search.replace('?', ''));
-  const [kategoriSlug, slug] = query.split('/');
+const query = decodeURIComponent(window.location.search.replace('?', ''));
+const [kategoriSlug, slug] = query.split('/');
 
-  if (!slug) {
-    berita.innerHTML = '<p>Berita tidak ditemukan</p>';
-    return;
-  }
+if (!slug) {
+berita.innerHTML = '<p>Berita tidak ditemukan</p>';
+return;
+}
 
-  try {
-    const api =
-      `https://lampost.co/wp-json/wp/v2/posts` +
-      `?slug=${slug}&orderby=date&order=desc`;
+try {
 
-    const res = await fetch(api);
-    if (!res.ok) throw new Error('Gagal ambil berita');
+const api = `https://lampost.co/wp-json/wp/v2/posts?slug=${slug}&orderby=date&order=desc`;
+const res = await fetch(api);
+if (!res.ok) throw new Error('Gagal ambil berita');
 
-    const posts = await res.json();
-    if (!posts.length) throw new Error('Berita tidak ada');
+const posts = await res.json();
+if (!posts.length) throw new Error('Berita tidak ada');
 
-    const post = posts[0];
+const post = posts[0];
 
-    /* ===== Judul ===== */
-    const judul = document.querySelector('.judul-berita');
-    if (judul) judul.innerHTML = post.title.rendered;
+const judul = document.querySelector('.judul-berita');
+if (judul) judul.innerHTML = post.title.rendered;
 
-    /* ===== Isi ===== */
-    const isi = document.querySelector('.isi-berita');
-    isi.innerHTML = post.content.rendered;
+const isi = document.querySelector('.isi-berita');
+isi.innerHTML = post.content.rendered;
 
-    isi.querySelectorAll('p').forEach(p => {
-      const text = p.innerHTML
-        .replace(/&nbsp;/g, '')
-        .replace(/\s+/g, '')
-        .trim();
-      if (!text) p.remove();
-    });
+isi.querySelectorAll('p').forEach(p => {
+const text = p.innerHTML.replace(/&nbsp;/g,'').replace(/\s+/g,'').trim();
+if (!text) p.remove();
+});
 
-    /* ===== Normalisasi Link ===== */
-    isi.querySelectorAll('a[href]').forEach(link => {
-      let href = link.getAttribute('href');
-      if (!href) return;
+isi.querySelectorAll('a[href]').forEach(link => {
+let href = link.getAttribute('href');
+if (!href) return;
 
-      if (
-        href.startsWith('#') ||
-        href.startsWith('mailto:') ||
-        href.startsWith('tel:')
-      ) return;
+if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
 
-      try {
-        const url = href.startsWith('http')
-          ? new URL(href)
-          : new URL(href, 'https://lampost.co');
+try {
 
-        if (!url.hostname.includes('lampost.co')) return;
+const url = href.startsWith('http') ? new URL(href) : new URL(href,'https://lampost.co');
 
-        const search = url.searchParams.get('s');
-        if (search) {
-          link.href = `search.html?q=${encodeURIComponent(search)}`;
-          link.target = '_self';
-          return;
-        }
+if (!url.hostname.includes('lampost.co')) return;
 
-        const parts = url.pathname.split('/').filter(Boolean);
-        if (parts.length >= 2) {
-          link.href = `halaman.html?${parts.at(-2)}/${parts.at(-1)}`;
-          link.target = '_self';
-          return;
-        }
+const search = url.searchParams.get('s');
+if (search) {
+link.href = `search.html?q=${encodeURIComponent(search)}`;
+link.target = '_self';
+return;
+}
 
-        link.href = 'index.html';
-        link.target = '_self';
+const parts = url.pathname.split('/').filter(Boolean);
+if (parts.length >= 2) {
+link.href = `halaman.html?${parts.at(-2)}/${parts.at(-1)}`;
+link.target = '_self';
+return;
+}
 
-      } catch {
-        link.href = 'index.html';
-        link.target = '_self';
-      }
-    });
+link.href = 'index.html';
+link.target = '_self';
 
-    /* ===== Gambar di Konten ===== */
-    isi.querySelectorAll('img').forEach(img => {
-      img.removeAttribute('width');
-      img.removeAttribute('height');
-      img.style.width = '100%';
-      img.style.height = 'auto';
-      img.style.display = 'block';
-    });
+}catch{
+link.href = 'index.html';
+link.target = '_self';
+}
 
-    isi.querySelectorAll('figure').forEach(f => {
-      f.style.width = '100%';
-      f.style.margin = '1rem auto';
-    });
+});
 
-    isi.querySelectorAll('.alignleft, .alignright').forEach(el => {
-      el.style.float = 'none';
-      el.style.margin = '1rem auto';
-    });
+isi.querySelectorAll('img').forEach(img => {
+img.removeAttribute('width');
+img.removeAttribute('height');
+img.style.width='100%';
+img.style.height='auto';
+img.style.display='block';
+});
 
-    /* ===== Featured Image (tanpa embed) ===== */
-    const gambar = document.querySelector('.gambar-berita');
-    if (gambar && post.featured_media) {
-      fetch(`https://lampost.co/wp-json/wp/v2/media/${post.featured_media}`)
-        .then(r => r.ok ? r.json() : null)
-        .then(m => {
-          if (!m) return;
-          gambar.src = m.source_url;
-          gambar.style.width = '100%';
-          gambar.style.height = 'auto';
-        })
-        .catch(() => {
-          gambar.src = 'image/default.jpg';
-        });
-    }
+isi.querySelectorAll('figure').forEach(f=>{
+f.style.width='100%';
+f.style.margin='1rem auto';
+});
 
-    /* ===== Tanggal ===== */
-    const tanggal = document.getElementById('tanggal');
-    if (tanggal) {
-      tanggal.innerText = new Date(post.date).toLocaleDateString('id-ID', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-    }
+isi.querySelectorAll('.alignleft, .alignright').forEach(el=>{
+el.style.float='none';
+el.style.margin='1rem auto';
+});
 
-    /* ===== Editor (tanpa embed) ===== */
-    const editorEl = document.getElementById('editor');
-    if (editorEl) {
-      const termLink = post._links?.['wp:term']?.[2]?.href;
+const gambar=document.querySelector('.gambar-berita');
+if(gambar&&post.featured_media){
+fetch(`https://lampost.co/wp-json/wp/v2/media/${post.featured_media}`)
+.then(r=>r.ok?r.json():null)
+.then(m=>{
+if(!m)return;
+gambar.src=m.source_url;
+gambar.style.width='100%';
+gambar.style.height='auto';
+})
+.catch(()=>gambar.src='image/default.jpg');
+}
 
-      if (!termLink) {
-        editorEl.innerText = 'by Redaksi';
-      } else {
-        fetch(termLink)
-          .then(r => r.ok ? r.json() : [])
-          .then(editors => {
-            if (!editors.length) {
-              editorEl.innerText = 'by Redaksi';
-            } else if (editors.length === 1) {
-              editorEl.innerText = `by ${editors[0].name}`;
-            } else if (editors.length === 2) {
-              editorEl.innerText =
-                `by ${editors[0].name} and ${editors[1].name}`;
-            } else {
-              const last = editors.pop().name;
-              editorEl.innerText =
-                `by ${editors.map(e => e.name).join(', ')}, and ${last}`;
-            }
-          })
-          .catch(() => {
-            editorEl.innerText = 'by Redaksi';
-          });
-      }
-    }
+const tanggal=document.getElementById('tanggal');
+if(tanggal){
+tanggal.innerText=new Date(post.date).toLocaleDateString('id-ID',{
+weekday:'long',
+day:'numeric',
+month:'long',
+year:'numeric'
+});
+}
 
-    /* ===== Kategori ===== */
-    const kategoriEl = document.getElementById('kategori');
-    if (kategoriEl && post.categories?.[0]) {
-      fetch(`https://lampost.co/wp-json/wp/v2/categories/${post.categories[0]}`)
-        .then(r => r.ok ? r.json() : null)
-        .then(cat => {
-          kategoriEl.innerText = cat?.name || kategoriSlug || 'Berita';
-        })
-        .catch(() => {
-          kategoriEl.innerText = kategoriSlug || 'Berita';
-        });
-    }
+const editorEl=document.getElementById('editor');
+if(editorEl){
+const termLink=post._links?.['wp:term']?.[2]?.href;
+if(!termLink){
+editorEl.innerText='by Redaksi';
+}else{
+fetch(termLink)
+.then(r=>r.ok?r.json():[])
+.then(editors=>{
+if(!editors.length){
+editorEl.innerText='by Redaksi';
+}else if(editors.length===1){
+editorEl.innerText=`by ${editors[0].name}`;
+}else if(editors.length===2){
+editorEl.innerText=`by ${editors[0].name} and ${editors[1].name}`;
+}else{
+const last=editors.pop().name;
+editorEl.innerText=`by ${editors.map(e=>e.name).join(', ')}, and ${last}`;
+}
+})
+.catch(()=>editorEl.innerText='by Redaksi');
+}
+}
 
-  } catch (err) {
-    console.error(err);
-    berita.innerHTML = '<p>Gagal memuat berita</p>';
-  }
+const kategoriEl=document.getElementById('kategori');
+if(kategoriEl&&post.categories?.[0]){
+fetch(`https://lampost.co/wp-json/wp/v2/categories/${post.categories[0]}`)
+.then(r=>r.ok?r.json():null)
+.then(cat=>{
+kategoriEl.innerText=cat?.name||kategoriSlug||'Berita';
+})
+.catch(()=>kategoriEl.innerText=kategoriSlug||'Berita');
+}
+
+setTimeout(()=>{
+
+const isiBerita=document.querySelector(".isi-berita");
+const tagBox=document.getElementById("aiTags");
+if(!isiBerita||!tagBox)return;
+
+const stopWords=["yang","dan","di","ke","dari","ini","itu","untuk","pada","dengan","adalah","akan","juga","karena","oleh","sebagai","atau","dalam","para","tidak","telah"];
+
+let text=isiBerita.innerText.toLowerCase().replace(/[^\w\s]/g,"");
+let words=text.split(/\s+/).filter(w=>w.length>4&&!stopWords.includes(w));
+
+let freq={};
+words.forEach(w=>freq[w]=(freq[w]||0)+1);
+
+let tags=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,12).map(t=>t[0]);
+
+tagBox.innerHTML='';
+
+tags.forEach(tag=>{
+const a=document.createElement("a");
+a.href=`search.html?q=${encodeURIComponent(tag)}`;
+a.innerText="#"+tag;
+tagBox.appendChild(a);
+});
+
+},500);
+
+}catch(err){
+console.error(err);
+berita.innerHTML='<p>Gagal memuat berita</p>';
+}
 
 });
