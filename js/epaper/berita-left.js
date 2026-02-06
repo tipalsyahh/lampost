@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const detailContent = detailBox.querySelector('.detail-content');
   const detailAction = detailBox.querySelector('.detail-action');
 
-  // =============================
-  // 1️⃣ COBA API EPAPER (LOKAL)
-  // =============================
   try {
     const catRes = await fetch(
       'https://lampost.co/epaper/wp-json/wp/v2/categories?slug=e-paper'
@@ -33,15 +30,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!posts.length) throw new Error('Post kosong');
 
     renderFromAPI(posts);
-    return; // ⛔ STOP kalau API sukses
+    return;
 
   } catch (err) {
     console.warn('API epaper gagal, fallback ke RSS');
   }
 
-  // =============================
-  // 2️⃣ FALLBACK KE RSS (ONLINE)
-  // =============================
   try {
     const rssRes = await fetch('https://lampost.co/epaper/feed/');
     if (!rssRes.ok) throw new Error('RSS gagal');
@@ -61,9 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       '<p style="opacity:.7">E-paper tidak dapat dimuat saat ini</p>';
   }
 
-  // =============================
-  // 🔧 RENDER DARI API
-  // =============================
   function renderFromAPI(posts) {
     container.innerHTML = posts.map(post => {
       const img =
@@ -99,9 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     })));
   }
 
-  // =============================
-  // 🔧 RENDER DARI RSS
-  // =============================
   function renderFromRSS(items) {
     const posts = items.map(item => {
       const title = item.querySelector('title')?.textContent || '';
@@ -131,9 +119,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     initDetail(posts, true);
   }
 
-  // =============================
-  // ⭐ DETAIL & CLICK
-  // =============================
   function initDetail(posts, isRSS = false) {
     const random = posts[Math.floor(Math.random() * posts.length)];
 
@@ -160,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <a href="${
           isRSS
             ? card.dataset.link
-            : `koran.html?${card.dataset.kategori}|${card.dataset.slug}`
+            : `koran.html?${card.dataset.kategori}/${card.dataset.slug}`
         }" class="detail-btn">
           Baca Selengkapnya
         </a>

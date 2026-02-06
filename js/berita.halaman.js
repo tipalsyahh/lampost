@@ -1,23 +1,40 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
   const container = document.querySelector('.home');
-  const loadMoreBtn = document.getElementById('loadMore');
   if (!container) return;
+
+  const headerWrap = document.createElement('div');
+  headerWrap.innerHTML = `
+    <h2 class="judul-lainnya">BERITA LAINNYA</h2>
+    <div class="line-accent"></div>
+  `;
+  container.before(headerWrap);
+
+  const loadMoreBtn = document.createElement('button');
+  loadMoreBtn.id = 'loadMore';
+  loadMoreBtn.className = 'load-more';
+  loadMoreBtn.textContent = 'Load More';
+  loadMoreBtn.style.display = 'none';
+  loadMoreBtn.style.margin = '20px auto';
+  loadMoreBtn.style.display = 'block';
+
+  container.after(loadMoreBtn);
+
+  const titleEl = document.querySelector('.judul-lainnya');
+  const lineAccent = document.querySelector('.line-accent');
+
+  titleEl.style.display = 'none';
+  lineAccent.style.display = 'none';
+  loadMoreBtn.style.display = 'none';
 
   const PER_PAGE = 10;
   let page = 1;
   let isLoading = false;
   let hasMore = true;
 
-  /* ===============================
-     CACHE
-  =============================== */
   const mediaCache = {};
   const editorCache = {};
 
-  /* ===============================
-     AMBIL QUERY URL
-  =============================== */
   const query = decodeURIComponent(
     window.location.search.replace('?', '')
   );
@@ -27,9 +44,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   let kategoriId = null;
   let kategoriNama = kategoriSlug;
 
-  /* ===============================
-     AMBIL KATEGORI
-  =============================== */
   try {
     const catRes = await fetch(
       `https://lampost.co/wp-json/wp/v2/categories?slug=${kategoriSlug}`
@@ -43,9 +57,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  /* ===============================
-     GAMBAR
-  =============================== */
   async function getMedia(mediaId) {
     if (!mediaId) return 'image/ai.jpg';
     if (mediaCache[mediaId]) return mediaCache[mediaId];
@@ -67,9 +78,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  /* ===============================
-     EDITOR
-  =============================== */
   async function getEditor(post) {
     let editor = 'Redaksi';
 
@@ -90,9 +98,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     return editor;
   }
 
-  /* ===============================
-     LOAD POSTS
-  =============================== */
   async function loadPosts() {
     if (isLoading || !hasMore) return;
     isLoading = true;
@@ -107,17 +112,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const res = await fetch(api);
 
-      // 🔥 FIX ERROR 400
       if (!res.ok) {
         hasMore = false;
-        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+        loadMoreBtn.style.display = 'none';
         return;
       }
 
       const posts = await res.json();
       if (!posts.length) {
         hasMore = false;
-        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+        loadMoreBtn.style.display = 'none';
         return;
       }
 
@@ -144,7 +148,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           `${String(d.getMonth() + 1).padStart(2, '0')}/` +
           `${d.getFullYear()}`;
 
-        // ✅ GAMBAR LANGSUNG ADA
         output += `
           <a href="halaman.html?${kategoriSlug}/${slug}"
              class="item-info"
@@ -169,7 +172,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       container.insertAdjacentHTML('beforeend', output);
 
-      // 🔁 UPDATE GAMBAR + EDITOR SETELAH RENDER
+      titleEl.style.display = 'block';
+      lineAccent.style.display = 'block';
+      loadMoreBtn.style.display = 'block';
+
       posts.forEach(post => {
         const el = document.getElementById(`post-${post.id}`);
         if (!el) return;
@@ -194,8 +200,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   loadPosts();
-  if (loadMoreBtn) {
-    loadMoreBtn.addEventListener('click', loadPosts);
-  }
+  loadMoreBtn.addEventListener('click', loadPosts);
 
 });

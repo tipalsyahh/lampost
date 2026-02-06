@@ -28,9 +28,43 @@
 }
 
 .gambar-berita {
-    width: 100%;
-    height: auto;
-    margin: 10px 0;
+    max-width: none !important;
+    height: calc(100vh * 0.60) !important;
+    display: block;
+    margin: auto;
+}
+
+.terbaru {
+    margin-top: 10px;
+}
+
+.terbaru a {
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.item-microweb {
+    display: flex;
+    padding: 10px 0;
+    text-decoration: none;
+}
+
+.berita-microweb {
+    padding: 10px;
+    overflow: hidden;
+}
+
+.judul-terbaru {
+    font-size: 15px;
+    color: #000;
+    margin: 0 0 10px 0;
+}
+
+.img-terbaru-teknokrat {
+    width: 100px;
+    height: 100px;
+    display: block;
+    object-fit: cover;
 }
 
 .tanggal-berita {
@@ -39,11 +73,11 @@
 }
 
 .isi-berita {
-  text-align: justify;
-  text-justify: inter-word;
-  hyphens: auto;
-  overflow-wrap: break-word;
-  word-break: normal;
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    word-break: normal;
 }
 
 .baca-selengkapnya {
