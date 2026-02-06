@@ -1,29 +1,12 @@
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', () => {
 
-document.querySelectorAll('.navbar-sub ul li > a').forEach(a=>{
+  const nav = document.querySelector('.navbar-sub ul');
+  if (!nav) return;
 
-a.addEventListener('touchstart',e=>{
+  const spacer = document.createElement('li');
+  spacer.style.flex = '0 0 16px';
+  spacer.style.listStyle = 'none';
 
-const li=a.parentElement;
-const open=li.classList.contains('active');
-
-document.querySelectorAll('.navbar-sub li')
-.forEach(x=>x.classList.remove('active'));
-
-if(!open){
-e.preventDefault();
-li.classList.add('active');
-}
-
-},{passive:false});
-
-});
-
-document.addEventListener('touchstart',e=>{
-if(!e.target.closest('.navbar-sub')){
-document.querySelectorAll('.navbar-sub li')
-.forEach(x=>x.classList.remove('active'));
-}
-});
+  nav.appendChild(spacer);
 
 });
