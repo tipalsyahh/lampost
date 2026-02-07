@@ -460,4 +460,8 @@
         height: calc(100vh * 0.40);
     }
 
+    .info-microweb {
+      display: block;
+    }
+
 }

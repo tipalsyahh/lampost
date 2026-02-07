@@ -981,17 +981,27 @@ body {
     }
 
     @supports (-webkit-touch-callout: none) {
-        .navbar-sub {
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-        }
 
-        .navbar-sub ul li .sub-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-        }
+    .navbar-sub {
+        position: relative;
+        z-index: 9999;
     }
+
+    .navbar-sub ul li .sub-menu {
+        position: fixed;
+        top: auto;
+        left: auto;
+        transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
+        will-change: transform;
+    }
+
+    .navbar-sub ul li:focus-within > .sub-menu,
+    .navbar-sub ul li:active > .sub-menu {
+        display: flex;
+    }
+}
+
 
 
 }

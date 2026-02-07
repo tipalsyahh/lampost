@@ -321,7 +321,7 @@
 }
 
 .logo-microweb {
-    width: 60%;
+    width: calc(100% * 0.70);
     box-sizing: border-box;
 }
 
@@ -515,7 +515,8 @@
     box-sizing: border-box;
 }
 
-.footer-left p {
+.footer-left p,
+.footer-center {
     font-size: 14px;
     line-height: 1.2;
     hyphens: auto;
