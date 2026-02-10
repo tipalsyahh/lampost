@@ -12,7 +12,6 @@
 .img-unila {
   width: 100%;
   object-fit: cover;
-  height: 300px;
 }
 
 .judul-unila {
@@ -72,6 +71,7 @@
   position: relative;
   contain: layout paint;
   height: calc(100vh * 0.60);
+  margin-top: 10px;
 }
 
 .slider-dekstop {
@@ -335,6 +335,10 @@
 @media (max-width: 768px) {
   .berita-terbaru {
     margin-bottom: 15px;
+  }
+
+  .prestasi-terbaru a {
+    padding: 0;
   }
 
    .search-beranda {
