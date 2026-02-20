@@ -566,7 +566,7 @@ body {
     display: flex;
     align-items: stretch;
     border: 1px solid #e5e7eb;
-    max-width: 1200px;
+    max-width: calc(100% - (100% - 1200px));
     margin: auto;
     padding: 0 20px;
 }

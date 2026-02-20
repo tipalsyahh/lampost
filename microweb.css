@@ -22,6 +22,8 @@
 .img-microweb {
     width: 50%;
     object-fit: cover;
+    box-sizing: border-box;
+    height: 250px;
 }
 
 .terbaru {
