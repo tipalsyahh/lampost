@@ -95,6 +95,31 @@
     color: #d40000;
 }
 
+.more-btn {
+    grid-column: span 2;
+    justify-self: center;
+    padding: 10px;
+    border: none;
+    background: #d40000;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+
+.more-btn:hover {
+    transform: scale(1.1);
+}
+
+.extra-item {
+    display: none;
+}
+
+.extra-item.active {
+    display: flex;
+}
+
 @media (max-width: 768px) {
     .widget-grid {
         display: contents;
@@ -102,5 +127,10 @@
 
     .widget-item {
         margin: 10px 0;
+    }
+
+    .more-btn {
+        display: block;
+        margin: 10px auto;
     }
 }

@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </ul>
 
           <div class="card-footer">
-            <span>Lampost</span>
+            <span><img src="image/logo.png" class="icon-showcase";>Etalase</span>
             <span>${tanggal}</span>
           </div>
         </div>
