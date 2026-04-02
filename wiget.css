@@ -100,11 +100,11 @@
     justify-self: center;
     padding: 10px;
     border: none;
-    background: #d40000;
-    color: #fff;
+    color: #d40000;
+    font-weight: 400;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    background: transparent;
     transition: 0.3s;
 }
 
