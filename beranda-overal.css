@@ -330,6 +330,10 @@
     height: calc(100vh * 0.40);
   }
 
+  .info-microweb {
+    display: block;
+  }
+
 }
 
 @media (max-width: 768px) {
@@ -341,7 +345,7 @@
     padding: 0;
   }
 
-   .search-beranda {
+  .search-beranda {
     max-width: 100%;
   }
 
@@ -458,15 +462,4 @@
   .search-beranda {
     display: none;
   }
-}
-
-@media (max-width: 847px) {
-    .hero-slider {
-        height: calc(100vh * 0.60);
-    }
-
-    .info-microweb {
-      display: block;
-    }
-
 }
