@@ -462,7 +462,7 @@
 
 @media (max-width: 847px) {
     .hero-slider {
-        height: calc(100vh * 0.40);
+        height: calc(100vh * 0.60);
     }
 
     .info-microweb {
