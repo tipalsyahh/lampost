@@ -551,7 +551,7 @@
     }
 
     .judul {
-        font-size: 15px;
+        font-size: 13px;
     }
 
     .bener {
@@ -630,5 +630,9 @@
 
     .hero-overlay {
         justify-content: center;
+    }
+
+    .judul-terbaru {
+        font-size: 13px;
     }
 }

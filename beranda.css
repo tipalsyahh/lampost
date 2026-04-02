@@ -260,7 +260,7 @@
     opacity: 0;
 }
 
-.news-card-container:hover {
+.berita-terbaru:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
@@ -370,7 +370,7 @@
 .meta {
     font-size: 13px;
     color: #9ca3af;
-    margin: 0;
+    margin-top: 10px;
 }
 
 .berita-left {

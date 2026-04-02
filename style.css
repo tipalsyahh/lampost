@@ -1052,6 +1052,10 @@ body {
         list-style: none;
     }
 
+    .navbar-sub ul li a {
+        font-size: 13px;
+    }
+
     .navbar-sub ul li {
         position: relative;
     }
@@ -1081,6 +1085,16 @@ body {
 
     #link-mobile {
         display: block;
+    }
+
+    .news-title,
+    .deskripsi-unila-lanjutan,
+    .deskripsi-unila-lanjutan,
+    .judul-unila,
+    .deskripsi,
+    .judul-ekonomi,
+    .teknologi a p {
+        font-size: 13px;
     }
 }
 
