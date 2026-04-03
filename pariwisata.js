@@ -45,15 +45,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       const link = `halaman.html?${slug}/${post.slug}`;
 
       html += `
-        <a href="${link}" class="news-item">
-          <div class="news-thumb">
-            <img src="${gambar}" alt="">
-          </div>
-          <div class="news-content">
-            <div class="news-category">${kategori}</div>
-            <div class="news-title">${judul}</div>
-          </div>
-        </a>
+<a href="${link}" class="post-item">
+  <div class="post-thumb">
+    <img src="${gambar}" alt="">
+  </div>
+  <div class="post-content">
+    <div class="post-category">${kategori}</div>
+    <div class="post-title">${judul}</div>
+  </div>
+</a>
       `;
     }
 
