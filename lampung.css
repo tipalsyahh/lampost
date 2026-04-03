@@ -30,6 +30,10 @@
   flex: 1;
 }
 
+.news-info:hover *{
+  color: #DC0000 ;
+}
+
 .news-category {
   font-size: 12px;
   color: #888;

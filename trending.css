@@ -64,6 +64,11 @@
     flex: 1;
 }
 
+.lingkar-text:hover,
+.lingkar-text:hover * {
+  color: #DC0000;
+}
+
 .lingkar-text h4 {
     font-size: 14px;
     font-weight: 600;
@@ -96,7 +101,7 @@
     background: transparent;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 847px) {
     .lingkar-wrapper {
         flex-direction: column;
         height: 500px;

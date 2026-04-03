@@ -47,6 +47,10 @@
     font-size: 14px;
 }
 
+.berita-unila:hover * {
+    color: #DC0000;
+}
+
 .hukum a p,
 .opini a p,
 .teknologi a p {
@@ -352,7 +356,11 @@
 }
 
 .list-berita:hover .judul,
-.list-berita:hover .meta {
+.list-berita:hover .meta,
+.news-content:hover,
+.news-tags:hover,
+.news-desc:hover,
+.news-meta:hover {
     color: #DC0000;
 }
 

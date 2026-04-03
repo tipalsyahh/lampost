@@ -44,6 +44,10 @@
   margin-bottom: 8px;
 }
 
+.card-title:hover {
+  color: #d40000;
+}
+
 .card-desc {
   font-size: 13px;
   color: #555;
@@ -60,9 +64,8 @@
   margin-bottom: 6px;
 }
 
-/* 🔥 link related */
 .related-link {
-  text-decoration: none;
+  text-decoration: none !important;
   color: #333;
 }
 
@@ -89,6 +92,10 @@
   border: 1px solid #888;
   width: 15px;
   height: 15px;
+}
+
+.card-desc:hover {
+  color: #d40000;
 }
 
 @media (max-width: 768px) {

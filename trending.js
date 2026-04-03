@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
 
-    const catRes = await fetch('https://lampost.co/wp-json/wp/v2/categories?slug=teknologi');
+    const catRes = await fetch('https://lampost.co/wp-json/wp/v2/categories?slug=kesehatan');
     if (!catRes.ok) throw new Error('err');
 
     const catData = await catRes.json();
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="lingkar-wrapper">
         <div class="lingkar-bg"></div>
         <div class="lingkar-panel">
-          <h3>TEKNOLOGI</h3>
+          <h3>KESEHATAN</h3>
           <div class="lingkar-list">
             ${list}
           </div>

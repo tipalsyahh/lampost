@@ -25,6 +25,11 @@
   flex: 1;
 }
 
+.intl-content:hover,
+.intl-content:hover * {
+  color: #DC0000;
+}
+
 .intl-category {
   font-size: 13px;
   color: #777;

@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
 
         const catRes = await fetch(
-            'https://lampost.co/wp-json/wp/v2/categories?slug=humaniora'
+            'https://lampost.co/wp-json/wp/v2/categories?slug=internasional'
         );
         if (!catRes.ok) throw new Error();
 
