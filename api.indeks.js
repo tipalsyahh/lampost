@@ -272,18 +272,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 const link = `halaman.html?${catSlug}/${post.slug}`;
 
                 html += `
-<a href="${link}" class="item-berita">
-<img src="${img}">
-<div class="info-berita">
-<p class="judul">${title}</p>
-<p class="kategori">${catName}</p>
-<div class="detail-info">
-<p class="editor" data-editor="${termLink}">By Redaksi</p>
-<p class="tanggal">${date}</p>
-</div>
-</div>
-</a>
-`;
+                <a href="${link}" class="item-berita">
+                <img src="${img}">
+                <div class="info-berita">
+                <p class="judul">${title}</p>
+                <p class="kategori">${catName}</p>
+                <div class="detail-info">
+                <p class="editor" data-editor="${termLink}">By Redaksi</p>
+                <p class="tanggal">${date}</p>
+                </div>
+                </div>
+                </a>
+                `;
 
             });
 
