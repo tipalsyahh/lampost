@@ -168,6 +168,17 @@
   box-sizing: border-box;
 }
 
+.footer-right a,
+.footer-center p {
+  font-size: 14px;
+  line-height: 1.2;
+  hyphens: auto;
+}
+
+.footer-right h3 {
+  font-size: 14px;
+}
+
 .hero-category {
   background-color: #DC0000;
   padding: 5px 10px;
@@ -332,6 +343,11 @@
 
   .info-microweb {
     display: block;
+  }
+
+  .footer-right a,
+  .footer-center p {
+    font-size: 12px;
   }
 
 }
