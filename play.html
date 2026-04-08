@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lampung Post Update View</title>
+    <link rel="icon" href="image/logo.png" type="image/png">
+    <link rel="stylesheet" href="vidio-play.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="player-overlay">
+
+        <button class="close-btn" onclick="closeTab()">✕</button>
+
+        <div class="player-container">
+
+            <!-- VIDEO -->
+            <div class="video-box">
+                <iframe id="player" allow="autoplay; encrypted-media" allowfullscreen>
+                </iframe>
+            </div>
+
+            <!-- INFO -->
+            <div class="info-box">
+                <span class="label">Lampung Post Update</span>
+                <h2 id="video-title">Judul Video</h2>
+                <p id="video-desc">Deskripsi video...</p>
+
+                <div class="meta">
+                    <span>3 hari lalu</span>
+                    <a id="yt-link" target="_blank">Selengkapnya</a>
+                </div>
+
+                <div class="actions">
+                    <input type="text" id="video-url" readonly>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            const videos = {
+                1: {
+                    yt: "Fa5eARCeIx4",
+                    title: "PRABOWO BAWA Rp575 T! Investasi Jumbo dari Jepang-Korsel",
+                    desc: "Presiden Prabowo Subianto membawa oleh-oleh besar usai kunjungan luar negeri ke Jepang dan Korea Selatan."
+                },
+                2: {
+                    yt: "SJnACU2gw1A",
+                    title: "WFH BUKAN WFC! ASN DKI Terancam Sanksi",
+                    desc: "Pemerintah Provinsi DKI Jakarta menyiapkan sanksi tegas bagi aparatur sipil negara atau ASN yang menyalahgunakan kebijakan work from home."
+                },
+                3: {
+                    yt: "H9_xyNOTisE",
+                    title: "PERANG IRAN MEMANAS! Pasukan Elite AS Mulai Dikerahkan",
+                    desc: "Amerika Serikat dilaporkan mengerahkan ratusan pasukan operasi khusus ke kawasan tersebut, di tengah konflik yang terus memanas dengan Iran."
+                },
+                4: {
+                    yt: "6BrCwDpnfEA",
+                    title: "PRAJURIT TNI GUGUR! Diserang di Misi Perdamaian Lebanon",
+                    desc: "Seorang prajurit TNI yang tergabung dalam pasukan penjaga perdamaian Perserikatan Bangsa-Bangsa dilaporkan gugur akibat serangan di wilayah konflik tersebut."
+                },
+                5: {
+                    yt: "EQFQF39BaZg",
+                    title: "BSPJI LANDSCAPE",
+                    desc: "Selamat bertambah usia untuk Provinsi Lampung. Semoga semakin maju, berdaya saing, dan terus berkembang menjadi daerah yang unggul serta membanggakan."
+                },
+                6: {
+                    yt: "6SaPV6oIgKc",
+                    title: "Hoaks di Tengah Konflik Isu Kematian Netanyahu Viral",
+                    desc: "Perdana Menteri Israel, Benjamin Netanyahu, dikabarkan meninggal dunia setelah serangan balasan Iran dalam konflik yang terus memanas."
+                },
+                7: {
+                    yt: "15O2ZvOjHGk",
+                    title: "Rudal Anyar Iran Hantam Target AS dan Israel",
+                    desc: "Ketegangan di kawasan Timur Tengah kembali meningkat setelah Iran meluncurkan gelombang serangan menggunakan rudal generasi baru yang menargetkan wilayah Israel serta sejumlah pangkalan militer Amerika Serikat di kawasan tersebut."
+                },
+                8: {
+                    yt: "7QZXwzEKA5U",
+                    title: "Prabowo Instruksikan Pembangunan Storage Baru, Cadangan BBM Nasional Aman",
+                    desc: "Pemerintah memastikan cadangan bahan bakar minyak atau BBM nasional saat ini berada dalam kondisi aman. Namun di tengah dinamika geopolitik global dan potensi gangguan pasokan energi dunia, pemerintah juga menyiapkan langkah strategis untuk memperkuat ketahanan energi nasional."
+                },
+                9: {
+                    yt: "_THazAwNp8c",
+                    title: "Trump Kena Batunya Perang AS Israel vs Iran Dipandang Bawa Dampak Besar ke Amerika",
+                    desc: "Perang yang menghantam kawasan Timur Tengah antara Amerika Serikat (AS), Israel, dan Iran bukan hanya mengguncang negara-negara yang terlibat, tetapi juga diperkirakan bakal membawa dampak besar bagi Amerika Serikat sendiri..."
+                },
+                10: {
+                    yt: "NR1tC4SCUNM",
+                    title: "KPK Tangkap Bupati Pekalongan Fadia Arafiq dalam OTT Terkait Dugaan Korupsi Pengadaan",
+                    desc: "Komisi Pemberantasan Korupsi (KPK) kembali melakukan operasi tangkap tangan (OTT) pada Selasa (3/3/2026) yang menjaring Bupati Pekalongan, Fadia Arafiq, bersama sejumlah pihak terkait dugaan tindak pidana korupsi di lingkungan Pemerintah Kabupaten Pekalongan, Jawa Tengah."
+                }
+            };
+
+            const data = videos[id] || videos[1];
+
+            const iframe = document.getElementById('player');
+            const urlInput = document.getElementById('video-url');
+
+            iframe.src = `https://www.youtube-nocookie.com/embed/${data.yt}?autoplay=1`;
+
+            document.getElementById('video-title').textContent = data.title;
+            document.getElementById('video-desc').textContent = data.desc;
+            document.getElementById('yt-link').href =
+                `https://www.youtube.com/watch?v=${data.yt}`;
+
+            urlInput.value = `https://www.youtube.com/watch?v=${data.yt}`;
+
+            urlInput.addEventListener('click', () => {
+                urlInput.select();
+                document.execCommand('copy');
+            });
+
+        });
+    </script>
+    <script>
+        function closeTab() {
+            window.close();
+
+            // fallback kalau gagal
+            setTimeout(() => {
+                window.location.href = "index.html"; // ganti sesuai halaman kamu
+            }, 300);
+        }
+    </script>
+</body>
+
+</html>

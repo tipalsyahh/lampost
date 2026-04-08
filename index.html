@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="beranda.css">
+    <link rel="stylesheet" href="beranda-overal.css">
+    <link rel="icon" href="image/logo.png" type="image/png">
+    <link rel="canonical" href="https://lampost.co">
+    <link rel="stylesheet" href="lampung.css">
+    <link rel="stylesheet" href="internasional.css">
+    <link rel="stylesheet" href="wiget.css">
+    <link rel="stylesheet" href="showcase.css">
+    <link rel="stylesheet" href="trending.css">
+    <link rel="stylesheet" href="pariwisata.css">
+    <link rel="stylesheet" href="populer.css">
+    <link rel="stylesheet" href="vidio.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Lampost - Jendela Informasi Lampung</title>
+</head>
+
+<body>
+    <nav class="navbar-main">
+        <div class="navbar-padding">
+            <div class="logo">
+                <img src="image/lampost300.png (1).webp" alt="image" class="logo-img">
+                <ul>
+                    <li><a href="#" id="btnMenu">
+                            <i class="bi bi-list"></i> Menu
+                        </a></li>
+                    <li><a href="harian.html">E-paper</a></li>
+                    <li><a href="index.html">Beranda</a></li>
+                </ul>
+            </div>
+            <div class="button-user">
+                <a href="#" class="langganan">Langganan</a>
+                <a href="#" class="login"><i class="bi bi-person-circle"></i>Masuk</a>
+                <a href="#" class="login-mobile"><i class="bi bi-person-circle"></i></a>
+                <a href="#" id="btnMenu" class="menu-mobile">
+                    <i class="bi bi-list"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <nav class="navbar-sub">
+        <ul>
+            <li><a href="kategori/olahraga/bola.html">Bola</a></li>
+            <li class="has-sub">
+                <a href="#">Pendidikan</a>
+                <ul class="sub-menu">
+                    <li><a href="microweb/teknokrat.html">Universitas Teknokrat Indonesia</a></li>
+                    <li><a href="microweb/unila.html">Universitas Lampung</a></li>
+                    <li><a href="microweb/ubl.html">UBL</a></li>
+                    <li><a href="microweb/stiab.html">STIAB</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Kolom</a>
+                <ul class="sub-menu" id="kolom">
+                    <li><a href="kategori/opini.html">Opini</a></li>
+                    <li><a href="kategori/refleksi.html">Refleksi</a></li>
+                    <li><a href="kategori/nuansa.html">Nuansa</a></li>
+                    <li><a href="kategori/tajuk-lampung-post.html">Tajuk</a></li>
+                    <li><a href="kategori/forum-guru.html">Forum Guru</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Vidio</a>
+                <ul class="sub-menu" id="vidio">
+                    <li><a href="#">Breking New</a></li>
+                    <li><a href="kategori/vidio/bedah-tajuk.html">Bedah Tajuk</a></li>
+                    <li><a href="#">Economic Corner</a></li>
+                    <li><a href="#">Podcast</a></li>
+                </ul>
+            </li>
+            <li><a href="kategori/teknologi.html">Teknologi</a></li>
+            <li class="has-sub">
+                <a href="#">Ekonomi</a>
+                <ul class="sub-menu">
+                    <li><a href="microweb/bankindonesialampung.html">Bank Indonesia Lampung</a></li>
+                    <li><a href="microweb/bsi.html">Bank Syariah Indonesia</a></li>
+                    <li><a href="microweb/banklampung.html">Bank Lampung</a></li>
+                    <li><a href="kategori/otomotif.html">Otomotif</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="#">Lampung</a>
+                <ul class="sub-menu">
+                    <li><a href="kategori/lampung/bandar-lampung.html">Bandar Lampung</a></li>
+                    <li><a href="microweb/pemprovlampung.html">Pemprov Lampung</a></li>
+                    <li><a href="kategori/lampung/lampung-barat.html">Lampung Barat</a></li>
+                    <li><a href="kategori/lampung/lampung-timur.html">Lampung Timur</a></li>
+                </ul>
+            </li>
+            <li id="link-mobile"><a href="kategori/lampung/bandar-lampung.html">Bandar Lampung</a></li>
+            <li id="link-mobile"><a href="microweb/pemprovlampung.html">Pemprov Lampung</a></li>
+            <li id="link-mobile"><a href="kategori/lampung/lampung-barat.html">Lampung Barat</a></li>
+            <li id="link-mobile"><a href="kategori/lampung/lampung-timur.html">Lampung Timur</a></li>
+            <li><a href="#">Tokoh</a></li>
+            <li><a href="indeks.html">Indeks</a></li>
+        </ul>
+    </nav>
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <center>
+            <h2>MENU</h2>
+        </center>
+        <div class="search-sidebar" id="searchSidebar">
+            <div class="input-menu">
+                <input type="search" class="search-input" placeholder="Cari Artikel Disini.." aria-label="Search"
+                    id="input-sidebar">
+                <button type="button" class="search-btn" aria-label="Search" id="btn-sidebar-search">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="sidebar-isi">
+            <ul>
+                <li><a href="harian.html"><i class="bi bi-calendar3"></i> Epaper</a></li>
+                <li><a href="index.html"><i class="bi bi-house-door"></i> Beranda</a></li>
+                <li><a href="#"><i class="bi bi-newspaper"></i> Infografik</a></li></br>
+                <li class="menu-sidebar">
+                    <a href="#">
+                        <i class="bi bi-mortarboard"></i>
+                        <span class="menu-text">Pendidikan</span>
+                        <span class="icon-toggle">
+                            <i class="bi bi-chevron-down icon-down"></i>
+                            <i class="bi bi-chevron-up icon-up"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-sidebar">
+                        <li><a href="microweb/teknokrat.html">Universitas Teknokrat Indonesia</a></li>
+                        <li><a href="microweb/unila.html">Universitas Lampung</a></li>
+                        <li><a href="microweb/ubl.html">UBL</a></li>
+                        <li><a href="microweb/stiab.html">STIAB</a></li>
+                    </ul>
+                </li>
+                <li class="menu-sidebar">
+                    <a href="#">
+                        <i class="bi bi-newspaper"></i>
+                        <span class="menu-text">Kolom</span>
+                        <span class="icon-toggle">
+                            <i class="bi bi-chevron-down icon-down"></i>
+                            <i class="bi bi-chevron-up icon-up"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-sidebar">
+                        <li><a href="kategori/opini.html">Opini</a></li>
+                        <li><a href="kategori/refleksi.html">Refleksi</a></li>
+                        <li><a href="kategori/nuansa.html">Nuansa</a></li>
+                        <li><a href="kategori/tajuk-lampung-post.html">Tajuk</a></li>
+                        <li><a href="kategori/forum-guru.html">Forum Guru</a></li>
+                    </ul>
+                </li>
+                <li class="menu-sidebar">
+                    <a href="#">
+                        <i class="bi bi-camera-video"></i>
+                        <span class="menu-text">Vidio</span>
+                        <span class="icon-toggle">
+                            <i class="bi bi-chevron-down icon-down"></i>
+                            <i class="bi bi-chevron-up icon-up"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-sidebar">
+                        <li><a href="#">Breking New</a></li>
+                        <li><a href="kategori/vidio/bedah-tajuk.html">Bedah Tajuk</a></li>
+                        <li><a href="#">Economic Corner</a></li>
+                        <li><a href="#">Podcash</a></li>
+                    </ul>
+                </li>
+                <li class="menu-sidebar">
+                    <a href="#">
+                        <i class="bi bi-bank"></i>
+                        <span class="menu-text">Ekonomi</span>
+                        <span class="icon-toggle">
+                            <i class="bi bi-chevron-down icon-down"></i>
+                            <i class="bi bi-chevron-up icon-up"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-sidebar">
+                        <li><a href="microweb/bankindonesialampung.html">Bank Indonesia Lampung</a></li>
+                        <li><a href="microweb/bsi.html">Bank Syariah Indonesia</a></li>
+                        <li><a href="microweb/banklampung.html">Bank Lampung</a></li>
+                        <li><a href="kategori/otomotif.html">Otomotif</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <div class="news fade-in">
+        <div class="news-padding">
+            <div class="news-ticker">
+                <span class="ticker-label">TRENDING NOW</span>
+                <div class="ticker-content">
+                    <a href="#" class="ticker-text" id="tickerText">
+                        Memuat berita...
+                    </a>
+                </div>
+            </div>
+            <div class="search-beranda" id="searchBeranda">
+                <input type="text" class="search-input" placeholder="Cari Artikel Disini.." />
+                <button type="button" class="search-btn">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <section class="hero-slider fade-in">
+        <div class="slider-dekstop">
+            <div class="hero-track fade-in">
+                <article class="hero-left fade-in"></article>
+                <div class="hero-right fade-in">
+                    <div class="hero-right-bottom fade-in">
+                        <article class="hero-box bottom-1"></article>
+                    </div>
+                    <div class="hero-right-top fade-in">
+                        <article class="hero-box top-1"></article>
+                        <article class="hero-box top-2"></article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="slider-mobile">
+        <div class="hero-flex">
+            <div class="hero-main" id="hero-main"></div>
+            <div class="hero-sub">
+                <div class="hero-item" id="hero-sub-1"></div>
+                <div class="hero-item" id="hero-sub-2"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="iklan-gambar fade-in">
+        <a
+            href="https://news.google.com/publications/CAAqJAgKIh5DQklTRUFnTWFnd0tDbXhoYlhCdmMzUXVZMjhvQUFQAQ/sections/CAQifkNCSVNXRG9pWjJGeVlXMXZibVJmY0hWaWJHbHphR1Z5WDNObFkzUnBiMjVmWldScGRHbHZia0lhWjJGeVlXMXZibVJmY0hWaWJHbHphR1Z5WDNObFkzUnBiMjV5RmdvVUNoSkhRVkpCVFU5T1JGOUdWVXhNWDA1QlRVVW9BQSooCAAqJAgKIh5DQklTRUFnTWFnd0tDbXhoYlhCdmMzUXVZMjhvQUFQAVAB?ceid=ID:id&oc=3&hl=id&gl=ID">
+            <img src="image/atas.webp" alt="img" class="gambar">
+        </a>
+    </div>
+    <div class="container-beranda">
+        <div class="berita-beranda">
+            <div class="breaking-news fade-in">
+                <h2>Breaking News</h2>
+                <a href="kategori/breaking-news.html" class="btn-breaking">
+                    Selengkapnya <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+            <div class="line-accent"></div>
+            <div class="pariwisata news-grid fade-in">
+            </div>
+            <h2>Kriminal</h2>
+            <div class="kriminal">
+                <div class="berita-terbaru fade-in">
+                </div>
+                <center><a href="indeks.html" class="link-kriminal">Selengkapnya ›</a></center>
+            </div>
+            <h2>Showcase Lampung Post</h2>
+            <div class="showcase fade-in"></div>
+            <h2>Microsite</h2>
+            <div class="widget-carousel">
+                <div class="widget-track">
+
+                    <a href="microweb/teknokrat.html" class="widget-item">
+                        <img src="image/logo-uti.png" alt="">
+                        <h3>Universitas Teknokrat Indonesia</h3>
+                        <div class="data-microsite-teknokrat"></div>
+                    </a>
+
+                    <a href="#" class="widget-item">
+                        <img src="image/stiab-jinarakkhita.png" alt="">
+                        <h3>Sekolah Tinggi Ilmu Agama Budha</h3>
+                        <div class="data-microsite-stiab"></div>
+                    </a>
+
+                    <a href="kategori/lampung/bandar-lampung.html" class="widget-item active">
+                        <img src="image/balam.png" alt="">
+                        <h3>Pemkot Bandar Lampung</h3>
+                        <div class="data-microsite-bandarlampung"></div>
+                    </a>
+
+                    <a href="microweb/uin.html" class="widget-item">
+                        <img src="image/uin.png" alt="">
+                        <h3>Universitas Islam Negeri</h3>
+                        <div class="data-microsite-uin"></div>
+                    </a>
+
+                    <a href="microweb/unila.html" class="widget-item">
+                        <img src="image/logo_unila.png" alt="">
+                        <h3>Universitas Lampung</h3>
+                        <div class="data-microsite-unila"></div>
+                    </a>
+
+                    <a href="microweb/ubl.html" class="widget-item">
+                        <img src="image/ubl-hitam.png" alt="">
+                        <h3>Universitas Bandar Lampung</h3>
+                        <div class="data-microsite-ubl"></div>
+                    </a>
+
+                </div>
+
+                <button class="nav prev">&#10094;</button>
+                <button class="nav next">&#10095;</button>
+            </div>
+            <div class="internasional fade-in">
+                <h2>Internasional</h2>
+            </div>
+            <h2>Lampung Update</h2>
+            <div class="video-slider fade-in">
+                <div class="video-track">
+
+                    <a href="play.html?id=1" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/Fa5eARCeIx4/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 1</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=2" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/SJnACU2gw1A/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 2</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=3" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/H9_xyNOTisE/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 3</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=4" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/6BrCwDpnfEA/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 4</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=5" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/EQFQF39BaZg/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 5</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=6" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/6SaPV6oIgKc/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 6</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=7" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/15O2ZvOjHGk/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 7</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=8" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/7QZXwzEKA5U/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 8</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=9" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/_THazAwNp8c/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 9</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                    <a href="play.html?id=10" target="_blank" rel="noopener noreferrer" class="video-card">
+                        <img src="https://img.youtube.com/vi/NR1tC4SCUNM/hqdefault.jpg">
+                        <div class="play-center">▶</div>
+                        <div class="overlay">
+                            <h3>Video 10</h3>
+                            <div class="bottom"><span class="play">▶</span><span class="duration">--:--</span></div>
+                        </div>
+                    </a>
+
+                </div>
+
+                <button class="video-prev">&#10094;</button>
+                <button class="video-next">&#10095;</button>
+            </div>
+            <div class="lingkar-box fade-in"></div>
+            <h2>Berita Pilihan</h2>
+            <div class="info fade-in">
+            </div>
+            <div class="alink-wrapper fade-in">
+
+                <div class="alink-header">
+                    <span class="alink-icon"><i class="bi bi-graph-up-arrow"></i></span>
+                    <h3>Terpopuler</h3>
+                </div>
+
+                <div class="alink-list terpopuler"></div>
+
+                <div class="alink-footer">
+                    <a href="terpopuler.html">Selengkapnya ›</a>
+                </div>
+
+            </div>
+            <div class="berita-mobile fade-in">
+                <h2>Ekonomi Dan Bisnis</h2>
+                <div class="ekonomi fade-in">
+                </div>
+                <div class="teknologi fade-in">
+                    <h2>Teknologi</h2>
+                </div>
+            </div>
+        </div>
+        <div class="iklan fade-in">
+            <h2>E-paper</h2>
+            <div class="line-accent"></div>
+            <div class="tagar fade-in">
+                <a href="harian.html">
+                    <img src="image/EPAPER-LAMPUNG-POST-2024-01-01.webp" alt="img" class="epaper-image">
+                </a>
+            </div>
+            <h2>Hiburan</h2>
+            <div class="hiburan fade-in">
+            </div>
+            <div class="tagar fade-in">
+                <a href="#">
+                    <img src="image/ads_info_mudik-copy.webp" alt="img" class="epaper-image">
+                </a>
+            </div>
+            <div class="opini fade-in">
+                <h2>Kolom</h2>
+            </div>
+        </div>
+    </div>
+    <div class="berita-dua fade-in">
+        <div class="gaya-hidup">
+            <h2>Nasional</h2>
+            <div class="line-accent"></div>
+            <div class="prestasi fade-in">
+                <div class="prestasi-terbaru fade-in"></div>
+                <div class="prestasi-lanjutan fade-in"></div>
+            </div>
+        </div>
+        <div class="olahraga">
+            <h2>Olahraga</h2>
+            <div class="line-accent"></div>
+            <div class="sport">
+                <h2>Olahraga</h2>
+                <div class="line-accent"></div>
+            </div>
+            <div class="tagar fade-in">
+                <a href="harian.html">
+                    <img src="image/ads_zitline.webp" alt="img" class="epaper-image">
+                </a>
+            </div>
+            <h2>Humaniora</h2>
+            <div class="humaniora">
+            </div>
+        </div>
+    </div>
+    <!-- <div class="lampung fade-in">
+        <div class="lampung-populer">
+            <h2>KESEHATAN</h2>
+            <div class="line-accent"></div>
+            <div class="berita-terpopuler fade-in">
+
+            </div>
+        </div>
+    </div> -->
+    <div class="populer-mobile fade-in">
+        <h2>Olahraga Dan Hiburan</h2>
+        <div class="line-accent"></div>
+    </div>
+    <button id="backToTop"><i class="bi bi-arrow-up"></i></button>
+
+    <footer class="footer">
+        <div class="sosmed">
+            <a href="https://www.instagram.com/lampost.co/"><i class="bi bi-instagram"></i>Instagram</a>
+            <a href="https://www.facebook.com/lampungpostupdate"><i class="bi bi-facebook"></i>Fecebook</a>
+            <a href="https://x.com/lampungpost_"><i class="bi bi-twitter-x"></i></i>Twitter</a>
+            <a href="https://www.tiktok.com/@lampungpost_official"><i class="bi bi-tiktok"></i>Tiktok</a>
+            <a href="https://www.youtube.com/@lampungpostupdate"><i class="bi bi-youtube"></i>Youtube</a>
+        </div>
+        <div class="footer-container">
+
+            <div class="footer-left">
+                <center>
+                    <p>Affiliated with:</p>
+                    <img src="image/media.webp" alt="Logo">
+                </center>
+            </div>
+
+            <div class="footer-center">
+                <h4>Tentang Kami</h4>
+                <p>Alamat</p>
+                <p>Jl. Soekarno – Hatta No.108, Hajimena, Lampung Selatan</p>
+                <p>Email</p>
+                <p>redaksi@lampost.co</p>
+                <p>Telpon</p>
+                <p>(0721) 783693 (hunting), 773888 (redaksi)</p>
+            </div>
+
+            <div class="footer-right">
+                <h4>Sitemap</h4>
+                <a href="#">Beranda</a>
+                <a href="#">Tentang Kami</a>
+                <a href="#">Compro</a>
+                <a href="#">Ilkan</a>
+                <a href="#">Microsite</a>
+                <a href="#">RRS</a>
+                <a href="#">Pedoman Media Siber</a>
+            </div>
+        </div>
+
+        <!-- Footer bawah -->
+        <div class="footer-bottom">
+            <small>© 2026 Lampost.co - Media Group. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <script src="https://tipalsyahh.github.io/lampost-js/js/navbar.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/scrip.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/app.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/api.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/olahraga.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/slider.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/gaya.hidup.utama.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/gaya.hidup.lanjutan.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/hiburan.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/hukum.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/terbaru.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/populer.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/humaniora.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/opini.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/ekonomi.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/teknologi.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/berita.bawah.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/slider.mobile.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/treding.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/beranda/search-beranda.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/trending.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/showcase.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/corousel.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/internasional.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/pariwisata.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/miksosite/teknokrat.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/miksosite/stiab.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/miksosite/unila.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/miksosite/bandarlampung.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/miksosite/ubl.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/miksosite/uin.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/plus/popoler.js"></script>
+    <script src="vidio.js"></script>
+    <!-- <script src="coba.js"></script> -->
+     
+</body>
+
+</html>
