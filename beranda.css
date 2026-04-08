@@ -10,7 +10,8 @@
     width: 70%;
 }
 
-.hiburan {
+.hiburan,
+.opini {
     margin-bottom: 15px;
     border-bottom: 1px solid #e5e7eb;
 }
