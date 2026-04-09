@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="pariwisata.css">
     <link rel="stylesheet" href="populer.css">
     <link rel="stylesheet" href="vidio.css">
+    <link rel="stylesheet" href="icon-sosmed.css">
+    <link rel="stylesheet" href="stream.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Lampost - Jendela Informasi Lampung</title>
 </head>
@@ -282,22 +284,124 @@
                     <img src="image/EPAPER-LAMPUNG-POST-2024-01-01.webp" alt="img" class="epaper-image">
                 </a>
             </div>
-            <h2>Hiburan</h2>
-            <div class="hiburan fade-in">
-            </div>
-            <div class="tagar fade-in">
-                <a href="#">
-                    <img src="image/ads_info_mudik-copy.webp" alt="img" class="epaper-image">
-                </a>
-            </div>
-            <div class="opini fade-in">
-                <h2>Kolom</h2>
-            </div>
-            <div class="tagar fade-in">
-                <a href="harian.html">
-                    <img src="image/ads_zitline.webp" alt="img" class="epaper-image">
-                </a>
-            </div>
+            <a href="stream.html" target="_blank" style="text-decoration:none; color:inherit;">
+                <div class="music-card fade-in">
+
+                    <div class="cover">
+                        <img src="image/sai.webp" alt="">
+                        <div class="progress"></div>
+                    </div>
+
+                    <div class="time" id="time"></div>
+
+                    <div class="title">Sairadio</div>
+                    <div class="artist">Lampung Post</div>
+
+                    <div class="actions">
+                        <div class="icon"><img src="image/logo.png" alt=""></div>
+                        <div class="icon">⤴</div>
+                    </div>
+
+                    <div class="wave">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+
+                </div>
+                <h2>Hiburan</h2>
+                <div class="hiburan fade-in">
+                </div>
+                <div class="tagar fade-in">
+                    <a href="#">
+                        <img src="image/ads_info_mudik-copy.webp" alt="img" class="epaper-image">
+                    </a>
+                </div>
+                <div class="opini fade-in">
+                    <h2>Kolom</h2>
+                </div>
+                <div class="sosmed-icon fade-in">
+
+                    <div class="card" onclick="openLink('https://www.instagram.com/lampost.co/')">
+                        <div class="left">
+                            <div class="icon">
+                                <img src="https://cdn.simpleicons.org/instagram" alt="Instagram">
+                            </div>
+                            <div>
+                                <div class="name">Instagram</div>
+                                <div class="desc">lampost.co</div>
+                            </div>
+                        </div>
+                        <div class="right">→</div>
+                    </div>
+
+                    <div class="card" onclick="openLink('https://www.facebook.com/lampungpostupdate')">
+                        <div class="left">
+                            <div class="icon">
+                                <img src="https://cdn.simpleicons.org/facebook" alt="Facebook">
+                            </div>
+                            <div>
+                                <div class="name">Facebook</div>
+                                <div class="desc">lampungpostupdate</div>
+                            </div>
+                        </div>
+                        <div class="right">→</div>
+                    </div>
+
+                    <div class="card" onclick="openLink('https://x.com/lampungpost_')">
+                        <div class="left">
+                            <div class="icon">
+                                <img src="https://cdn.simpleicons.org/x" alt="X">
+                            </div>
+                            <div>
+                                <div class="name">X</div>
+                                <div class="desc">lampungpost_</div>
+                            </div>
+                        </div>
+                        <div class="right">→</div>
+                    </div>
+
+                    <div class="card" onclick="openLink('https://www.tiktok.com/@lampungpost_official')">
+                        <div class="left">
+                            <div class="icon">
+                                <img src="https://cdn.simpleicons.org/tiktok" alt="TikTok">
+                            </div>
+                            <div>
+                                <div class="name">TikTok</div>
+                                <div class="desc">lampungpost_official</div>
+                            </div>
+                        </div>
+                        <div class="right">→</div>
+                    </div>
+
+                    <div class="card" onclick="openLink('https://www.youtube.com/@lampungpostupdate')">
+                        <div class="left">
+                            <div class="icon">
+                                <img src="https://cdn.simpleicons.org/youtube" alt="YouTube">
+                            </div>
+                            <div>
+                                <div class="name">YouTube</div>
+                                <div class="desc">lampungpostupdate</div>
+                            </div>
+                        </div>
+                        <div class="right">→</div>
+                    </div>
+
+                </div>
+
+
+                <div class="tagar fade-in">
+                    <a href="harian.html">
+                        <img src="image/ads_zitline.webp" alt="img" class="epaper-image">
+                    </a>
+                </div>
         </div>
     </div>
     <div class="berita-dua fade-in">
@@ -417,6 +521,7 @@
     <script src="components/sidebar.js"></script>
     <script src="inculede.js"></script>
     <!-- <script src="coba.js"></script> -->
+    <script src="stream.js"></script>
 
 </body>
 

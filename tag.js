@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!container || !loadMoreBtn) return;
 
   const PER_PAGE = 6;
-  const MAX_PAGE = 6;
 
   let page = 1;
   let isLoading = false;
@@ -26,24 +25,23 @@ document.addEventListener('DOMContentLoaded', () => {
            `${d.getFullYear()}`;
   };
 
-  // 🔥 ambil tag dari URL
   const params = new URLSearchParams(window.location.search);
   tagName = params.get('q') || '';
 
   if (!tagName) {
     container.innerHTML = '<p>Tag tidak ditemukan</p>';
+    loadMoreBtn.style.display = 'none';
     return;
   }
 
-  // 🔥 set judul halaman
+  const format = tagName.charAt(0).toUpperCase() + tagName.slice(1);
+
+  document.title = `Berita "${format}" - Lampost`;
+
   if (judulTag) {
-    const format = tagName.charAt(0).toUpperCase() + tagName.slice(1);
     judulTag.innerText = `Berita "${format}"`;
   }
 
-  document.title = `Berita "${tagName}" - Lampost`;
-
-  // 🔥 ambil ID tag dari WP
   (async () => {
     try {
       const res = await fetch(
@@ -60,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch {
       container.innerHTML = '<p>Tag tidak tersedia</p>';
+      loadMoreBtn.style.display = 'none';
     }
   })();
 
@@ -117,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadPosts() {
-    if (isLoading || !hasMore || page > MAX_PAGE) {
+    if (isLoading || !hasMore) {
       loadMoreBtn.style.display = 'none';
       return;
     }
@@ -139,16 +138,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let posts = await res.json();
+      const posts = await res.json();
+
+      // 🔥 FIX UTAMA
+      if (posts.length < PER_PAGE) {
+        hasMore = false;
+        loadMoreBtn.style.display = 'none';
+      }
+
       if (!posts.length) {
         hasMore = false;
         loadMoreBtn.style.display = 'none';
         return;
       }
-
-      posts = posts.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
 
       const htmlArr = [];
 
@@ -175,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             deskripsi = deskripsi.slice(0, 150) + '...';
           }
 
-          const link = `../halaman.html?${kategoriSlug}/${slug}`;
+          const link = `halaman.html?${kategoriSlug}/${slug}`;
 
           htmlArr.push(`
             <a href="${link}" class="item-info">
@@ -200,6 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (err) {
       console.error(err);
+      hasMore = false;
+      loadMoreBtn.style.display = 'none';
     } finally {
       isLoading = false;
       loadMoreBtn.disabled = false;

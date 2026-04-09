@@ -12,9 +12,9 @@ const SIDEBAR = `
                 </ul>
             </div>
             <div class="button-user">
-                <a href="#" class="langganan">Langganan</a>
-                <a href="#" class="login"><i class="bi bi-person-circle"></i>Masuk</a>
-                <a href="#" class="login-mobile"><i class="bi bi-person-circle"></i></a>
+                <a href="https://lampost.co/epaper/produk/lampung-post-digital-premium/" class="langganan">Langganan</a>
+                <a href="https://lampost.co/epaper/my-account/?wcm_redirect_to=post&wcm_redirect_id=302927" class="login"><i class="bi bi-person-circle"></i>Masuk</a>
+                <a href="https://lampost.co/epaper/produk/lampung-post-digital-premium/" class="login-mobile"><i class="bi bi-person-circle"></i></a>
                 <a href="#" id="btnMenu" class="menu-mobile">
                     <i class="bi bi-list"></i>
                 </a>
@@ -88,8 +88,8 @@ const SIDEBAR = `
         </div>
         <div class="sidebar-isi">
             <ul>
-                <li><a href="../harian.html"><i class="bi bi-calendar3"></i> Epaper</a></li>
                 <li><a href="../index.html"><i class="bi bi-house-door"></i> Beranda</a></li>
+                <li><a href="../harian.html"><i class="bi bi-calendar3"></i> Epaper</a></li>
                 <li><a href="#"><i class="bi bi-newspaper"></i> Infografik</a></li></br>
                 <li class="menu-sidebar">
                     <a href="#">
