@@ -8,25 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../microweb.css">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../beranda.css">
-    <link rel="icon" href="../image/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="beranda.css">
+    <link rel="stylesheet" href="microweb.css">
+    <link rel="stylesheet" href="beranda-overal.css">
+    <link rel="icon" href="image/logo.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Lampost</title>
+    <title>Tag</title>
 </head>
 
 <body>
     <div id="sidebar-container"></div>
-    <div class="slider-microweb">
-        <div class="hero-slider">
-            <div class="hero-track"></div>
-            <div class="hero-dots"></div>
-        </div>
-    </div>
     <div class="container-microweb">
         <div class="berita-microweb">
-            <h2>BERITA TERKINI</h2>
+            <h2 id="judulTag">Berita</h2>
             <div class="line-accent"></div>
             <div class="berita-terbaru">
 
@@ -40,14 +35,14 @@
             </div>
         </div>
         <div class="iklan-parent">
-            <h2>KORAN DIGITAL</h2>
+            <h2>Koran Digital</h2>
             <div class="line-accent"></div>
             <div class="tagar">
-                <a href="../harian.html">
-                    <img src="../image/epaper-tekno.jpg" alt="img" class="epaper-image" id="epeper-microweb">
+                <a href="harian.html">
+                    <img src="image/showcase-350pxl2.gif" alt="img" class="epaper-image" id="epeper-microweb">
                 </a>
             </div>
-            <h2>BERITA TERKINI</h2>
+            <h2>Berita Terkini</h2>
             <div class="line-accent"></div>
             <div class="terbaru">
             </div>
@@ -67,12 +62,8 @@
             <div class="footer-left">
                 <center>
                     <p>Affiliated with:</p>
-                    <img src="../image/lampost300.png (1).webp" alt="Logo">
+                    <img src="../image/media.webp" alt="Logo">
                 </center>
-                <p>Microsite ini adalah laman berita kerja sama Harian Umum Lampung Post dengan Pemprov Lampung.
-                    Lampost.co adalah situs berita yang diterbitkan oleh PT. Suara Nada Alam Indah. NIB : 9120102863787
-                    yang berkedudukan di Lampung, tepatnya Gedung Lampung Post Jl. Soekarno – Hatta No.108, Hajimena,
-                    Lampung Selatan</p>
             </div>
 
             <div class="footer-center">
@@ -86,10 +77,14 @@
             </div>
 
             <div class="footer-right">
-                <center>
-                    <h3>PROVINSI LAMPUNG</h3>
-                    <img src="../image/Logo-Provinsi-Lampung-445x570-1.png" alt="image" class="logo-microweb">
-                </center>
+                <h4>Sitemap</h4>
+                <a href="#">Beranda</a>
+                <a href="#">Tentang Kami</a>
+                <a href="#">Compro</a>
+                <a href="#">Ilkan</a>
+                <a href="#">Microsite</a>
+                <a href="#">RRS</a>
+                <a href="#">Pedoman Media Siber</a>
             </div>
         </div>
 
@@ -98,15 +93,14 @@
             <small>© 2026 Lampost.co - Media Group. All rights reserved.</small>
         </div>
     </footer>
-
-
-    <script src="https://tipalsyahh.github.io/lampost-js/js/pemprov/lampung.js"></script>
-    <script src="https://tipalsyahh.github.io/lampost-js/js/pemprov/slider.js"></script>
-    <script src="https://tipalsyahh.github.io/lampost-js/js/pemprov/terbaru.js"></script>
+    
+    <script src="https://tipalsyahh.github.io/lampost-js/js/kategori/terbaru.js"></script>
+    <script src="https://tipalsyahh.github.io/lampost-js/js/kategori/search-kategori.js"></script>
     <script src="https://tipalsyahh.github.io/lampost-js/js/scrip.js"></script>
     <script src="https://tipalsyahh.github.io/lampost-js/js/navbar.js"></script>
-    <script src="../components/sidebar.kategori.microweb.js"></script>
-    <script src="../inculede.js"></script>
+    <script src="components/sidebar.js"></script>
+    <script src="inculede.js"></script>
+    <script src="tag.js"></script>
 </body>
 
 </html>
