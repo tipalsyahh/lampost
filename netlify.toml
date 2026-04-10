@@ -2,31 +2,6 @@
   functions = "netlify/functions"
 
 [[redirects]]
-  from = "/:slug.html"
-  to = "/:slug"
-  status = 301
-
-[[redirects]]
-  from = "/:slug"
-  to = "/:slug.html"
-  status = 200
-
-[[redirects]]
-  from = "/:path/:slug.html"
-  to = "/:path/:slug"
-  status = 301
-
-[[redirects]]
-  from = "/:path/:slug"
-  to = "/:path/:slug.html"
-  status = 200
-
-[[redirects]]
-  from = "/:path/:subpath/:slug.html"
-  to = "/:path/:subpath/:slug"
-  status = 301
-
-[[redirects]]
-  from = "/:path/:subpath/:slug"
-  to = "/:path/:subpath/:slug.html"
+  from = "/*"
+  to = "/halaman.html"
   status = 200
