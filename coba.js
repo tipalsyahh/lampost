@@ -1,208 +1,215 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
 
-  const berita = document.getElementById('berita');
-  if (!berita) return;
+  const container = document.querySelector('.home');
+  const loadMoreBtn = document.getElementById('loadMore');
+  const titleEl = document.querySelector('.berita-microweb h2');
 
-  const isLocal =
-    location.hostname === 'localhost' ||
-    location.hostname === '127.0.0.1' ||
-    location.protocol === 'file:';
+  if (!container || !loadMoreBtn) return;
 
-  let kategoriSlug, slug;
+  const PER_PAGE = 6;
+  const MAX_PAGE = 6;
 
-  if (window.location.search) {
-    const query = decodeURIComponent(window.location.search.substring(1) || '');
-    const parts = query.split('/').filter(Boolean);
-    if (parts.length >= 2) {
-      kategoriSlug = parts[0];
-      slug = parts.slice(1).join('/');
-    }
-  } else {
-    const path = window.location.pathname.replace('.html', '').split('/').filter(Boolean);
-    if (path.length >= 2) {
-      kategoriSlug = path[0];
-      slug = path.slice(1).join('/');
+  let page = 1;
+  let isLoading = false;
+  let hasMore = true;
+  let kategoriId = null;
+
+  const mediaCache = {};
+  const editorCache = {};
+
+  const formatTanggal = dateString => {
+    const d = new Date(dateString);
+    return `${String(d.getDate()).padStart(2, '0')}/` +
+      `${String(d.getMonth() + 1).padStart(2, '0')}/` +
+      `${d.getFullYear()}`;
+  };
+
+  const path = window.location.pathname.split('/').filter(Boolean);
+
+  let slugKategori = null;
+
+  if (path[0] === 'kategori' && path[1] === 'lampung') {
+    slugKategori = path[2] || null;
+  }
+
+  if (!slugKategori) {
+    const query = window.location.search.replace('?', '');
+    if (query) {
+      slugKategori = query;
     }
   }
 
-  if (!isLocal && window.location.search && kategoriSlug && slug) {
-    try {
-      const cleanUrl = `/${kategoriSlug}/${slug}`;
-      history.replaceState(null, '', cleanUrl);
-    } catch (e) { }
-  }
-
-  if (!slug) {
-    berita.innerHTML = '<p>Berita tidak ditemukan</p>';
+  if (!slugKategori) {
+    container.innerHTML = '<p>Kategori tidak valid</p>';
+    loadMoreBtn.style.display = 'none';
     return;
   }
 
-  try {
+  if (slugKategori.includes('.html')) {
+    slugKategori = slugKategori.replace('.html', '');
+  }
 
-    const api = `https://lampost.co/wp-json/wp/v2/posts?slug=${slug}&orderby=date&order=desc`;
-    const res = await fetch(api);
-    if (!res.ok) throw new Error();
+  const formatNama = slug => {
+    return slug
+      .split('-')
+      .map(k => k.charAt(0).toUpperCase() + k.slice(1))
+      .join(' ');
+  };
 
-    const posts = await res.json();
-    if (!posts.length) {
-      berita.innerHTML = '<p>Berita tidak ditemukan</p>';
+  if (titleEl) {
+    titleEl.textContent = `Berita ${formatNama(slugKategori)}`;
+  }
+
+  document.title = `${formatNama(slugKategori)} Archives`;
+
+  (async () => {
+    try {
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/categories?slug=${slugKategori}`
+      );
+      const data = await res.json();
+      kategoriId = data?.[0]?.id;
+
+      if (!kategoriId) {
+        container.innerHTML = '<p>Kategori tidak ditemukan</p>';
+        loadMoreBtn.style.display = 'none';
+        return;
+      }
+
+      loadPosts();
+    } catch {
+      container.innerHTML = '<p>Kategori tidak tersedia</p>';
+    }
+  })();
+
+  async function getMedia(mediaId) {
+    if (!mediaId) return '../image/ai.jpg';
+    if (mediaCache[mediaId]) return mediaCache[mediaId];
+
+    try {
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/media/${mediaId}`
+      );
+      const data = await res.json();
+
+      return (mediaCache[mediaId] =
+        data.media_details?.sizes?.full?.source_url ||
+        data.media_details?.sizes?.large?.source_url ||
+        data.source_url ||
+        '../image/ai.jpg'
+      );
+    } catch {
+      return '../image/ai.jpg';
+    }
+  }
+
+  async function getEditor(post) {
+    let editor = 'Redaksi';
+    const termLink = post._links?.['wp:term']?.[2]?.href;
+    if (!termLink) return editor;
+    if (editorCache[termLink]) return editorCache[termLink];
+
+    try {
+      const res = await fetch(termLink);
+      if (res.ok) {
+        const data = await res.json();
+        editor = data?.[0]?.name || editor;
+        editorCache[termLink] = editor;
+      }
+    } catch { }
+
+    return editor;
+  }
+
+  async function loadPosts() {
+
+    if (isLoading || !hasMore || page > MAX_PAGE) {
+      loadMoreBtn.style.display = 'none';
       return;
     }
 
-    const post = posts[0];
+    isLoading = true;
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.textContent = 'Loading...';
 
-    document.title = post.title.rendered + ' - Lampost';
+    try {
 
-    const judulEl = document.querySelector('.judul-berita');
-    if (judulEl) judulEl.innerHTML = post.title.rendered;
+      const res = await fetch(
+        `https://lampost.co/wp-json/wp/v2/posts` +
+        `?categories=${kategoriId}&per_page=${PER_PAGE}&page=${page}` +
+        `&orderby=date&order=desc`
+      );
 
-    const isi = document.querySelector('.isi-berita');
-    isi.innerHTML = post.content.rendered;
-
-    isi.querySelectorAll('p').forEach(p => {
-      const t = p.innerHTML.replace(/&nbsp;/g, '').replace(/\s+/g, '').trim();
-      if (!t) p.remove();
-    });
-
-    isi.querySelectorAll('a[href]').forEach(link => {
-      let href = link.getAttribute('href');
-      if (!href) return;
-      if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
-
-      try {
-        const url = href.startsWith('http') ? new URL(href) : new URL(href, 'https://lampost.co');
-        if (!url.hostname.includes('lampost.co')) return;
-
-        const search = url.searchParams.get('s');
-        if (search) {
-          link.href = `/search?q=${encodeURIComponent(search)}`;
-          link.target = '_self';
-          return;
-        }
-
-        const parts = url.pathname.split('/').filter(Boolean);
-        if (parts.length >= 2) {
-          link.href = `/${parts.at(-2)}/${parts.at(-1)}`;
-          link.target = '_self';
-          return;
-        }
-
-        link.href = '/';
-        link.target = '_self';
-      } catch {
-        link.href = '/';
-        link.target = '_self';
+      if (!res.ok) {
+        hasMore = false;
+        loadMoreBtn.style.display = 'none';
+        return;
       }
-    });
 
-    isi.querySelectorAll('img').forEach(img => {
-      img.removeAttribute('width');
-      img.removeAttribute('height');
-      img.style.width = '100%';
-      img.style.height = 'auto';
-      img.style.display = 'block';
-    });
+      const posts = await res.json();
 
-    isi.querySelectorAll('figure').forEach(f => {
-      f.style.width = '100%';
-      f.style.margin = '1rem auto';
-    });
+      if (!posts.length) {
+        hasMore = false;
+        loadMoreBtn.style.display = 'none';
+        return;
+      }
 
-    isi.querySelectorAll('.alignleft,.alignright').forEach(el => {
-      el.style.float = 'none';
-      el.style.margin = '1rem auto';
-    });
+      const htmlArr = [];
 
-    const gambar = document.querySelector('.gambar-berita');
-    if (gambar && post.featured_media) {
-      fetch(`https://lampost.co/wp-json/wp/v2/media/${post.featured_media}`)
-        .then(r => r.ok ? r.json() : null)
-        .then(m => {
-          if (!m) return;
-          gambar.src = m.source_url;
-          gambar.style.width = '100%';
-          gambar.style.height = 'auto';
-        })
-        .catch(() => gambar.src = '/image/default.jpg');
-    }
+      posts.forEach(post => {
 
-    const tanggal = document.getElementById('tanggal');
-    if (tanggal) {
-      tanggal.innerText = new Date(post.date).toLocaleDateString('id-ID', {
-        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        const id = `post-${post.id}`;
+        const judul = post.title.rendered;
+        const slug = post.slug;
+        const tanggal = formatTanggal(post.date);
+
+        let deskripsi =
+          post.excerpt?.rendered?.replace(/<[^>]+>/g, '').trim() || '';
+
+        if (deskripsi.length > 150) {
+          deskripsi = deskripsi.slice(0, 150) + '...';
+        }
+
+        htmlArr.push(`
+          <a href="../halaman.html?${slugKategori}/${slug}" class="item-info" id="${id}">
+            <img src="../image/ai.jpg" class="img-microweb" loading="lazy">
+            <div class="berita-microweb">
+              <p class="judul">${judul}</p>
+              <p class="kategori">${formatNama(slugKategori)}</p>
+              <div class="info-microweb">
+                <p class="editor">By ...</p>
+                <p class="tanggal">${tanggal}</p>
+              </div>
+              <p class="deskripsi">${deskripsi}</p>
+            </div>
+          </a>
+        `);
+
+        (async () => {
+          const img = await getMedia(post.featured_media);
+          const editor = await getEditor(post);
+
+          const el = document.getElementById(id);
+          if (!el) return;
+
+          el.querySelector('img').src = img;
+          el.querySelector('.editor').textContent = `By ${editor}`;
+        })();
+
       });
+
+      container.insertAdjacentHTML('beforeend', htmlArr.join(''));
+      page++;
+
+    } catch (e) {
+      console.error(e);
+    } finally {
+      isLoading = false;
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = 'Load More';
     }
-
-    // 🔥 FIX EDITOR (AMBIL DARI WP TERM CUSTOM)
-    const editorEl = document.getElementById('editor');
-    if (editorEl) {
-
-      const termLink = post._links?.['wp:term']?.find(t =>
-        !['category', 'post_tag'].includes(t.taxonomy)
-      )?.href;
-
-      if (!termLink) {
-        editorEl.innerText = 'oleh Redaksi';
-      } else {
-        fetch(termLink)
-          .then(r => r.ok ? r.json() : [])
-          .then(editors => {
-            if (!editors.length) {
-              editorEl.innerText = 'oleh Redaksi';
-            } else if (editors.length === 1) {
-              editorEl.innerText = `oleh ${editors[0].name}`;
-            } else {
-              const last = editors.pop().name;
-              editorEl.innerText = `oleh ${editors.map(e => e.name).join(', ')}, dan ${last}`;
-            }
-          })
-          .catch(() => editorEl.innerText = 'oleh Redaksi');
-      }
-    }
-
-    const kategoriEl = document.getElementById('kategori');
-    if (kategoriEl && post.categories?.[0]) {
-      fetch(`https://lampost.co/wp-json/wp/v2/categories/${post.categories[0]}`)
-        .then(r => r.ok ? r.json() : null)
-        .then(cat => kategoriEl.innerText = cat?.name || kategoriSlug || 'Berita')
-        .catch(() => kategoriEl.innerText = kategoriSlug || 'Berita');
-    }
-
-    // 🔥 FIX TAG → tag.html
-    setTimeout(() => {
-
-      const tagBox = document.getElementById("aiTags");
-      if (!tagBox) return;
-
-      const tagLink = post._links?.['wp:term']?.find(t => t.taxonomy === 'post_tag')?.href;
-      if (!tagLink) return;
-
-      fetch(tagLink)
-        .then(r => r.ok ? r.json() : [])
-        .then(tags => {
-
-          tagBox.innerHTML = '';
-
-          tags.forEach(tag => {
-
-            const a = document.createElement("a");
-
-            a.href = `tag.html?q=${encodeURIComponent(tag.name)}`;
-            a.innerText = tag.name;
-            a.title = tag.name;
-
-            tagBox.appendChild(a);
-
-          });
-
-        })
-        .catch(() => { });
-
-    }, 500);
-
-  } catch (err) {
-    console.error(err);
-    berita.innerHTML = '<p>Gagal memuat berita</p>';
   }
+
+  loadMoreBtn.addEventListener('click', loadPosts);
 
 });

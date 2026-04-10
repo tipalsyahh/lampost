@@ -7,14 +7,14 @@ const SIDEBAR = `
                     <li><a href="#" id="btnMenu">
                             <i class="bi bi-list"></i> Menu
                         </a></li>
-                    <li><a href="../harian.html">E-paper</a></li>
-                    <li><a href="../index.html">Beranda</a></li>
+                    <li><a href="../harian">E-paper</a></li>
+                    <li><a href="../index">Beranda</a></li>
                 </ul>
             </div>
             <div class="button-user">
-                <a href="https://lampost.co/epaper/produk/lampung-post-digital-premium/" class="langganan">Langganan</a>
-                <a href="https://lampost.co/epaper/my-account/?wcm_redirect_to=post&wcm_redirect_id=302927" class="login"><i class="bi bi-person-circle"></i>Masuk</a>
-                <a href="https://lampost.co/epaper/produk/lampung-post-digital-premium/" class="login-mobile"><i class="bi bi-person-circle"></i></a>
+                <a href="#" class="langganan">Langganan</a>
+                <a href="#" class="login"><i class="bi bi-person-circle"></i>Masuk</a>
+                <a href="#" class="login-mobile"><i class="bi bi-person-circle"></i></a>
                 <a href="#" id="btnMenu" class="menu-mobile">
                     <i class="bi bi-list"></i>
                 </a>
@@ -23,52 +23,64 @@ const SIDEBAR = `
     </nav>
     <nav class="navbar-sub">
         <ul>
-            <li><a href="olahraga/bola.html">Bola</a></li>
-            <li><a href="../pendidikan.html">Pendidikan</a></li>
+            <li><a href="../kategori/olahraga/bola">Bola</a></li>
+            <li><a href="kategori/pendidikan">Pendidikan</a></li>
             <li class="has-sub">
                 <a href="#">Kolom</a>
                 <ul class="sub-menu" id="kolom">
-                    <li><a href="opini.html">Opini</a></li>
-                    <li><a href="refleksi.html">Refleksi</a></li>
-                    <li><a href="nuansa.html">Nuansa</a></li>
-                    <li><a href="tajuk-lampung-post.html">Tajuk</a></li>
-                    <li><a href="forum-guru.html">Forum Guru</a></li>
+                    <li><a href="../kategori/opini">Opini</a></li>
+                    <li><a href="../kategori/refleksi">Refleksi</a></li>
+                    <li><a href="../kategori/nuansa">Nuansa</a></li>
+                    <li><a href="../kategori/tajuk-lampung-post">Tajuk</a></li>
+                    <li><a href="../kategori/forum-guru">Forum Guru</a></li>
                 </ul>
             </li>
             <li class="has-sub">
                 <a href="#">Vidio</a>
                 <ul class="sub-menu" id="vidio">
                     <li><a href="#">Breking New</a></li>
-                    <li><a href="../kategori/vidio/bedah-tajuk.html">Bedah Tajuk</a></li>
+                    <li><a href="../kategori/vidio/bedah-tajuk">Bedah Tajuk</a></li>
                     <li><a href="#">Economic Corner</a></li>
                     <li><a href="#">Podcast</a></li>
                 </ul>
             </li>
-            <li><a href="teknologi.html">Teknologi</a></li>
+            <li><a href="../kategori/teknologi">Teknologi</a></li>
             <li class="has-sub">
                 <a href="#">Ekonomi</a>
                 <ul class="sub-menu">
-                    <li><a href="../microweb/bankindonesialampung.html">Bank Indonesia Lampung</a></li>
-                    <li><a href="../microweb/bsi.html">Bank Syariah Indonesia</a></li>
-                    <li><a href="../microweb/banklampung.html">Bank Lampung</a></li>
-                    <li><a href="otomotif.html">Otomotif</a></li>
+                    <li><a href="bankindonesialampung">Bank Indonesia Lampung</a></li>
+                    <li><a href="bsi">Bank Syariah Indonesia</a></li>
+                    <li><a href="banklampung">Bank Lampung</a></li>
+                    <li><a href="../kategori/otomotif">Otomotif</a></li>
                 </ul>
             </li>
             <li class="has-sub">
                 <a href="#">Lampung</a>
                 <ul class="sub-menu">
-                    <li><a href="lampung/bandar-lampung.html">Bandar Lampung</a></li>
-                    <li><a href="../microweb/pemprovlampung.html">Pemprov Lampung</a></li>
-                    <li><a href="lampung/lampung-barat.html">Lampung Barat</a></li>
-                    <li><a href="lampung/lampung-timur.html">Lampung Timur</a></li>
+                    <li><a href="../kategori/lampung/bandar-lampung">Bandar Lampung</a></li>
+                    <li><a href="pemprovlampung">Pemprov Lampung</a></li>
+                    <li><a href="../kategori/lampung/lampung-barat">Lampung Barat</a></li>
+                    <li><a href="../kategori/lampung/lampung-timur">Lampung Timur</a></li>
+                    <li><a href="../kategori/lampung/l/lampung-selatan">Lampung Selatan</a></li>
+                    <li><a href="../kategori/lampung/l/lampung-tengah">Lampung Tengah</a></li>
+                    <li><a href="../kategori/lampung/l/lampung-utara">Lampung Utara</a></li>
+                    <li><a href="../kategori/lampung/l/pringsewu">Pringsewu</a></li>
+                    <li><a href="../kategori/lampung/l/pesawaran">Pesawaran</a></li>
+                    <li><a href="../kategori/lampung/l/mesuji">Mesuji</a></li>
+                    <li><a href="../kategori/lampung/l/tanggamus">Tanggamus</a></li>
+                    <li><a href="../kategori/lampung/l/metro">Metro</a></li>
+                    <li><a href="../kategori/lampung/l/tulang-bawang">Tulang Bawang</a></li>
+                    <li><a href="../kategori/lampung/l/tulang-bawang-barat">Tulang Bawang Barat</a></li>
+                    <li><a href="../kategori/lampung/l/way-kanan">Way Kanan</a></li>
+                    <li><a href="../kategori/lampung/l/pesisir-barat">Pesisir Barat</a></li>
                 </ul>
             </li>
-            <li id="link-mobile"><a href="lampung/bandar-lampung.html">Bandar Lampung</a></li>
-            <li id="link-mobile"><a href="../microweb/pemprovlampung.html">Pemprov Lampung</a></li>
-            <li id="link-mobile"><a href="lampung/lampung-barat.html">Lampung Barat</a></li>
-            <li id="link-mobile"><a href="lampung/lampung-timur.html">Lampung Timur</a></li>
+            <li id="link-mobile"><a href="../kategori/lampung/bandar-lampung">Bandar Lampung</a></li>
+            <li id="link-mobile"><a href="pemprovlampung">Pemprov Lampung</a></li>
+            <li id="link-mobile"><a href="../kategori/lampung/lampung-barat">Lampung Barat</a></li>
+            <li id="link-mobile"><a href="../kategori/lampung/lampung-timur">Lampung Timur</a></li>
             <li><a href="#">Tokoh</a></li>
-            <li><a href="../indeks.html">Indeks</a></li>
+            <li><a href="../indeks">Info Top</a></li>
         </ul>
     </nav>
     <div id="overlay" class="overlay"></div>
@@ -88,8 +100,8 @@ const SIDEBAR = `
         </div>
         <div class="sidebar-isi">
             <ul>
-                <li><a href="../index.html"><i class="bi bi-house-door"></i> Beranda</a></li>
-                <li><a href="../harian.html"><i class="bi bi-calendar3"></i> Epaper</a></li>
+                <li><a href="../harian"><i class="bi bi-calendar3"></i> Epaper</a></li>
+                <li><a href="../index"><i class="bi bi-house-door"></i> Beranda</a></li>
                 <li><a href="#"><i class="bi bi-newspaper"></i> Infografik</a></li></br>
                 <li class="menu-sidebar">
                     <a href="#">
@@ -101,10 +113,10 @@ const SIDEBAR = `
                         </span>
                     </a>
                     <ul class="dropdown-sidebar">
-                        <li><a href="../microweb/teknokrat.html">Universitas Teknokrat Indonesia</a></li>
-                        <li><a href="../microweb/unila.html">Universitas Lampung</a></li>
-                        <li><a href="../microweb/ubl.html">UBL</a></li>
-                        <li><a href="../microweb/stiab.html">STIAB</a></li>
+                        <li><a href="teknokrat">Universitas Teknokrat Indonesia</a></li>
+                        <li><a href="unila">Universitas Lampung</a></li>
+                        <li><a href="ubl">UBL</a></li>
+                        <li><a href="stiab">STIAB</a></li>
                     </ul>
                 </li>
                 <li class="menu-sidebar">
@@ -117,11 +129,11 @@ const SIDEBAR = `
                         </span>
                     </a>
                     <ul class="dropdown-sidebar">
-                        <li><a href="opini.html">Opini</a></li>
-                        <li><a href="refleksi.html">Refleksi</a></li>
-                        <li><a href="nuansa.html">Nuansa</a></li>
-                        <li><a href="tajuk-lampung-post.html">Tajuk</a></li>
-                        <li><a href="forum-guru.html">Forum Guru</a></li>
+                        <li><a href="../kategori/opini">Opini</a></li>
+                        <li><a href="../kategori/refleksi">Refleksi</a></li>
+                        <li><a href="../kategori/nuansa">Nuansa</a></li>
+                        <li><a href="../kategori/tajuk-lampung-post">Tajuk</a></li>
+                        <li><a href="../kategori/forum-guru">Forum Guru</a></li>
                     </ul>
                 </li>
                 <li class="menu-sidebar">
@@ -135,7 +147,7 @@ const SIDEBAR = `
                     </a>
                     <ul class="dropdown-sidebar">
                         <li><a href="#">Breking New</a></li>
-                        <li><a href="../kategori/vidio/bedah-tajuk.html">Bedah Tajuk</a></li>
+                        <li><a href="../kategori/vidio/bedah-tajuk">Bedah Tajuk</a></li>
                         <li><a href="#">Economic Corner</a></li>
                         <li><a href="#">Podcash</a></li>
                     </ul>
@@ -150,10 +162,10 @@ const SIDEBAR = `
                         </span>
                     </a>
                     <ul class="dropdown-sidebar">
-                        <li><a href="../microweb/bankindonesialampung.html">Bank Indonesia Lampung</a></li>
-                        <li><a href="../microweb/bsi.html">Bank Syariah Indonesia</a></li>
-                        <li><a href="../microweb/banklampung.html">Bank Lampung</a></li>
-                        <li><a href="otomotif.html">Otomotif</a></li>
+                        <li><a href="bankindonesialampung">Bank Indonesia Lampung</a></li>
+                        <li><a href="bsi">Bank Syariah Indonesia</a></li>
+                        <li><a href="banklampung">Bank Lampung</a></li>
+                        <li><a href="otomotif">Otomotif</a></li>
                     </ul>
                 </li>
             </ul>
