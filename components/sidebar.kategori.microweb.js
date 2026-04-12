@@ -68,8 +68,8 @@ const SIDEBAR = `
                 </ul>
             </li>
             <li id="link-mobile"><a href="../kategori/breaking-news">Breaking News</a></li>
+            <li id="link-mobile"><a href="../kategori/lampung">Lampung</a></li>
             <li id="link-mobile"><a href="pemprovlampung">Pemprov Lampung</a></li>
-            <li id="link-mobile"><a href="../kategori/lampung/lampung-barat">Lampung Barat</a></li>
             <li id="link-mobile"><a href="../kategori/teknologi">Teknologi</a></li>
             <li><a href="#">Tokoh</a></li>
             <li><a href="../indeks">Info Top</a></li>

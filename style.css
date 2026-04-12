@@ -176,25 +176,29 @@ body {
     position: relative;
 }
 
-.navbar-sub ul li .sub-menu {
+.navbar-sub ul li .sub-menu { 
     position: absolute;
     top: 100%;
     left: 0;
-
     background-color: #fff;
     min-width: 270px;
     padding: 10px 0;
     border: 1px solid #e5e7eb;
-
     display: none;
     flex-direction: column;
-
     z-index: 999;
-
-    /* 🔥 FIX iOS SAFARI */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     will-change: transform;
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.navbar-sub ul li .sub-menu::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -908,7 +912,15 @@ h2.detail-title::before,
 }
 
 .menu-sidebar.active .dropdown-sidebar {
-    max-height: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.menu-sidebar.active .dropdown-sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 .dropdown-sidebar li {
