@@ -1,0 +1,167 @@
+.video-slider {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.video-track {
+    display: flex;
+    gap: 15px;
+    transition: transform 0.4s ease;
+}
+
+.video-card {
+    position: relative;
+    min-width: 100px;
+    height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: #fff;
+}
+
+.video-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay h3 {
+    font-size: 12px;
+    margin: 0 0 6px;
+    line-height: 1.3;
+}
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+
+.play {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 3px 6px;
+    border-radius: 5px;
+}
+
+.duration {
+    opacity: 0.8;
+}
+
+/* tombol */
+.video-next,
+.video-prev {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.video-prev { left: 10px; }
+.video-next { right: 10px; }
+
+.video-next:hover,
+.video-prev:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* play tengah */
+.play-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.video-card:hover .play-center {
+    transform: translate(-50%, -50%) scale(1.2);
+    background: rgba(0,0,0,0.8);
+}
+
+.judul-vidio {
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.judul-vidio a {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: auto;
+    text-decoration: none;
+    background: radial-gradient(circle at 109.67% 60.52%,
+            #aa7900 0%,
+            #b06f00 8.33%,
+            #b56300 16.67%,
+            #b95503 25%,
+            #bb450b 33.33%,
+            #bc2f13 41.67%,
+            #bb071a 50%,
+            #b90021 58.33%,
+            #b6002a 66.67%,
+            #b20033 75%,
+            #ad003e 83.33%,
+            #a6004a 91.67%,
+            #9d0058 100%);
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .video-slider {
+        padding: 15px 0;
+    }
+
+    .video-track {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        scroll-behavior: smooth;
+    }
+
+    .video-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .video-card {
+        scroll-snap-align: start;
+        width: 80px;
+        height: 160px;
+    }
+
+    .video-card:first-child {
+        margin-left: 15px;
+    }
+
+    .video-next,
+    .video-prev {
+        display: none;
+    }
+}

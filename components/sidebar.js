@@ -45,15 +45,7 @@ const SIDEBAR = `
                 </ul>
             </li>
             <li><a href="kategori/teknologi">Teknologi</a></li>
-            <li class="has-sub">
-                <a href="#">Ekonomi</a>
-                <ul class="sub-menu">
-                    <li><a href="microweb/bankindonesialampung">Bank Indonesia Lampung</a></li>
-                    <li><a href="microweb/bsi">Bank Syariah Indonesia</a></li>
-                    <li><a href="microweb/banklampung">Bank Lampung</a></li>
-                    <li><a href="kategori/otomotif">Otomotif</a></li>
-                </ul>
-            </li>
+            <li><a href="kategori/ekonomi">Ekonomi</a></li>
             <li class="has-sub">
                 <a href="#">Lampung</a>
                 <ul class="sub-menu">
